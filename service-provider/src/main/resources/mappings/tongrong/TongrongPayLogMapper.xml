@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.tongrong.dao.TongrongPayLogDao">
+    
+	<sql id="tongrongPayLogColumns">
+		a.id AS "id",
+		a.apply_id AS "applyId",
+		a.user_id AS "userId",
+		a.user_name AS "userName",
+		a.mobile AS "mobile",
+		a.id_no AS "idNo",
+		a.bank_code AS "bankCode",
+		a.bank_name AS "bankName",
+		a.card_no AS "cardNo",
+		a.pay_amt AS "payAmt",
+		a.pay_time AS "payTime",
+		a.pay_succ_time AS "paySuccTime",
+		a.request_no AS "requestNo",
+		a.pay_fail_count AS "payFailCount",
+		a.pay_status AS "payStatus",
+		a.pay_msg AS "payMsg",
+		a.contract_id AS "contractId",
+		a.contract_url AS "contractUrl",
+		a.contract_msg AS "contractMsg",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+	
+	<sql id="tongrongPayLogJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{id},
+		#{applyId},
+		#{userId},
+		#{userName},
+		#{mobile},
+		#{idNo},
+		#{bankCode},
+		#{bankName},
+		#{cardNo},
+		#{payAmt},
+		#{payTime},
+		#{paySuccTime},
+		#{requestNo},
+		#{payFailCount},
+		#{payStatus},
+		#{payMsg},
+		#{contractId},
+		#{contractUrl},
+		#{contractMsg},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.applyId},
+		#{entity.userId},
+		#{entity.userName},
+		#{entity.mobile},
+		#{entity.idNo},
+		#{entity.bankCode},
+		#{entity.bankName},
+		#{entity.cardNo},
+		#{entity.payAmt},
+		#{entity.payTime},
+		#{entity.paySuccTime},
+		#{entity.requestNo},
+		#{entity.payFailCount},
+		#{entity.payStatus},
+		#{entity.payMsg},
+		#{entity.contractId},
+		#{entity.contractUrl},
+		#{entity.contractMsg},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		id,
+		apply_id,
+		user_id,
+		user_name,
+		mobile,
+		id_no,
+		bank_code,
+		bank_name,
+		card_no,
+		pay_amt,
+		pay_time,
+		pay_succ_time,
+		request_no,
+		pay_fail_count,
+		pay_status,
+		pay_msg,
+		contract_id,
+		contract_url,
+		contract_msg,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		apply_id = #{applyId},
+		user_id = #{userId},
+		user_name = #{userName},
+		mobile = #{mobile},
+		id_no = #{idNo},
+		bank_code = #{bankCode},
+		bank_name = #{bankName},
+		card_no = #{cardNo},
+		pay_amt = #{payAmt},
+		pay_time = #{payTime},
+		pay_succ_time = #{paySuccTime},
+		request_no = #{requestNo},
+		pay_fail_count = #{payFailCount},
+		pay_status = #{payStatus},
+		pay_msg = #{payMsg},
+		contract_id = #{contractId},
+		contract_url = #{contractUrl},
+		contract_msg = #{contractMsg},
+		remark = #{remark},
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.applyId != null">
+				apply_id = #{entity.applyId},
+			</if>
+			<if test="entity.userId != null">
+				user_id = #{entity.userId},
+			</if>
+			<if test="entity.userName != null">
+				user_name = #{entity.userName},
+			</if>
+			<if test="entity.mobile != null">
+				mobile = #{entity.mobile},
+			</if>
+			<if test="entity.idNo != null">
+				id_no = #{entity.idNo},
+			</if>
+			<if test="entity.bankCode != null">
+				bank_code = #{entity.bankCode},
+			</if>
+			<if test="entity.bankName != null">
+				bank_name = #{entity.bankName},
+			</if>
+			<if test="entity.cardNo != null">
+				card_no = #{entity.cardNo},
+			</if>
+			<if test="entity.payAmt != null">
+				pay_amt = #{entity.payAmt},
+			</if>
+			<if test="entity.payTime != null">
+				pay_time = #{entity.payTime},
+			</if>
+			<if test="entity.paySuccTime != null">
+				pay_succ_time = #{entity.paySuccTime},
+			</if>
+			<if test="entity.requestNo != null">
+				request_no = #{entity.requestNo},
+			</if>
+			<if test="entity.payFailCount != null">
+				pay_fail_count = #{entity.payFailCount},
+			</if>
+			<if test="entity.payStatus != null">
+				pay_status = #{entity.payStatus},
+			</if>
+			<if test="entity.payMsg != null">
+				pay_msg = #{entity.payMsg},
+			</if>
+			<if test="entity.contractId != null">
+				contract_id = #{entity.contractId},
+			</if>
+			<if test="entity.contractUrl != null">
+				contract_url = #{entity.contractUrl},
+			</if>
+			<if test="entity.contractMsg != null">
+				contract_msg = #{entity.contractMsg},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+  	<select id="get" resultType="TongrongPayLog">
+		SELECT 
+		<include refid="tongrongPayLogColumns"/>
+		FROM loan_tongrong_pay_log a
+		<include refid="tongrongPayLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+  	<select id="getById" resultType="TongrongPayLog">
+		SELECT 
+		<include refid="tongrongPayLogColumns"/>
+		FROM loan_tongrong_pay_log a
+		<include refid="tongrongPayLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+		
+    <select id="getByCriteria" resultType="TongrongPayLog">
+		SELECT 
+		<include refid="tongrongPayLogColumns"/>
+		FROM loan_tongrong_pay_log a
+		<include refid="tongrongPayLogJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultType="TongrongPayLog">
+		SELECT 
+		<include refid="tongrongPayLogColumns"/>
+		FROM loan_tongrong_pay_log a
+		<include refid="tongrongPayLogJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultType="TongrongPayLog">
+		SELECT 
+		<include refid="tongrongPayLogColumns"/>
+		FROM loan_tongrong_pay_log a
+		<include refid="tongrongPayLogJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultType="TongrongPayLog">
+		SELECT 
+		<include refid="tongrongPayLogColumns"/>
+		FROM loan_tongrong_pay_log a
+		<include refid="tongrongPayLogJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="TongrongPayLog">
+		SELECT 
+		<include refid="tongrongPayLogColumns"/>
+		FROM loan_tongrong_pay_log a
+		<include refid="tongrongPayLogJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="TongrongPayLog">
+		SELECT 
+		<include refid="tongrongPayLogColumns"/>
+		FROM loan_tongrong_pay_log a
+		<include refid="tongrongPayLogJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM loan_tongrong_pay_log a
+		<include refid="tongrongPayLogJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM loan_tongrong_pay_log a
+		<include refid="tongrongPayLogJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO loan_tongrong_pay_log
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+	
+	<insert id="insertBatch">
+		INSERT INTO loan_tongrong_pay_log
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	<update id="update">
+		UPDATE loan_tongrong_pay_log SET 
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE loan_tongrong_pay_log 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE loan_tongrong_pay_log 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE loan_tongrong_pay_log		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE loan_tongrong_pay_log
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByCriteria">
+		UPDATE loan_tongrong_pay_log
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE loan_tongrong_pay_log 
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE loan_tongrong_pay_log
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM loan_tongrong_pay_log
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM loan_tongrong_pay_log
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM loan_tongrong_pay_log
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM loan_tongrong_pay_log
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<select id="sumCurrPayedAmt" resultType="BigDecimal">
+		select COALESCE(SUM(pay_amt),0) from loan_tongrong_pay_log a
+		where pay_time >curdate() and pay_status in(0,1)
+	</select>
+	 
+	 
+	 	
+	<select id="findList" resultType="TongrongPayLog">
+		/*FORCE_MASTER*/
+		SELECT 
+		<include refid="tongrongPayLogColumns"/>
+		FROM loan_tongrong_pay_log a
+		<where>
+            a.del = 0
+            <if test="op.userName != null and op.userName != ''">
+                and a.user_name = #{op.userName}
+            </if>
+            <if test="op.mobile != null and op.mobile != ''">
+                and a.mobile = #{op.mobile}
+            </if>
+            <if test="op.payStatus != null and op.payStatus != ''">
+                and a.pay_status = #{op.payStatus}
+            </if>
+            <if test="op.expectStart != null and op.expectStart !=''">
+				<![CDATA[ AND a.pay_time >= #{op.expectStart} ]]>
+			</if>
+			<if test="op.expectEnd != null and op.expectEnd !='' ">
+				<![CDATA[ AND a.pay_time <= #{op.expectEnd} ]]>
+			</if>
+			
+		<!-- 	<if test="op.kdCreateCode != null and op.kdCreateCode != ''">
+                <if test='op.kdCreateCode == "0"'>
+                and a.kd_create_code = 0 
+            	</if>
+            	<if test='op.kdCreateCode == "1"'>
+                and a.kd_create_code != 0 and a.kd_create_code is not null 
+            	</if>
+            	<if test='op.kdCreateCode == "2"'>
+                and a.kd_create_code is null 
+            	</if>
+            </if>
+             -->
+        </where>
+        <include refid="pageOrderBy"/>
+	</select>
+	
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+</mapper>

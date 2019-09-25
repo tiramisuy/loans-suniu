@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.credit.dao.ApiInvokeLogDao">
+    
+	<sql id="apiInvokeLogColumns">
+		a.id AS "id",
+		a.user_id AS "userId",
+		a.apply_id AS "applyId",
+		a.biz_id AS "bizId",
+		a.biz_code AS "bizCode",
+		a.biz_name AS "bizName",
+		a.partner_id AS "partnerId",
+		a.partner_name AS "partnerName",
+		a.month AS "month",
+		a.invoke_time AS "invokeTime",
+		a.cost_time AS "costTime",
+		a.fee AS "fee",
+		a.url AS "url",
+		a.success AS "success",
+		a.status AS "status",
+		a.req_content AS "reqContent",
+		a.sync_resp_content AS "syncRespContent",
+		a.async_resp_content AS "asyncRespContent",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+	
+	<sql id="apiInvokeLogJoins">
+
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{id},
+		#{userId},
+		#{applyId},
+		#{bizId},
+		#{bizCode},
+		#{bizName},
+		#{partnerId},
+		#{partnerName},
+		#{month},
+		#{invokeTime},
+		#{costTime},
+		#{fee},
+		#{url},
+		#{success},
+		#{status},
+		#{reqContent},
+		#{syncRespContent},
+		#{asyncRespContent},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.userId},
+		#{entity.applyId},
+		#{entity.bizId},
+		#{entity.bizCode},
+		#{entity.bizName},
+		#{entity.partnerId},
+		#{entity.partnerName},
+		#{entity.month},
+		#{entity.invokeTime},
+		#{entity.costTime},
+		#{entity.fee},
+		#{entity.url},
+		#{entity.success},
+		#{entity.status},
+		#{entity.reqContent},
+		#{entity.syncRespContent},
+		#{entity.asyncRespContent},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		id,
+		user_id,
+		apply_id,
+		biz_id,
+		biz_code,
+		biz_name,
+		partner_id,
+		partner_name,
+		month,
+		invoke_time,
+		cost_time,
+		fee,
+		url,
+		success,
+		status,
+		req_content,
+		sync_resp_content,
+		async_resp_content,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		user_id = #{userId},
+		apply_id = #{applyId},
+		biz_id = #{bizId},
+		biz_code = #{bizCode},
+		biz_name = #{bizName},
+		partner_id = #{partnerId},
+		partner_name = #{partnerName},
+		month = #{month},
+		invoke_time = #{invokeTime},
+		cost_time = #{costTime},
+		fee = #{fee},
+		url = #{url},
+		success = #{success},
+		status = #{status},
+		req_content = #{reqContent},
+		sync_resp_content = #{syncRespContent},
+		async_resp_content = #{asyncRespContent},
+		remark = #{remark},
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.userId != null">
+				user_id = #{entity.userId},
+			</if>
+			<if test="entity.applyId != null">
+				apply_id = #{entity.applyId},
+			</if>
+			<if test="entity.bizId != null">
+				biz_id = #{entity.bizId},
+			</if>
+			<if test="entity.bizCode != null">
+				biz_code = #{entity.bizCode},
+			</if>
+			<if test="entity.bizName != null">
+				biz_name = #{entity.bizName},
+			</if>
+			<if test="entity.partnerId != null">
+				partner_id = #{entity.partnerId},
+			</if>
+			<if test="entity.partnerName != null">
+				partner_name = #{entity.partnerName},
+			</if>
+			<if test="entity.month != null">
+				month = #{entity.month},
+			</if>
+			<if test="entity.invokeTime != null">
+				invoke_time = #{entity.invokeTime},
+			</if>
+			<if test="entity.costTime != null">
+				cost_time = #{entity.costTime},
+			</if>
+			<if test="entity.fee != null">
+				fee = #{entity.fee},
+			</if>
+			<if test="entity.url != null">
+				url = #{entity.url},
+			</if>
+			<if test="entity.success != null">
+				success = #{entity.success},
+			</if>
+			<if test="entity.status != null">
+				status = #{entity.status},
+			</if>
+			<if test="entity.reqContent != null">
+				req_content = #{entity.reqContent},
+			</if>
+			<if test="entity.syncRespContent != null">
+				sync_resp_content = #{entity.syncRespContent},
+			</if>
+			<if test="entity.asyncRespContent != null">
+				async_resp_content = #{entity.asyncRespContent},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+  	<select id="get" resultType="ApiInvokeLog">
+		SELECT 
+		<include refid="apiInvokeLogColumns"/>
+		FROM credit_api_invoke_log a
+		<include refid="apiInvokeLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+  	<select id="getById" resultType="ApiInvokeLog">
+		SELECT 
+		<include refid="apiInvokeLogColumns"/>
+		FROM credit_api_invoke_log a
+		<include refid="apiInvokeLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+		
+    <select id="getByCriteria" resultType="ApiInvokeLog">
+		SELECT 
+		<include refid="apiInvokeLogColumns"/>
+		FROM credit_api_invoke_log a
+		<include refid="apiInvokeLogJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultType="ApiInvokeLog">
+		SELECT 
+		<include refid="apiInvokeLogColumns"/>
+		FROM credit_api_invoke_log a
+		<include refid="apiInvokeLogJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultType="ApiInvokeLog">
+		SELECT 
+		<include refid="apiInvokeLogColumns"/>
+		FROM credit_api_invoke_log a
+		<include refid="apiInvokeLogJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultType="ApiInvokeLog">
+		SELECT 
+		<include refid="apiInvokeLogColumns"/>
+		FROM credit_api_invoke_log a
+		<include refid="apiInvokeLogJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="ApiInvokeLog">
+		SELECT 
+		<include refid="apiInvokeLogColumns"/>
+		FROM credit_api_invoke_log a
+		<include refid="apiInvokeLogJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="ApiInvokeLog">
+		SELECT 
+		<include refid="apiInvokeLogColumns"/>
+		FROM credit_api_invoke_log a
+		<include refid="apiInvokeLogJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM credit_api_invoke_log
+		<include refid="apiInvokeLogJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM credit_api_invoke_log
+		<include refid="apiInvokeLogJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO credit_api_invoke_log
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+	
+	<insert id="insertBatch">
+		INSERT INTO credit_api_invoke_log
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	<update id="update">
+		UPDATE credit_api_invoke_log SET 
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE credit_api_invoke_log 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE credit_api_invoke_log 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE credit_api_invoke_log		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE credit_api_invoke_log
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByCriteria">
+		UPDATE credit_api_invoke_log
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE credit_api_invoke_log 
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE credit_api_invoke_log
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM credit_api_invoke_log
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM credit_api_invoke_log
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM credit_api_invoke_log
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM credit_api_invoke_log
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	
+	 
+</mapper>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.SysCollectionAssignmentDAO">
+
+
+	<select id="findOverdueListByCondition" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT a.id,a.apply_id as applyId,a.cont_no as contNo,a.user_id as userId,a.user_name as userName,a.mobile,a.id_no as idNo,b.product_id as productId,
+		b.product_name as productName,b.approve_amt as approveAmt,b.approve_term as approveTerm,b.repay_method as repayMethod,b.basic_rate as basicRate,
+		b.discount_rate as discountRate,a.this_term as thisTerm,a.total_term as totalTerm,b.serv_fee_rate as servFeeRate,
+		c.overdue_fee as overdueFee,c.penalty,c.deduction,c.total_amount as totalAmount,c.actual_repay_amt as actualRepayAmt,
+		a.loan_start_date as loanStartDate,a.repay_date as repayDate,a.actual_repay_time as actualRepayTime,a.result,a.`status`,
+		c.principal,c.interest,a.operator_name as operatorName,a.overdue_days as overdue,c.serv_fee as termServFee
+		FROM loan_overdue a
+		LEFT JOIN loan_apply b ON a.apply_id = b.id
+		LEFT JOIN loan_repay_plan_item c ON a.id = c.id
+		WHERE
+		a.del=0
+		<if test="op.companyId != null and op.companyId != ''">
+            and b.company_id = #{op.companyId}
+        </if>
+        <if test="op.productId != null and op.productId != ''">
+            and b.product_id in (${op.productId})
+        </if>
+		<if test="op.status != null">
+			and a.`status`=  #{op.status}
+		</if>
+		<if test="op.id != null and op.id != ''">
+			and a.id = #{op.id}
+		</if>
+		<if test="op.userName != null and op.userName != ''">
+			and a.user_name = #{op.userName}
+		</if>
+		<if test="op.idNo != null and op.idNo != ''">
+			and a.id_no = #{op.idNo}
+		</if>
+		<if test="op.mobile != null and op.mobile != ''">
+			and a.mobile = #{op.mobile}
+		</if>
+		<if test="op.operatorId != null and op.operatorId != ''">
+			and a.operator_id = #{op.operatorId}
+		</if>
+		<if test="op.result != null and op.result != ''">
+			and a.result = #{op.result}
+		</if>
+		<if test="op.content != null and op.content != ''">
+			and a.content like CONCAT("%",replace( #{op.content},' ',''),"%")
+		</if>
+		<if test="op.expectTimeStart != null ">
+			<![CDATA[ AND a.repay_date >= #{op.expectTimeStart} ]]>
+		</if>
+		<if test="op.expectTimeEnd != null">
+			<![CDATA[ AND a.repay_date <= #{op.expectTimeEnd} ]]>
+		</if>
+		<if test="op.actualTimeStart != null ">
+			<![CDATA[ AND a.actual_repay_time >= #{op.actualTimeStart} ]]>
+		</if>
+		<if test="op.actualTimeEnd != null">
+			<![CDATA[ AND a.actual_repay_time <= #{op.actualTimeEnd} ]]>
+		</if>
+		<if test="op.borrowTimeStart != null ">
+			<![CDATA[ AND a.loan_start_date >= #{op.borrowTimeStart} ]]>
+		</if>
+		<if test="op.borrowTimeEnd != null">
+			<![CDATA[ AND a.loan_start_date <= #{op.borrowTimeEnd} ]]>
+		</if>
+		<if test="op.overdueList != null and op.overdueList.size > 0">
+			and
+			<if test="op.status == 1">
+				<foreach item="overdueTime" collection="op.overdueList" open="(" separator=" or " close=")">
+					<if test="overdueTime.min == overdueTime.max">
+						<![CDATA[
+                			a.overdue_days=#{overdueTime.min}
+                 		]]>
+					</if>
+					<if test="overdueTime.min != overdueTime.max">
+							<![CDATA[
+		                		a.overdue_days>=#{overdueTime.min} and overdue_days<=#{overdueTime.max}
+		                 	]]>
+		            </if>
+				</foreach>
+			</if>
+			<if test="op.status == 0">
+				<foreach item="overdueTime" collection="op.overdueList" open="(" separator=" or " close=")">
+					<if test="overdueTime.min == overdueTime.max">
+						<![CDATA[
+                			a.overdue_days=#{overdueTime.min}
+                 		]]>
+					</if>
+					<if test="overdueTime.min != overdueTime.max">
+							<![CDATA[
+		                		a.overdue_days>=#{overdueTime.min} and overdue_days<=#{overdueTime.max}
+		                 	]]>
+		            </if>
+				</foreach>
+			</if>
+		</if>
+		ORDER BY a.repay_date DESC
+	
+        
+        <if test="afterIndex != null and afterIndex != ''">
+              limit #{afterIndex},1
+        </if>
+         <if test="beforeIndex != null and beforeIndex != ''">
+              limit #{beforeIndex} ,1
+        </if>
+		 <if test="first != null and first != ''">
+              limit 1
+        </if>
+	</select>
+	
+	
+	
+	
+</mapper>

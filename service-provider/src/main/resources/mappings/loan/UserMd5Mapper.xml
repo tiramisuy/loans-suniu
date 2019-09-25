@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.UserMd5Dao">
+    
+	<sql id="userMd5Columns">
+		a.id AS "id",
+		a.md5 AS "md5",
+		a.real_name AS "realName",
+		a.id_no AS "idNo",
+		a.mobile AS "mobile",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del",
+		a.user_no AS "userNo"
+	</sql>
+	
+	<sql id="userMd5Joins">
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{id},
+		#{md5},
+		#{realName},
+		#{idNo},
+		#{mobile},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del},
+		#{userNo}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.md5},
+		#{entity.realName},
+		#{entity.idNo},
+		#{entity.mobile},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del},
+		#{entity.userNo}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		id,
+		md5,
+		real_name,
+		id_no,
+		mobile,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del,
+		user_no
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		md5 = #{md5},
+		real_name = #{realName},
+		id_no = #{idNo},
+		mobile = #{mobile},
+		update_by = #{updateBy},
+		update_time = #{updateTime},
+		user_no = #{userNo}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.md5 != null">
+				md5 = #{entity.md5},
+			</if>
+			<if test="entity.realName != null">
+				real_name = #{entity.realName},
+			</if>
+			<if test="entity.idNo != null">
+				id_no = #{entity.idNo},
+			</if>
+			<if test="entity.mobile != null">
+				mobile = #{entity.mobile},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+			<if test="entity.userNo != null">
+				user_no = #{entity.userNo},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+  	<select id="get" resultType="UserMd5">
+		SELECT 
+		<include refid="userMd5Columns"/>
+		FROM cust_user_md5 a
+		<include refid="userMd5Joins"/>
+		WHERE a.id = #{id}
+	</select>
+
+  	<select id="getById" resultType="UserMd5">
+		SELECT 
+		<include refid="userMd5Columns"/>
+		FROM cust_user_md5 a
+		<include refid="userMd5Joins"/>
+		WHERE a.id = #{id}
+	</select>
+		
+    <select id="getByCriteria" resultType="UserMd5">
+		SELECT 
+		<include refid="userMd5Columns"/>
+		FROM cust_user_md5 a
+		<include refid="userMd5Joins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultType="UserMd5">
+		SELECT 
+		<include refid="userMd5Columns"/>
+		FROM cust_user_md5 a
+		<include refid="userMd5Joins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultType="UserMd5">
+		SELECT 
+		<include refid="userMd5Columns"/>
+		FROM cust_user_md5 a
+		<include refid="userMd5Joins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultType="UserMd5">
+		SELECT 
+		<include refid="userMd5Columns"/>
+		FROM cust_user_md5 a
+		<include refid="userMd5Joins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="UserMd5">
+		SELECT 
+		<include refid="userMd5Columns"/>
+		FROM cust_user_md5 a
+		<include refid="userMd5Joins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="UserMd5">
+		SELECT 
+		<include refid="userMd5Columns"/>
+		FROM cust_user_md5 a
+		<include refid="userMd5Joins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM cust_user_md5
+		<include refid="userMd5Joins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM cust_user_md5
+		<include refid="userMd5Joins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cust_user_md5
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+	
+	<insert id="insertBatch">
+		INSERT INTO cust_user_md5
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	<update id="update">
+		UPDATE cust_user_md5 SET 
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE cust_user_md5 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE cust_user_md5 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE cust_user_md5		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE cust_user_md5
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByCriteria">
+		UPDATE cust_user_md5
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE cust_user_md5 
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE cust_user_md5
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM cust_user_md5
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM cust_user_md5
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM cust_user_md5
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM cust_user_md5
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	
+	 
+</mapper>

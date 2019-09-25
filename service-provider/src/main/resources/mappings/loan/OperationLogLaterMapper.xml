@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.OperationLogLaterDao">
+
+    <sql id="operationLogLaterColumns">
+		a.id AS "id",
+		a.user_id AS "userId",
+		a.apply_id AS "applyId",
+		a.stage AS "stage",
+		a.status AS "status",
+		a.previous_stage AS "previousStage",
+		a.previous_status AS "previousStatus",
+		a.operator_id AS "operatorId",
+		a.operator_name AS "operatorName",
+		a.time AS "time",
+		a.source AS "source",
+		a.ip AS "ip",
+		a.refuse_id AS "refuseId",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del",
+		u2.name AS "user.name"
+	</sql>
+
+    <sql id="operationLogLaterJoins">
+		LEFT JOIN sys_user u2 ON u2.id = a.user_id
+	</sql>
+
+    <sql id="insertValues">
+	(		
+		#{id},
+		#{userId},
+		#{applyId},
+		#{stage},
+		#{status},
+		#{previousStage},
+		#{previousStatus},
+		#{operatorId},
+		#{operatorName},
+		#{time},
+		#{source},
+		#{ip},
+		#{refuseId},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+	)	
+	</sql>
+
+    <sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.userId},
+		#{entity.applyId},
+		#{entity.stage},
+		#{entity.status},
+		#{entity.previousStage},
+		#{entity.previousStatus},
+		#{entity.operatorId},
+		#{entity.operatorName},
+		#{entity.time},
+		#{entity.source},
+		#{entity.ip},
+		#{entity.refuseId},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+	)	
+	</sql>
+
+    <sql id="insertColumns">
+	(		
+		id,
+		user_id,
+		apply_id,
+		stage,
+		status,
+		previous_stage,
+		previous_status,
+		operator_id,
+		operator_name,
+		time,
+		source,
+		ip,
+		refuse_id,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+	) 
+	</sql>
+
+    <sql id="updateColumns">
+		user_id = #{userId},
+		apply_id = #{applyId},
+		stage = #{stage},
+		status = #{status},
+		previous_stage = #{previousStage},
+		previous_status = #{previousStatus},
+		operator_id = #{operatorId},
+		operator_name = #{operatorName},
+		time = #{time},
+		source = #{source},
+		ip = #{ip},
+		refuse_id = #{refuseId},
+		remark = #{remark},
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+	</sql>
+
+    <sql id="updateSelectiveColumns">
+        <set>
+            <if test="entity.user.id != null">
+                user_id = #{entity.userId},
+            </if>
+            <if test="entity.applyId != null">
+                apply_id = #{entity.applyId},
+            </if>
+            <if test="entity.stage != null">
+                stage = #{entity.stage},
+            </if>
+            <if test="entity.status != null">
+                status = #{entity.status},
+            </if>
+            <if test="entity.previousStage != null">
+                previous_stage = #{entity.previousStage},
+            </if>
+            <if test="entity.previousStatus != null">
+                previous_status = #{entity.previousStatus},
+            </if>
+            <if test="entity.operatorId != null">
+                operator_id = #{entity.operatorId},
+            </if>
+            <if test="entity.operatorName != null">
+                operator_name = #{entity.operatorName},
+            </if>
+            <if test="entity.time != null">
+                time = #{entity.time},
+            </if>
+            <if test="entity.source != null">
+                source = #{entity.source},
+            </if>
+            <if test="entity.ip != null">
+                ip = #{entity.ip},
+            </if>
+            <if test="entity.refuseId != null">
+                refuse_id = #{entity.refuseId},
+            </if>
+            <if test="entity.remark != null">
+                remark = #{entity.remark},
+            </if>
+            <if test="entity.updateBy != null">
+                update_by = #{entity.updateBy},
+            </if>
+            <if test="entity.updateTime != null">
+                update_time = #{entity.updateTime},
+            </if>
+        </set>
+    </sql>
+
+    <sql id="whereByCriteriaList">
+        <where>
+            <foreach collection="criteriaList" item="criteria" separator=" AND ">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+                        <foreach collection="criteria.pairList" item="pair">
+                            <choose>
+                                <when test="pair.criterion.singleValue">
+                                    ${pair.logic} ${pair.criterion.column}
+                                    ${pair.criterion.match}
+                                    ${pair.criterion.value}
+                                </when>
+                                <when test="pair.criterion.betweenValue">
+                                    ${pair.logic} ${pair.criterion.column}
+                                    ${pair.criterion.match}
+                                    ${pair.criterion.value} and
+                                    ${pair.criterion.secondValue}
+                                </when>
+                                <when test="pair.criterion.listValue">
+                                    ${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+                                    <foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+                                        #{item}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="whereByCriteria">
+        <where>
+            <if test="criteria.valid">
+                <trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+                    <foreach collection="criteria.pairList" item="pair">
+                        <choose>
+                            <when test="pair.criterion.singleValue">
+                                ${pair.logic} ${pair.criterion.column}
+                                ${pair.criterion.match}
+                                ${pair.criterion.value}
+                            </when>
+                            <when test="pair.criterion.betweenValue">
+                                ${pair.logic} ${pair.criterion.column}
+                                ${pair.criterion.match}
+                                ${pair.criterion.value} and
+                                ${pair.criterion.secondValue}
+                            </when>
+                            <when test="pair.criterion.listValue">
+                                ${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+                                <foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+                                    #{item}
+                                </foreach>
+                            </when>
+                        </choose>
+                    </foreach>
+                </trim>
+            </if>
+        </where>
+    </sql>
+
+    <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+
+    <sql id="pageOrderBy">
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.create_time DESC
+            </otherwise>
+        </choose>
+    </sql>
+
+    <select id="get" resultType="OperationLogLater">
+        SELECT
+        <include refid="operationLogLaterColumns"/>
+        FROM loan_operation_log_later a
+        <include refid="operationLogLaterJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="getById" resultType="OperationLogLater">
+        SELECT
+        <include refid="operationLogLaterColumns"/>
+        FROM loan_operation_log_later a
+        <include refid="operationLogLaterJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="getByCriteria" resultType="OperationLogLater">
+        SELECT
+        <include refid="operationLogLaterColumns"/>
+        FROM loan_operation_log_later a
+        <include refid="operationLogLaterJoins"/>
+        <include refid="whereByCriteria"/>
+    </select>
+
+    <select id="findAllByCriteria" resultType="OperationLogLater">
+        SELECT
+        <include refid="operationLogLaterColumns"/>
+        FROM loan_operation_log_later a
+        <include refid="operationLogLaterJoins"/>
+        <include refid="whereByCriteria"/>
+        <include refid="orderBy"/>
+    </select>
+
+    <select id="findAllByCriteriaList" resultType="OperationLogLater">
+        SELECT
+        <include refid="operationLogLaterColumns"/>
+        FROM loan_operation_log_later a
+        <include refid="operationLogLaterJoins"/>
+        <include refid="whereByCriteriaList"/>
+        <include refid="orderBy"/>
+    </select>
+
+    <select id="getPage" resultType="OperationLogLater">
+        SELECT
+        <include refid="operationLogLaterColumns"/>
+        FROM loan_operation_log_later a
+        <include refid="operationLogLaterJoins"/>
+        <include refid="pageOrderBy"/>
+    </select>
+
+    <select id="getPageByCriteria" resultType="OperationLogLater">
+        SELECT
+        <include refid="operationLogLaterColumns"/>
+        FROM loan_operation_log_later a
+        <include refid="operationLogLaterJoins"/>
+        <include refid="whereByCriteria"/>
+        <include refid="pageOrderBy"/>
+    </select>
+
+    <select id="getPageByCriteriaList" resultType="OperationLogLater">
+        SELECT
+        <include refid="operationLogLaterColumns"/>
+        FROM loan_operation_log_later a
+        <include refid="operationLogLaterJoins"/>
+        <include refid="whereByCriteriaList"/>
+        <include refid="pageOrderBy"/>
+    </select>
+
+    <select id="countByCriteria" resultType="Long">
+        SELECT COUNT(1) FROM loan_operation_log_later
+        <include refid="operationLogLaterJoins"/>
+        <include refid="whereByCriteria"/>
+    </select>
+
+    <select id="countByCriteriaList" resultType="Long">
+        SELECT COUNT(1) FROM loan_operation_log_later
+        <include refid="operationLogLaterJoins"/>
+        <include refid="whereByCriteriaList"/>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO loan_operation_log_later
+        <include refid="insertColumns"/>
+        VALUES
+        <include refid="insertValues"/>
+    </insert>
+
+    <insert id="insertBatch">
+        INSERT INTO loan_operation_log_later
+        <include refid="insertColumns"/>
+        VALUES
+        <foreach collection="list" item="entity" index="index" separator=",">
+            <include refid="insertBatchValues"/>
+        </foreach>
+    </insert>
+
+    <update id="update">
+        UPDATE loan_operation_log_later SET
+        <include refid="updateColumns"/>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateByCriteriaSelective">
+        UPDATE loan_operation_log_later
+        <include refid="updateSelectiveColumns"/>
+        <include refid="whereByCriteria"/>
+    </update>
+
+    <update id="updateByCriteriaListSelective">
+        UPDATE loan_operation_log_later
+        <include refid="updateSelectiveColumns"/>
+        <include refid="whereByCriteriaList"/>
+    </update>
+
+    <update id="updateByIdSelective">
+        UPDATE loan_operation_log_later
+        <include refid="updateSelectiveColumns"/>
+        WHERE id = #{entity.id}
+    </update>
+
+    <update id="delete">
+		UPDATE loan_operation_log_later
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+
+    <update id="deleteByCriteria">
+        UPDATE loan_operation_log_later
+        SET del = 1
+        ,update_by=#{entity.updateBy}
+        <include refid="whereByCriteria"/>
+    </update>
+
+    <update id="deleteBatch">
+        UPDATE loan_operation_log_later
+        SET del = 1
+        ,update_by=#{entity.updateBy}
+        WHERE id in
+        <foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </update>
+
+    <update id="deleteByCriteriaList">
+        UPDATE loan_operation_log_later
+        SET del = 1
+        ,update_by=#{entity.updateBy}
+        <include refid="whereByCriteriaList"/>
+    </update>
+
+    <update id="deleteTruely">
+		DELETE FROM loan_operation_log_later
+		WHERE id = #{id}
+	</update>
+
+    <update id="deleteTruelyByCriteria">
+        DELETE FROM loan_operation_log_later
+        <include refid="whereByCriteria"/>
+    </update>
+
+    <update id="deleteTruelyByCriteriaList">
+        DELETE FROM loan_operation_log_later
+        <include refid="whereByCriteriaList"/>
+    </update>
+
+    <update id="deleteBatchTruely">
+        DELETE FROM loan_operation_log_later
+        WHERE id in
+        <foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </update>
+
+
+    <resultMap id="BaseResultMap" type="com.rongdu.loans.loan.entity.OperationLogLater">
+        <id column="ID" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="APPLY_ID" property="applyId"/>
+        <result column="STAGE" property="stage"/>
+        <result column="STATUS" property="status"/>
+        <result column="PREVIOUS_STAGE" property="previousStage"/>
+        <result column="PREVIOUS_STATUS" property="previousStatus"/>
+        <result column="OPERATOR_ID" property="operatorId"/>
+        <result column="OPERATOR_NAME" property="operatorName"/>
+        <result column="TIME" property="time"/>
+        <result column="SOURCE" property="source"/>
+        <result column="IP" property="ip"/>
+        <result column="REFUSE_ID" property="refuseId"/>
+        <result column="REMARK" property="remark"/>
+        <result column="CREATE_BY" property="createBy"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="UPDATE_BY" property="updateBy"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="DEL" property="del"/>
+    </resultMap>
+
+    <sql id="All_Column">
+        id, user_id, apply_id, stage, status, previous_stage, previous_status, operator_id, operator_name, time, ip, refuse_id, remark, create_by, create_time, update_by, update_time, del
+    </sql>
+
+
+    <select id="collectLog" resultMap="BaseResultMap">
+        SELECT
+        <include refid="All_Column"/>
+        from loan_operation_log_later a
+        WHERE a.create_time BETWEEN #{startTime} AND #{endTime} and a.`status` in (211,212,221,222) and a.del=0
+    </select>
+
+    <select id="getCheckLog" resultMap="BaseResultMap">
+        SELECT
+        <include refid="All_Column"/>
+        FROM
+        loan_operation_log_later a
+        WHERE
+        a.del = 0
+        AND a.apply_id = #{applyId}
+        <![CDATA[  AND a.`status` > 200 AND a.`status` < 300 ]]>
+        ORDER BY a.time
+    </select>
+
+</mapper>

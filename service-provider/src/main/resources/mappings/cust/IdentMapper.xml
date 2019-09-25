@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.cust.dao.IdentDAO">
+
+	<resultMap id="BaseResultMap" type="com.rongdu.loans.cust.entity.Ident">
+		<id column="user_id" property="userId" />
+		<result column="ID_TYPE" property="idType" />
+		<result column="ID_NO" property="idNo" />
+		<result column="ID_CTRY" property="idCtry" />
+		<result column="ID_TERM_BEGIN" property="idTermBegin" />
+		<result column="ID_TERM_END" property="idTermEnd" />
+		<result column="ID_TERM_LONG" property="idTermLong" />
+		<result column="ID_REG_ORG" property="idRegOrg" />
+	</resultMap>
+	
+	<sql id="All_Column">
+		user_id, id_type, id_no, id_ctry, id_term_begin, id_term_end, id_term_long, id_reg_org
+	</sql>
+
+	<sql id="identColumns">
+		a.user_id AS "userId",
+		a.id_type AS "idType",
+		a.id_no AS "idNo",
+		a.id_ctry AS "idCtry",
+		a.id_term_begin AS "idTermBegin",
+		a.id_term_end AS "idTermEnd",
+		a.id_term_long AS "idTermLong",
+		a.id_reg_org AS "idRegOrg"
+	</sql>
+
+	<sql id="identJoins">
+	</sql>
+
+	<sql id="insertValues">
+		(
+		#{userId},
+		#{idType},
+		#{idNo},
+		#{idCtry},
+		#{idTermBegin},
+		#{idTermEnd},
+		#{idTermLong},
+		#{idRegOrg}
+		)
+	</sql>
+
+	<sql id="insertColumns">
+		(
+		user_id,
+		id_type,
+		id_no,
+		id_ctry,
+		id_term_begin,
+		id_term_end,
+		id_term_long,
+		id_reg_org
+		)
+	</sql>
+
+	<sql id="updateColumns">
+		user_id = #{userId},
+		id_type = #{idType},
+		id_no = #{idNo},
+		id_ctry = #{idCtry},
+		id_term_begin = #{idTermBegin},
+		id_term_end = #{idTermEnd},
+		id_term_long = #{idTermLong},
+		id_reg_org = #{idRegOrg},
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+	</sql>
+
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.userId != null">
+				user_id = #{entity.userId},
+			</if>
+			<if test="entity.idType != null">
+				id_type = #{entity.idType},
+			</if>
+			<if test="entity.idNo != null">
+				id_no = #{entity.idNo},
+			</if>
+			<if test="entity.idCtry != null">
+				id_ctry = #{entity.idCtry},
+			</if>
+			<if test="entity.idTermBegin != null">
+				id_term_begin = #{entity.idTermBegin},
+			</if>
+			<if test="entity.idTermEnd != null">
+				id_term_end = #{entity.idTermEnd},
+			</if>
+			<if test="entity.idTermLong != null">
+				id_term_long = #{entity.idTermLong},
+			</if>
+			<if test="entity.idRegOrg != null">
+				id_reg_org = #{entity.idRegOrg},
+			</if>
+		</set>
+	</sql>
+
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+	<sql id="whereByCriteria">
+		<where>
+			<if test="criteria.valid">
+				<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+					<foreach collection="criteria.pairList" item="pair">
+						<choose>
+							<when test="pair.criterion.singleValue">
+								${pair.logic} ${pair.criterion.column}
+								${pair.criterion.match}
+								${pair.criterion.value}
+							</when>
+							<when test="pair.criterion.betweenValue">
+								${pair.logic} ${pair.criterion.column}
+								${pair.criterion.match}
+								${pair.criterion.value} and
+								${pair.criterion.secondValue}
+							</when>
+							<when test="pair.criterion.listValue">
+								${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+								<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+									#{item}
+								</foreach>
+							</when>
+						</choose>
+					</foreach>
+				</trim>
+			</if>
+		</where>
+	</sql>
+
+	<sql id="orderBy">
+		ORDER BY a.id DESC
+	</sql>
+
+	<sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.id DESC
+			</otherwise>
+		</choose>
+	</sql>
+
+    <select id="countByUserId" parameterType="string" resultType="int">
+	  select COUNT(user_id)
+	    from cust_ident
+	   where del = 0
+	     and user_id = #{userId}
+	</select>
+	
+	<select id="get" resultType="Ident">
+		SELECT
+		<include refid="identColumns"/>
+		FROM cust_ident a
+		<include refid="identJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getById" resultType="Ident">
+		SELECT
+		<include refid="identColumns"/>
+		FROM cust_ident a
+		<include refid="identJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByCriteria" resultType="Ident">
+		SELECT
+		<include refid="identColumns"/>
+		FROM cust_ident a
+		<include refid="identJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+
+	<select id="findAllByCriteria" resultType="Ident">
+		SELECT
+		<include refid="identColumns"/>
+		FROM cust_ident a
+		<include refid="identJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+
+	<select id="findAllByCriteriaList" resultType="Ident">
+		SELECT
+		<include refid="identColumns"/>
+		FROM cust_ident a
+		<include refid="identJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+
+	<select id="getPage" resultType="Ident">
+		SELECT
+		<include refid="identColumns"/>
+		FROM cust_ident a
+		<include refid="identJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+
+	<select id="getPageByCriteria" resultType="Ident">
+		SELECT
+		<include refid="identColumns"/>
+		FROM cust_ident a
+		<include refid="identJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+
+	<select id="getPageByCriteriaList" resultType="Ident">
+		SELECT
+		<include refid="identColumns"/>
+		FROM cust_ident a
+		<include refid="identJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM cust_ident
+		<include refid="identJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM cust_ident
+		<include refid="identJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+
+	<insert id="insert">
+		INSERT INTO cust_ident
+				(
+				user_id,
+				id_type,
+				id_no,
+				id_ctry,
+				id_term_begin,
+				id_term_end,
+				id_term_long,
+				id_reg_org,
+				remark,
+				create_by,
+				create_time,
+				update_by,
+				update_time,
+				del
+				)
+	       VALUES
+			   (		
+				#{userId},
+				#{idType},
+				#{idNo},
+				#{idCtry},
+				#{idTermBegin},
+				#{idTermEnd},
+				#{idTermLong},
+				#{idRegOrg},
+				#{remark},
+				#{createBy},
+				#{createTime},
+				#{updateBy},
+				#{updateTime},
+				#{del}
+	           )
+	</insert>
+
+	<insert id="insertBatch">
+		INSERT INTO cust_ident
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+			<include refid="insertValues"/>
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE cust_ident SET
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByUserId">
+		UPDATE cust_ident SET
+		<include refid="updateColumns"/>
+		WHERE user_id = #{userId}
+	</update>
+
+	<update id="updateByCriteriaSelective">
+		UPDATE cust_ident
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+
+	<update id="updateByCriteriaListSelective">
+		UPDATE cust_ident
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE cust_ident
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE cust_ident
+		SET del = 1
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteByCriteria">
+		UPDATE cust_ident
+		SET del = 1
+		<include refid="whereByCriteria"/>
+	</update>
+
+	<update id="deleteByCriteriaList">
+		UPDATE cust_ident
+		SET del = 1
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="deleteTruely">
+		DELETE FROM cust_ident
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM cust_ident
+		<include refid="whereByCriteria"/>
+	</update>
+
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM cust_ident
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="deleteBatch">
+		UPDATE cust_ident
+		SET del = 1
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>
+	</update>
+
+	<update id="deleteBatchTruely">
+		DELETE FROM cust_ident
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>
+	</update>
+
+
+
+</mapper>

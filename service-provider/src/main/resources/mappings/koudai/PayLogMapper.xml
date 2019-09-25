@@ -1,0 +1,684 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.koudai.dao.PayLogDao">
+    
+	<sql id="payLogColumns">
+		a.id AS "id",
+		a.apply_id AS "applyId",
+		a.user_id AS "userId",
+		a.user_name AS "userName",
+		a.mobile AS "mobile",
+		a.id_no AS "idNo",
+		a.bank_code AS "bankCode",
+		a.bank_name AS "bankName",
+		a.card_no AS "cardNo",
+		a.pay_amt AS "payAmt",
+		a.pay_time AS "payTime",
+		a.pay_succ_time AS "paySuccTime",
+		a.pay_order_id AS "payOrderId",
+		a.pay_fail_count AS "payFailCount",
+		a.pay_status AS "payStatus",
+		a.withdraw_status AS "withdrawStatus",		
+		a.kd_pay_user_id AS "kdPayUserId",
+		a.kd_pay_third_platform AS "kdPayThirdPlatform",
+		a.kd_pay_order_id AS "kdPayOrderId",
+		a.kd_pay_code AS "kdPayCode",
+		a.kd_pay_msg AS "kdPayMsg",
+		a.kd_create_order_id AS "kdCreateOrderId",
+		a.kd_create_code AS "kdCreateCode",
+		a.kd_create_msg AS "kdCreateMsg",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+	
+	<sql id="payLogJoins">
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{id},
+		#{applyId},
+		#{userId},
+		#{userName},
+		#{mobile},
+		#{idNo},
+		#{bankCode},
+		#{bankName},
+		#{cardNo},
+		#{payAmt},
+		#{payTime},
+		#{paySuccTime},
+		#{payOrderId},
+		#{payFailCount},
+		#{payStatus},
+		#{withdrawStatus},
+		#{kdPayUserId},
+		#{kdPayThirdPlatform},
+		#{kdPayOrderId},
+		#{kdPayCode},
+		#{kdPayMsg},
+		#{kdCreateOrderId},
+		#{kdCreateCode},
+		#{kdCreateMsg},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.applyId},
+		#{entity.userId},
+		#{entity.userName},
+		#{entity.mobile},
+		#{entity.idNo},
+		#{entity.bankCode},
+		#{entity.bankName},
+		#{entity.cardNo},
+		#{entity.payAmt},
+		#{entity.payTime},
+		#{entity.paySuccTime},
+		#{entity.payOrderId},
+		#{entity.payFailCount},
+		#{entity.payStatus},
+		#{entity.withdrawStatus},
+		#{entity.kdPayUserId},
+		#{entity.kdPayThirdPlatform},
+		#{entity.kdPayOrderId},
+		#{entity.kdPayCode},
+		#{entity.kdPayMsg},
+		#{entity.kdCreateOrderId},
+		#{entity.kdCreateCode},
+		#{entity.kdCreateMsg},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		id,
+		apply_id,
+		user_id,
+		user_name,
+		mobile,
+		id_no,
+		bank_code,
+		bank_name,
+		card_no,
+		pay_amt,
+		pay_time,
+		pay_succ_time,
+		pay_order_id,
+		pay_fail_count,
+		pay_status,
+		withdraw_status,
+		kd_pay_user_id,
+		kd_pay_third_platform,
+		kd_pay_order_id,
+		kd_pay_code,
+		kd_pay_msg,
+		kd_create_order_id,
+		kd_create_code,
+		kd_create_msg,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		apply_id = #{applyId},
+		user_id = #{userId},
+		user_name = #{userName},
+		mobile = #{mobile},
+		id_no = #{idNo},
+		bank_code = #{bankCode},
+		bank_name = #{bankName},
+		card_no = #{cardNo},
+		pay_amt = #{payAmt},
+		pay_time = #{payTime},
+		pay_succ_time = #{paySuccTime},
+		pay_order_id = #{payOrderId},
+		pay_fail_count = #{payFailCount},
+		pay_status = #{payStatus},
+		withdraw_status = #{withdrawStatus},
+		kd_pay_user_id = #{kdPayUserId},
+		kd_pay_third_platform = #{kdPayThirdPlatform},
+		kd_pay_order_id = #{kdPayOrderId},
+		kd_pay_code = #{kdPayCode},
+		kd_pay_msg = #{kdPayMsg},
+		kd_create_order_id = #{kdCreateOrderId},
+		kd_create_code = #{kdCreateCode},
+		kd_create_msg = #{kdCreateMsg},
+		remark = #{remark},
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.applyId != null">
+				apply_id = #{entity.applyId},
+			</if>
+			<if test="entity.userId != null">
+				user_id = #{entity.userId},
+			</if>
+			<if test="entity.userName != null">
+				user_name = #{entity.userName},
+			</if>
+			<if test="entity.mobile != null">
+				mobile = #{entity.mobile},
+			</if>
+			<if test="entity.idNo != null">
+				id_no = #{entity.idNo},
+			</if>
+			<if test="entity.bankCode != null">
+				bank_code = #{entity.bankCode},
+			</if>
+			<if test="entity.bankName != null">
+				bank_name = #{entity.bankName},
+			</if>
+			<if test="entity.cardNo != null">
+				card_no = #{entity.cardNo},
+			</if>
+			<if test="entity.payAmt != null">
+				pay_amt = #{entity.payAmt},
+			</if>
+			<if test="entity.payTime != null">
+				pay_time = #{entity.payTime},
+			</if>
+			<if test="entity.paySuccTime != null">
+				pay_succ_time = #{entity.paySuccTime},
+			</if>
+			<if test="entity.payOrderId != null">
+				pay_order_id = #{entity.payOrderId},
+			</if>
+			<if test="entity.payFailCount != null">
+				pay_fail_count = #{entity.payFailCount},
+			</if>
+			<if test="entity.payStatus != null">
+				pay_status = #{entity.payStatus},
+			</if>
+			<if test="entity.withdrawStatus != null">
+				withdraw_status = #{entity.withdrawStatus},
+			</if>
+			<if test="entity.kdPayUserId != null">
+				kd_pay_user_id = #{entity.kdPayUserId},
+			</if>
+			<if test="entity.kdPayThirdPlatform != null">
+				kd_pay_third_platform = #{entity.kdPayThirdPlatform},
+			</if>
+			<if test="entity.kdPayOrderId != null">
+				kd_pay_order_id = #{entity.kdPayOrderId},
+			</if>
+			<if test="entity.kdPayCode != null">
+				kd_pay_code = #{entity.kdPayCode},
+			</if>
+			<if test="entity.kdPayMsg != null">
+				kd_pay_msg = #{entity.kdPayMsg},
+			</if>
+			<if test="entity.kdCreateOrderId != null">
+				kd_create_order_id = #{entity.kdCreateOrderId},
+			</if>
+			<if test="entity.kdCreateCode != null">
+				kd_create_code = #{entity.kdCreateCode},
+			</if>
+			<if test="entity.kdCreateMsg != null">
+				kd_create_msg = #{entity.kdCreateMsg},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+  	<select id="get" resultType="PayLog">
+  		/*FORCE_MASTER*/
+		SELECT 
+		<include refid="payLogColumns"/>
+		FROM koudai_pay_log a
+		<include refid="payLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+  	<select id="getById" resultType="PayLog">
+  		/*FORCE_MASTER*/
+		SELECT 
+		<include refid="payLogColumns"/>
+		FROM koudai_pay_log a
+		<include refid="payLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+		
+    <select id="getByCriteria" resultType="PayLog">
+    	/*FORCE_MASTER*/
+		SELECT 
+		<include refid="payLogColumns"/>
+		FROM koudai_pay_log a
+		<include refid="payLogJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultType="PayLog">
+		/*FORCE_MASTER*/
+		SELECT 
+		<include refid="payLogColumns"/>
+		FROM koudai_pay_log a
+		<include refid="payLogJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultType="PayLog">
+		/*FORCE_MASTER*/
+		SELECT 
+		<include refid="payLogColumns"/>
+		FROM koudai_pay_log a
+		<include refid="payLogJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultType="PayLog">
+		/*FORCE_MASTER*/
+		SELECT 
+		<include refid="payLogColumns"/>
+		FROM koudai_pay_log a
+		<include refid="payLogJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="PayLog">
+		/*FORCE_MASTER*/
+		SELECT 
+		<include refid="payLogColumns"/>
+		FROM koudai_pay_log a
+		<include refid="payLogJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="PayLog">
+		/*FORCE_MASTER*/
+		SELECT 
+		<include refid="payLogColumns"/>
+		FROM koudai_pay_log a
+		<include refid="payLogJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		/*FORCE_MASTER*/
+		SELECT COUNT(1) FROM koudai_pay_log
+		<include refid="payLogJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		/*FORCE_MASTER*/
+		SELECT COUNT(1) FROM koudai_pay_log
+		<include refid="payLogJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO koudai_pay_log
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+	
+	<insert id="insertBatch">
+		INSERT INTO koudai_pay_log
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	<update id="update">
+		UPDATE koudai_pay_log SET 
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE koudai_pay_log 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE koudai_pay_log 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE koudai_pay_log		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE koudai_pay_log
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByCriteria">
+		UPDATE koudai_pay_log
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE koudai_pay_log 
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE koudai_pay_log
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM koudai_pay_log
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM koudai_pay_log
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM koudai_pay_log
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM koudai_pay_log
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<select id="findList" resultType="PayLog">
+		/*FORCE_MASTER*/
+		SELECT 
+		<include refid="payLogColumns"/>
+		FROM koudai_pay_log a
+		<where>
+            a.del = 0
+            <if test="payLogListOP.userName != null and payLogListOP.userName != ''">
+                and a.user_name = #{payLogListOP.userName}
+            </if>
+            <if test="payLogListOP.mobile != null and payLogListOP.mobile != ''">
+                and a.mobile = #{payLogListOP.mobile}
+            </if>
+            <if test="payLogListOP.payStatus != null and payLogListOP.payStatus != ''">
+                and a.pay_status = #{payLogListOP.payStatus}
+            </if>
+            <if test="payLogListOP.expectStart != null and payLogListOP.expectStart !=''">
+				<![CDATA[ AND a.pay_time >= #{payLogListOP.expectStart} ]]>
+			</if>
+			<if test="payLogListOP.expectEnd != null and payLogListOP.expectEnd !='' ">
+				<![CDATA[ AND a.pay_time <= #{payLogListOP.expectEnd} ]]>
+			</if>
+			
+			<if test="payLogListOP.kdCreateCode != null and payLogListOP.kdCreateCode != ''">
+                <if test='payLogListOP.kdCreateCode == "0"'>
+                and a.kd_create_code = 0 
+            	</if>
+            	<if test='payLogListOP.kdCreateCode == "1"'>
+                and a.kd_create_code != 0 and a.kd_create_code is not null 
+            	</if>
+            	<if test='payLogListOP.kdCreateCode == "2"'>
+                and a.kd_create_code is null 
+            	</if>
+            </if>
+            
+            <if test="payLogListOP.withdrawStatus != null and payLogListOP.withdrawStatus != ''">
+                and a.withdraw_status = #{payLogListOP.withdrawStatus}
+            </if>
+            
+        </where>
+        <include refid="pageOrderBy"/>
+	</select>
+	
+	
+	
+	<select id="findCreatingList" resultType="PayLog">
+		SELECT 
+		<include refid="payLogColumns"/>
+		FROM koudai_pay_log a 
+		join loan_apply apply on a.apply_id=apply.id where apply.pay_channel=2 and a.kd_create_code is null 
+				
+		<if test="param.pay_status != null and param.pay_status != ''">
+                and a.pay_status = #{param.pay_status} 
+          </if>
+          <if test="param.pay_succ_time_begin != null and param.pay_succ_time_begin != ''">                
+                <![CDATA[ and a.pay_succ_time >= #{param.pay_succ_time_begin} ]]>
+          </if>
+          
+          <if test="param.pay_succ_time_end != null and param.pay_succ_time_end != ''">                
+                 <![CDATA[ and a.pay_succ_time <= #{param.pay_succ_time_end} ]]>
+          </if>
+          
+		
+		<include refid="orderBy" />
+		
+		limit 100
+		
+	</select>
+	 
+	<select id="sumCurrPayedAmt" resultType="BigDecimal">
+		select COALESCE(SUM(pay_amt),0) from koudai_pay_log a
+		where pay_time >curdate() and pay_status in(0,2)
+	</select>
+	
+	<select id="findWithdrawRecode" resultType="PayLog">
+	select 
+	<include refid="payLogColumns"/>	
+	from koudai_pay_log a join loan_apply apply on a.apply_id=apply.id 
+	where apply.pay_channel=3 and a.withdraw_status is not null and a.del=0 
+				
+		<if test="payLog.userId != null and payLog.userId != ''">
+                and a.user_id = #{payLog.userId}
+        </if>
+        
+        <if test="payLog.withdrawStatus != null">
+            and a.withdraw_status = #{payLog.withdrawStatus}
+        </if>
+        
+        <if test="payLog.payStatus != null">
+            and a.pay_status = #{payLog.payStatus}
+        </if>
+		
+		<include refid="orderBy" />
+		
+		limit 100
+		
+	</select>
+	
+	<select id="findKDWaitingLendingList" resultType="PayLog">
+	select 
+	<include refid="payLogColumns"/>	
+	from koudai_pay_log a join loan_apply apply on a.apply_id=apply.id 
+	where apply.pay_channel=3 and apply.status=411 and a.pay_status =2 and a.del=0 				
+	<include refid="orderBy" />		
+	limit 100
+		
+	</select>
+	
+	<select id="findKDUnWithdrawOrderList" resultType="PayLog">
+	select 	a.id AS "id",a.apply_id AS "applyId"
+	from koudai_pay_log a
+	where a.pay_status =0 and a.del=0 and a.withdraw_status = 0 	
+	<![CDATA[ and a.pay_time>date_sub(now(), interval 3 day) ]]>
+	<if test="payTime != null">
+         <![CDATA[ and a.pay_succ_time <= #{payTime} ]]>
+    </if> 
+	limit 100
+	</select>
+	
+	<select id="getPayCount" resultType="java.util.HashMap">
+			SELECT
+				date_format( pay_time, '%Y-%m-%d' ) time ,
+				sum( CASE pay_status  WHEN 0 THEN pay_amt ELSE 0 END ) AS succAmt,
+				sum(CASE pay_status  WHEN 0 THEN 1 ELSE 0 END) as succTimes,
+				sum( CASE pay_status  WHEN 0 THEN 0 ELSE pay_amt END ) AS otherAmt,
+				sum(CASE pay_status  WHEN 0 THEN 0 ELSE 1 END) as otherTimes,
+				sum(pay_amt) as allAmt,
+				count( 1 ) AS allTimes
+			FROM
+				koudai_pay_log k 
+			
+		<where>
+			<if test="op.applyStart != null and op.applyStart != '' ">
+				<![CDATA[
+						and date_format(k.pay_time,'%Y-%m-%d') >= DATE_FORMAT(#{op.applyStart},'%Y-%m-%d')
+				]]>
+			</if>
+			<if test="op.applyEnd != null and op.applyEnd != '' ">
+				<![CDATA[
+						and date_format(k.pay_time,'%Y-%m-%d') <= DATE_FORMAT(#{op.applyEnd},'%Y-%m-%d')
+				]]>
+			</if>
+		</where>
+		
+		
+	GROUP BY
+				date_format( pay_time, '%Y-%m-%d' )
+	</select>
+	
+	<select id="findPayLogList" resultType="PayLog">
+	select 
+	<include refid="payLogColumns"/>	
+	from koudai_pay_log a join loan_apply apply on a.apply_id=apply.id
+	where a.del=0 
+	<if test="pay_channel != null">
+                and apply.pay_channel=#{pay_channel}
+    </if>
+     <if test="pay_status != null">
+               and a.pay_status =#{pay_status}
+    </if>
+    <if test="pay_time != null">
+                 <![CDATA[ and a.pay_time <= #{pay_time} ]]>
+    </if> 
+			
+	<include refid="orderBy" />		
+	limit 100
+		
+	</select>
+
+</mapper>

@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.GoodsListDao">
+    
+	<sql id="goodsListColumns">
+		a.id AS "id",
+		a.goods_name AS "goodsName",
+		a.goods_price AS "goodsPrice",
+		a.market_price AS "marketPrice",
+		a.goods_pic AS "goodsPic",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del",
+		a.simple_name AS "simpleName",
+		a.sales_volume AS "salesVolume",
+		a.pic_banner AS "picBanner",
+		a.pic_detail AS "picDetail",
+		a.max_coupon AS "maxCoupon",
+		a.status AS "status"
+	</sql>
+	
+	<sql id="goodsListJoins">
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{id},
+		#{goodsName},
+		#{goodsPrice},
+		#{marketPrice},
+		#{goodsPic},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del},
+		#{simpleName},
+		#{salesVolume},
+		#{picBanner},
+		#{picDetail},
+		#{maxCoupon},
+		#{status}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.goodsName},
+		#{entity.goodsPrice},
+		#{entity.marketPrice},
+		#{entity.goodsPic},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del},
+		#{entity.simpleName},
+		#{entity.salesVolume},
+		#{entity.picBanner},
+		#{entity.picDetail},
+		#{entity.maxCoupon},
+		#{entity.status}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		id,
+		goods_name,
+		goods_price,
+		market_price,
+		goods_pic,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del,
+		simple_name,
+		sales_volume,
+		pic_banner,
+		pic_detail,
+		max_coupon,
+		status
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		goods_name = #{goodsName},
+		goods_price = #{goodsPrice},
+		market_price = #{marketPrice},
+		goods_pic = #{goodsPic},
+		update_by = #{updateBy},
+		update_time = #{updateTime},
+		simple_name = #{simpleName},
+		sales_volume = #{salesVolume},
+		pic_banner = #{picBanner},
+		pic_detail = #{picDetail},
+		max_coupon = #{maxCoupon},
+		status= #{status}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.goodsName != null">
+				goods_name = #{entity.goodsName},
+			</if>
+			<if test="entity.goodsPrice != null">
+				goods_price = #{entity.goodsPrice},
+			</if>
+			<if test="entity.marketPrice != null">
+				market_price = #{entity.marketPrice},
+			</if>
+			<if test="entity.goodsPic != null">
+				goods_pic = #{entity.goodsPic},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+			<if test="entity.simpleName != null">
+				simple_name = #{entity.simpleName},
+			</if>
+			<if test="entity.salesVolume != null">
+				sales_volume = #{entity.salesVolume},
+			</if>
+			<if test="entity.picBanner != null">
+				pic_banner = #{entity.picBanner},
+			</if>
+			<if test="entity.picDetail != null">
+				pic_detail = #{entity.picDetail},
+			</if>
+			<if test="entity.maxCoupon != null">
+				max_coupon = #{entity.maxCoupon},
+			</if>
+			<if test="entity.status != null">
+				status = #{entity.status},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+  	<select id="get" resultType="GoodsList">
+		SELECT 
+		<include refid="goodsListColumns"/>
+		FROM loan_goods_list a
+		<include refid="goodsListJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+  	<select id="getById" resultType="GoodsList">
+		SELECT 
+		<include refid="goodsListColumns"/>
+		FROM loan_goods_list a
+		<include refid="goodsListJoins"/>
+		WHERE a.id = #{id}
+	</select>
+		
+    <select id="getByCriteria" resultType="GoodsList">
+		SELECT 
+		<include refid="goodsListColumns"/>
+		FROM loan_goods_list a
+		<include refid="goodsListJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultType="GoodsList">
+		SELECT 
+		<include refid="goodsListColumns"/>
+		FROM loan_goods_list a
+		<include refid="goodsListJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultType="GoodsList">
+		SELECT 
+		<include refid="goodsListColumns"/>
+		FROM loan_goods_list a
+		<include refid="goodsListJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultType="GoodsList">
+		SELECT 
+		<include refid="goodsListColumns"/>
+		FROM loan_goods_list a
+		<include refid="goodsListJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="GoodsList">
+		SELECT 
+		<include refid="goodsListColumns"/>
+		FROM loan_goods_list a
+		<include refid="goodsListJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="GoodsList">
+		SELECT 
+		<include refid="goodsListColumns"/>
+		FROM loan_goods_list a
+		<include refid="goodsListJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM loan_goods_list
+		<include refid="goodsListJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM loan_goods_list
+		<include refid="goodsListJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO loan_goods_list
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+
+
+
+	
+	<insert id="insertBatch">
+		INSERT INTO loan_goods_list
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	<update id="update">
+		UPDATE loan_goods_list SET 
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE loan_goods_list 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE loan_goods_list 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE loan_goods_list		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+
+
+	<update id="delete">
+		UPDATE loan_goods_list
+		SET del = 1
+		,update_by=#{updateBy},update_time=#{updateTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByCriteria">
+		UPDATE loan_goods_list
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE loan_goods_list 
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE loan_goods_list
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM loan_goods_list
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM loan_goods_list
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM loan_goods_list
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM loan_goods_list
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+
+
+	<select id="queryGoodsList" resultType="com.rongdu.loans.loan.vo.GoodsListVO">
+		SELECT
+		<include refid="goodsListColumns"/>
+		FROM loan_goods_list a
+		<where>
+			a.del = 0
+			<if test="op.goodsName != null and op.goodsName != ''">
+				AND a.goods_name = #{op.goodsName}
+			</if>
+			<if test="op.status != null and op.status != ''">
+				AND a.status = #{op.status}
+			</if>
+
+		</where>
+		<include refid="pageOrderBy"/>
+	</select>
+
+    <update id="updateGoods">
+        UPDATE loan_goods_list
+        <include refid="updateSelectiveColumns"/>
+        WHERE id = #{entity.id}
+    </update>
+
+
+	<insert id="insertGoods">
+		INSERT INTO loan_goods_list
+		<include refid="insertColumns"/>
+		VALUES
+		<include refid="insertValues"/>
+	</insert>
+	
+	 
+</mapper>

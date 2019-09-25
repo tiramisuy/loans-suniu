@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.CollectionAssignmentDao">
+    
+	<sql id="collectionAssignment">
+		a.id AS "id",
+		a.repay_plan_item_id AS "repayPlanItemId",
+		a.apply_id AS "applyId",
+		a.cont_no AS "contNo",
+		a.user_id AS "userId",
+		a.user_name AS "userName",
+		a.from_operator_id AS "fromOperatorId",
+		a.from_operator_name AS "fromOperatorName",
+		a.to_operator_id AS "toOperatorId",
+		a.to_operator_name AS "toOperatorName",
+		a.return_time AS "returnTime",
+		a.return_type AS "returnType",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+	
+	<sql id="allotmentLogJoins">
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{id},
+		#{repayPlanItemId},
+		#{applyId},
+		#{contNo},
+		#{userId},
+		#{userName},
+		#{fromOperatorId},
+		#{fromOperatorName},
+		#{toOperatorId},
+		#{toOperatorName},
+		#{returnTime},
+		#{returnType},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.repayPlanItemId},
+		#{entity.applyId},
+		#{entity.contNo},
+		#{entity.userId},
+		#{entity.userName},
+		#{entity.fromOperatorId},
+		#{entity.fromOperatorName},
+		#{entity.toOperatorId},
+		#{entity.toOperatorName},
+		#{entity.returnTime},
+		#{entity.returnType},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		id,
+		repay_plan_item_id,
+		apply_id,
+		cont_no,
+		user_id,
+		user_name,
+		from_operator_id,
+		from_operator_name,
+		to_operator_id,
+		to_operator_name,
+		return_time,
+		return_type,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		repay_plan_item_id = #{repayPlanItemId},
+		apply_id = #{applyId},
+		cont_no = #{contNo},
+		user_id = #{userId},
+		user_name = #{userName},
+		from_operator_id = #{fromOperatorId},
+		from_operator_name = #{fromOperatorName},
+		to_operator_id = #{toOperatorId},
+		to_operator_name = #{toOperatorName},
+		return_time = #{returnTime},
+		return_type = #{returnType},
+		remark = #{remark},
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.repayPlanItemId != null">
+				repay_plan_item_id = #{entity.repayPlanItemId},
+			</if>
+			<if test="entity.applyId != null">
+				apply_id = #{entity.applyId},
+			</if>
+			<if test="entity.contNo != null">
+				cont_no = #{entity.contNo},
+			</if>
+			<if test="entity.userId != null">
+				user_id = #{entity.userId},
+			</if>
+			<if test="entity.userName != null">
+				user_name = #{entity.userName},
+			</if>
+			<if test="entity.fromOperatorId != null">
+				from_operator_id = #{entity.fromOperatorId},
+			</if>
+			<if test="entity.fromOperatorName != null">
+				from_operator_name = #{entity.fromOperatorName},
+			</if>
+			<if test="entity.toOperatorId != null">
+				to_operator_id = #{entity.toOperatorId},
+			</if>
+			<if test="entity.toOperatorName != null">
+				to_operator_name = #{entity.toOperatorName},
+			</if>
+			<if test="entity.returnTime != null">
+				return_time = #{entity.returnTime},
+			</if>
+			<if test="entity.returnType != null">
+				return_type = #{entity.returnType},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND|OR">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND|OR">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+  	<select id="get" resultType="CollectionAssignment">
+		SELECT 
+		<include refid="collectionAssignment"/>
+		FROM loan_collection_assignment a
+		<include refid="allotmentLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+  	<select id="getById" resultType="CollectionAssignment">
+		SELECT 
+		<include refid="collectionAssignment"/>
+		FROM loan_collection_assignment a
+		<include refid="allotmentLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+		
+    <select id="getByCriteria" resultType="CollectionAssignment">
+		SELECT 
+		<include refid="collectionAssignment"/>
+		FROM loan_collection_assignment a
+		<include refid="allotmentLogJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultType="CollectionAssignment">
+		SELECT 
+		<include refid="collectionAssignment"/>
+		FROM loan_collection_assignment a
+		<include refid="allotmentLogJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultType="CollectionAssignment">
+		SELECT 
+		<include refid="collectionAssignment"/>
+		FROM loan_collection_assignment a
+		<include refid="allotmentLogJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultType="CollectionAssignment">
+		SELECT 
+		<include refid="collectionAssignment"/>
+		FROM loan_collection_assignment a
+		<include refid="allotmentLogJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="CollectionAssignment">
+		SELECT 
+		<include refid="collectionAssignment"/>
+		FROM loan_collection_assignment a
+		<include refid="allotmentLogJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="CollectionAssignment">
+		SELECT 
+		<include refid="collectionAssignment"/>
+		FROM loan_collection_assignment a
+		<include refid="allotmentLogJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM loan_collection_assignment
+		<include refid="allotmentLogJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM loan_collection_assignment
+		<include refid="allotmentLogJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO loan_collection_assignment
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+	
+	<insert id="insertBatch">
+		INSERT INTO loan_collection_assignment
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	<update id="update">
+		UPDATE loan_collection_assignment SET 
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE loan_collection_assignment 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE loan_collection_assignment 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE loan_collection_assignment		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE loan_collection_assignment
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByCriteria">
+		UPDATE loan_collection_assignment
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE loan_collection_assignment 
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE loan_collection_assignment
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM loan_collection_assignment
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM loan_collection_assignment
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM loan_collection_assignment
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM loan_collection_assignment
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<select id="getAllByRepayPlanItemId" resultType="CollectionAssignment">
+		SELECT <include refid="collectionAssignment"/> from loan_collection_assignment a
+		where a.repay_plan_item_id = #{repayPlanItemId} ORDER BY create_time desc;
+	</select>
+
+	<select id="getAllByItemIdAndDel" resultType="CollectionAssignment">
+		SELECT <include refid="collectionAssignment"/> from loan_collection_assignment a
+		WHERE a.del = #{del} and  a.repay_plan_item_id in
+		<foreach collection="idList" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>
+	</select>
+
+	<update id="deleteByIdList">
+		UPDATE loan_collection_assignment SET del = 1
+		WHERE repay_plan_item_id in
+		<foreach collection="idList" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>
+	</update>
+
+	<select id="getForReturnBack" resultType="CollectionAssignment">
+		 SELECT <include refid="collectionAssignment"/> from loan_collection_assignment a
+ 					where a.del = 0 and a.return_type = 1 and <![CDATA[ a.return_time < NOW() ]]>
+	</select>
+	
+	<select id="getOperateByApplyId" resultType="CollectionAssignment">
+		SELECT 
+		<include refid="collectionAssignment"/>
+		FROM loan_collection_assignment a
+		WHERE a.apply_id = #{applyId} 
+			ORDER BY a.create_time desc
+		LIMIT 1
+	</select>
+	
+	
+	
+	
+	 
+</mapper>

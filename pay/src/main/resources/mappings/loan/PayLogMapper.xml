@@ -1,0 +1,880 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.pay.dao.PayLogDAO">
+
+    <sql id="payLogColumns">
+		a.id AS "id",
+		a.apply_id AS "applyId",
+		a.contract_no AS "contractNo",
+		a.user_id AS "userId",
+		a.user_name AS "userName",
+		a.orig_order_no AS "origOrderNo",
+		a.tx_type AS "txType",
+		a.tx_date AS "txDate",
+		a.tx_time AS "txTime",
+		a.tx_amt AS "txAmt",
+		a.tx_fee AS "txFee",
+		a.terminal AS "terminal",
+		a.terminal_id AS "terminalId",
+		a.chl_order_no AS "chlOrderNo",
+		a.chl_code AS "chlCode",
+		a.chl_name AS "chlName",
+		a.to_acc_name AS "toAccName",
+		a.to_acc_no AS "toAccNo",
+		a.to_idno AS "toIdno",
+		a.to_mobile AS "toMobile",
+		a.to_bank_name AS "toBankName",
+		a.to_pro_name AS "toProName",
+		a.to_city_name AS "toCityName",
+		a.to_acc_dept AS "toAccDept",
+		a.ip AS "ip",
+		a.succ_amt AS "succAmt",
+		a.succ_time AS "succTime",
+		a.contract_url AS "contractUrl",
+		a.review_status AS "reviewStatus",
+		a.review_time AS "reviewTime",
+		a.review_by AS "reviewBy",
+		a.status AS "status",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+
+    <sql id="payLogJoins">
+    </sql>
+
+    <sql id="insertValues">
+	(		
+		#{id},
+		#{applyId},
+		#{contractNo},
+		#{userId},
+		#{userName},
+		#{origOrderNo},
+		#{txType},
+		#{txDate},
+		#{txTime},
+		#{txAmt},
+		#{txFee},
+		#{terminal},
+		#{terminalId},
+		#{chlOrderNo},
+		#{chlCode},
+		#{chlName},
+		#{toAccName},
+		#{toAccNo},
+		#{toIdno},
+		#{toMobile},
+		#{toBankName},
+		#{toProName},
+		#{toCityName},
+		#{toAccDept},
+		#{ip},
+		#{succAmt},
+		#{succTime},
+		#{contractUrl},
+		#{reviewStatus},
+		#{reviewTime},
+		#{reviewBy},
+		#{status},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+	)	
+	</sql>
+
+    <sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.applyId},
+		#{entity.contractNo},
+		#{entity.userId},
+		#{entity.userName},
+		#{entity.origOrderNo},
+		#{entity.txType},
+		#{entity.txDate},
+		#{entity.txTime},
+		#{entity.txAmt},
+		#{entity.txFee},
+		#{entity.terminal},
+		#{entity.terminalId},
+		#{entity.chlOrderNo},
+		#{entity.chlCode},
+		#{entity.chlName},
+		#{entity.toAccName},
+		#{entity.toAccNo},
+		#{entity.toIdno},
+		#{entity.toMobile},
+		#{entity.toBankName},
+		#{entity.toProName},
+		#{entity.toCityName},
+		#{entity.toAccDept},
+		#{entity.ip},
+		#{entity.succAmt},
+		#{entity.succTime},
+		#{entity.contractUrl},
+		#{entity.reviewStatus},
+		#{entity.reviewTime},
+		#{entity.reviewBy},
+		#{entity.status},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+	)	
+	</sql>
+
+    <sql id="insertColumns">
+	(		
+		id,
+		apply_id,
+		contract_no,
+		user_id,
+		user_name,
+		orig_order_no,
+		tx_type,
+		tx_date,
+		tx_time,
+		tx_amt,
+		tx_fee,
+		terminal,
+		terminal_id,
+		chl_order_no,
+		chl_code,
+		chl_name,
+		to_acc_name,
+		to_acc_no,
+		to_idno,
+		to_mobile,
+		to_bank_name,
+		to_pro_name,
+		to_city_name,
+		to_acc_dept,
+		ip,
+		succ_amt,
+		succ_time,
+		contract_url,
+		review_status,
+		review_time,
+		review_by,
+		status,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+	) 
+	</sql>
+
+    <sql id="updateColumns">
+		apply_id = #{applyId},
+		contract_no = #{contractNo},
+		user_id = #{userId},
+		user_name = #{userName},
+		orig_order_no = #{origOrderNo},
+		tx_type = #{txType},
+		tx_date = #{txDate},
+		tx_time = #{txTime},
+		tx_amt = #{txAmt},
+		tx_fee = #{txFee},
+		terminal = #{terminal},
+		terminal_id = #{terminalId},
+		chl_order_no = #{chlOrderNo},
+		chl_code = #{chlCode},
+		chl_name = #{chlName},
+		to_acc_name = #{toAccName},
+		to_acc_no = #{toAccNo},
+		to_idno = #{toIdno},
+		to_mobile = #{toMobile},
+		to_bank_name = #{toBankName},
+		to_pro_name = #{toProName},
+		to_city_name = #{toCityName},
+		to_acc_dept = #{toAccDept},
+		ip = #{ip},
+		succ_amt = #{succAmt},
+		succ_time = #{succTime},
+		contract_url = #{contractUrl},
+		review_status = #{reviewStatus},
+		review_time = #{reviewTime},
+		review_by = #{reviewBy},
+		status = #{status},
+		remark = #{remark},
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+	</sql>
+
+    <sql id="updateSelectiveColumns">
+        <set>
+            <if test="entity.applyId != null">
+                apply_id = #{entity.applyId},
+            </if>
+            <if test="entity.contractNo != null">
+                contract_no = #{entity.contractNo},
+            </if>
+            <if test="entity.userId != null">
+                user_id = #{entity.userId},
+            </if>
+            <if test="entity.userName != null">
+                user_name = #{entity.userName},
+            </if>
+            <if test="entity.origOrderNo != null">
+                orig_order_no = #{entity.origOrderNo},
+            </if>
+            <if test="entity.txType != null">
+                tx_type = #{entity.txType},
+            </if>
+            <if test="entity.txDate != null">
+                tx_date = #{entity.txDate},
+            </if>
+            <if test="entity.txTime != null">
+                tx_time = #{entity.txTime},
+            </if>
+            <if test="entity.txAmt != null">
+                tx_amt = #{entity.txAmt},
+            </if>
+            <if test="entity.txFee != null">
+                tx_fee = #{entity.txFee},
+            </if>
+            <if test="entity.terminal != null">
+                terminal = #{entity.terminal},
+            </if>
+            <if test="entity.terminalId != null">
+                terminal_id = #{entity.terminalId},
+            </if>
+            <if test="entity.chlOrderNo != null">
+                chl_order_no = #{entity.chlOrderNo},
+            </if>
+            <if test="entity.chlCode != null">
+                chl_code = #{entity.chlCode},
+            </if>
+            <if test="entity.chlName != null">
+                chl_name = #{entity.chlName},
+            </if>
+            <if test="entity.toAccName != null">
+                to_acc_name = #{entity.toAccName},
+            </if>
+            <if test="entity.toAccNo != null">
+                to_acc_no = #{entity.toAccNo},
+            </if>
+            <if test="entity.toIdno != null">
+                to_idno = #{entity.toIdno},
+            </if>
+            <if test="entity.toMobile != null">
+                to_mobile = #{entity.toMobile},
+            </if>
+            <if test="entity.toBankName != null">
+                to_bank_name = #{entity.toBankName},
+            </if>
+            <if test="entity.toProName != null">
+                to_pro_name = #{entity.toProName},
+            </if>
+            <if test="entity.toCityName != null">
+                to_city_name = #{entity.toCityName},
+            </if>
+            <if test="entity.toAccDept != null">
+                to_acc_dept = #{entity.toAccDept},
+            </if>
+            <if test="entity.ip != null">
+                ip = #{entity.ip},
+            </if>
+            <if test="entity.succAmt != null">
+                succ_amt = #{entity.succAmt},
+            </if>
+            <if test="entity.succTime != null">
+                succ_time = #{entity.succTime},
+            </if>
+            <if test="entity.contractUrl != null">
+                contract_url = #{entity.contractUrl},
+            </if>
+            <if test="entity.reviewStatus != null">
+                review_status = #{entity.reviewStatus},
+            </if>
+            <if test="entity.reviewTime != null">
+                review_time = #{entity.reviewTime},
+            </if>
+            <if test="entity.reviewBy != null">
+                review_by = #{entity.reviewBy},
+            </if>
+            <if test="entity.status != null">
+                status = #{entity.status},
+            </if>
+            <if test="entity.remark != null">
+                remark = #{entity.remark},
+            </if>
+            <if test="entity.updateBy != null">
+                update_by = #{entity.updateBy},
+            </if>
+            <if test="entity.updateTime != null">
+                update_time = #{entity.updateTime},
+            </if>
+        </set>
+    </sql>
+
+    <sql id="whereByCriteriaList">
+        <where>
+            <foreach collection="criteriaList" item="criteria" separator=" AND ">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+                        <foreach collection="criteria.pairList" item="pair">
+                            <choose>
+                                <when test="pair.criterion.singleValue">
+                                    ${pair.logic} ${pair.criterion.column}
+                                    ${pair.criterion.match}
+                                    ${pair.criterion.value}
+                                </when>
+                                <when test="pair.criterion.betweenValue">
+                                    ${pair.logic} ${pair.criterion.column}
+                                    ${pair.criterion.match}
+                                    ${pair.criterion.value} and
+                                    ${pair.criterion.secondValue}
+                                </when>
+                                <when test="pair.criterion.listValue">
+                                    ${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+                                    <foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+                                        #{item}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="whereByCriteria">
+        <where>
+            <if test="criteria.valid">
+                <trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+                    <foreach collection="criteria.pairList" item="pair">
+                        <choose>
+                            <when test="pair.criterion.singleValue">
+                                ${pair.logic} ${pair.criterion.column}
+                                ${pair.criterion.match}
+                                ${pair.criterion.value}
+                            </when>
+                            <when test="pair.criterion.betweenValue">
+                                ${pair.logic} ${pair.criterion.column}
+                                ${pair.criterion.match}
+                                ${pair.criterion.value} and
+                                ${pair.criterion.secondValue}
+                            </when>
+                            <when test="pair.criterion.listValue">
+                                ${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+                                <foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+                                    #{item}
+                                </foreach>
+                            </when>
+                        </choose>
+                    </foreach>
+                </trim>
+            </if>
+        </where>
+    </sql>
+
+    <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+
+    <sql id="pageOrderBy">
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.create_time DESC
+            </otherwise>
+        </choose>
+    </sql>
+
+    <select id="get" resultType="PayLog">
+        SELECT
+        <include refid="payLogColumns"/>
+        FROM loan_pay_log a
+        <include refid="payLogJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="getById" resultType="PayLog">
+        SELECT
+        <include refid="payLogColumns"/>
+        FROM loan_pay_log a
+        <include refid="payLogJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="getByCriteria" resultType="PayLog">
+        SELECT
+        <include refid="payLogColumns"/>
+        FROM loan_pay_log a
+        <include refid="payLogJoins"/>
+        <include refid="whereByCriteria"/>
+    </select>
+
+    <select id="findAllByCriteria" resultType="PayLog">
+        SELECT
+        <include refid="payLogColumns"/>
+        FROM loan_pay_log a
+        <include refid="payLogJoins"/>
+        <include refid="whereByCriteria"/>
+        <include refid="orderBy"/>
+    </select>
+
+    <select id="findAllByCriteriaList" resultType="PayLog">
+        SELECT
+        <include refid="payLogColumns"/>
+        FROM loan_pay_log a
+        <include refid="payLogJoins"/>
+        <include refid="whereByCriteriaList"/>
+        <include refid="orderBy"/>
+    </select>
+
+    <select id="getPage" resultType="PayLog">
+        SELECT
+        <include refid="payLogColumns"/>
+        FROM loan_pay_log a
+        <include refid="payLogJoins"/>
+        <include refid="pageOrderBy"/>
+    </select>
+
+    <select id="getPageByCriteria" resultType="PayLog">
+        SELECT
+        <include refid="payLogColumns"/>
+        FROM loan_pay_log a
+        <include refid="payLogJoins"/>
+        <include refid="whereByCriteria"/>
+        <include refid="pageOrderBy"/>
+    </select>
+
+    <select id="getPageByCriteriaList" resultType="PayLog">
+        SELECT
+        <include refid="payLogColumns"/>
+        FROM loan_pay_log a
+        <include refid="payLogJoins"/>
+        <include refid="whereByCriteriaList"/>
+        <include refid="pageOrderBy"/>
+    </select>
+
+    <select id="countByCriteria" resultType="Long">
+        SELECT COUNT(1) FROM loan_pay_log
+        <include refid="payLogJoins"/>
+        <include refid="whereByCriteria"/>
+    </select>
+
+    <select id="countByCriteriaList" resultType="Long">
+        SELECT COUNT(1) FROM loan_pay_log
+        <include refid="payLogJoins"/>
+        <include refid="whereByCriteriaList"/>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO loan_pay_log
+        <include refid="insertColumns"/>
+        VALUES
+        <include refid="insertValues"/>
+    </insert>
+
+    <insert id="insertBatch">
+        INSERT INTO loan_pay_log
+        <include refid="insertColumns"/>
+        VALUES
+        <foreach collection="list" item="entity" index="index" separator=",">
+            <include refid="insertBatchValues"/>
+        </foreach>
+    </insert>
+
+    <update id="update">
+        UPDATE loan_pay_log SET
+        <include refid="updateColumns"/>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateByCriteriaSelective">
+        UPDATE loan_pay_log
+        <include refid="updateSelectiveColumns"/>
+        <include refid="whereByCriteria"/>
+    </update>
+
+    <update id="updateByCriteriaListSelective">
+        UPDATE loan_pay_log
+        <include refid="updateSelectiveColumns"/>
+        <include refid="whereByCriteriaList"/>
+    </update>
+
+    <update id="updateByIdSelective">
+        UPDATE loan_pay_log
+        <include refid="updateSelectiveColumns"/>
+        WHERE id = #{entity.id}
+    </update>
+
+    <update id="delete">
+		UPDATE loan_pay_log
+		SET del = 1
+		WHERE id = #{id}
+	</update>
+
+    <update id="deleteByCriteria">
+        UPDATE loan_pay_log
+        SET del = 1
+        <include refid="whereByCriteria"/>
+    </update>
+
+    <update id="deleteByCriteriaList">
+        UPDATE loan_pay_log
+        SET del = 1
+        <include refid="whereByCriteriaList"/>
+    </update>
+
+    <update id="deleteTruely">
+		DELETE FROM loan_pay_log
+		WHERE id = #{id}
+	</update>
+
+    <update id="deleteTruelyByCriteria">
+        DELETE FROM loan_pay_log
+        <include refid="whereByCriteria"/>
+    </update>
+
+    <update id="deleteTruelyByCriteriaList">
+        DELETE FROM loan_pay_log
+        <include refid="whereByCriteriaList"/>
+    </update>
+
+    <update id="deleteBatch">
+        UPDATE loan_pay_log
+        SET del = 1
+        WHERE id in
+        <foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </update>
+
+    <update id="deleteBatchTruely">
+        DELETE FROM loan_pay_log
+        WHERE id in
+        <foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </update>
+
+    <select id="withdrawList" resultType="com.rongdu.loans.loan.vo.WithdrawDetailListVO">
+        SELECT p.apply_id as applyId,p.id,p.user_id as userId,p.user_name as name,l.mobile,l.id_no as idNo,p.tx_type as
+        txType,p.tx_amt as txAmt,
+        p.tx_time as txTime, p.succ_time as succTime,p.status,p.chl_order_no,p.chl_code,p.chl_name,p.remark,
+        p.contract_url,p.to_bank_name as toBankName,p.to_acc_no as toAccNo
+        FROM
+        loan_pay_log p LEFT JOIN loan_apply l on p.apply_id = l.id
+        <where>
+            p.del = 0
+            <if test="op.companyId != null and op.companyId != ''">
+                and l.company_id = #{op.companyId}
+            </if>
+            <if test="op.productId != null and op.productId != ''">
+                and l.product_id in (${op.productId})
+            </if>
+            <if test="op.mobile != null and op.mobile != ''">
+                and l.mobile = #{op.mobile}
+            </if>
+            <if test="op.idNo != null and op.idNo != ''">
+                and l.id_no = #{op.idNo}
+            </if>
+            <if test="op.userName != null and op.userName != ''">
+                and p.user_name = #{op.userName}
+            </if>
+            <if test="op.status != null and op.status != ''">
+                and p.status = #{op.status}
+            </if>
+            <if test="op.txAmt != null and op.txAmt != ''">
+                and p.tx_amt = #{op.txAmt}
+            </if>
+            <if test="op.txType != null and op.txType != ''">
+                and p.tx_type = #{op.txType}
+            </if>
+            <if test="op.chlCode != null and op.chlCode != ''">
+                and p.chl_code = #{op.chlCode}
+            </if>
+            <if test="op.applyTimeStart != null ">
+                <![CDATA[ AND p.tx_time >= #{op.applyTimeStart} ]]>
+            </if>
+            <if test="op.applyTimeEnd != null">
+                <![CDATA[ AND p.tx_time <= #{op.applyTimeEnd} ]]>
+            </if>
+            <if test="op.accountTimeStart != null ">
+                <![CDATA[ AND p.succ_time >= #{op.accountTimeStart} ]]>
+            </if>
+            <if test="op.accountTimeEnd != null">
+                <![CDATA[ AND p.succ_time <= #{op.accountTimeEnd} ]]>
+            </if>
+
+        </where>
+        ORDER BY p.tx_time desc
+    </select>
+
+
+    <select id="exportWithdrawList" resultType="com.rongdu.loans.loan.vo.WithdrawDetailListVO">
+        SELECT p.apply_id as applyId,p.id,p.user_id as userId,l.user_name as name,l.mobile,l.id_no as idNo,p.tx_type as
+        txType,p.tx_amt as txAmt,
+        p.tx_time as txTime, p.succ_time as succTime,p.status,p.chl_order_no,p.chl_code,p.chl_name,p.remark
+        FROM
+        loan_pay_log p LEFT JOIN loan_apply l on p.apply_id = l.id
+        <where>
+            p.del = 0
+            <if test="op.companyId != null and op.companyId != ''">
+                and l.company_id = #{op.companyId}
+            </if>
+            <if test="op.productId != null and op.productId != ''">
+                and l.product_id in (${op.productId})
+            </if>
+            <if test="op.mobile != null and op.mobile != ''">
+                and l.mobile = #{op.mobile}
+            </if>
+            <if test="op.idNo != null and op.idNo != ''">
+                and l.id_no = #{op.idNo}
+            </if>
+            <if test="op.userName != null and op.userName != ''">
+                and l.user_name = #{op.userName}
+            </if>
+            <if test="op.status != null and op.status != ''">
+                and p.status = #{op.status}
+            </if>
+            <if test="op.txAmt != null and op.txAmt != ''">
+                and p.tx_amt = #{op.txAmt}
+            </if>
+            <if test="op.txType != null and op.txType != ''">
+                and p.tx_type = #{op.txType}
+            </if>
+            <if test="op.applyTimeStart != null ">
+                <![CDATA[ AND p.tx_time >= #{op.applyTimeStart} ]]>
+            </if>
+            <if test="op.applyTimeEnd != null">
+                <![CDATA[ AND p.tx_time <= #{op.applyTimeEnd} ]]>
+            </if>
+            <if test="op.accountTimeStart != null ">
+                <![CDATA[ AND p.succ_time >= #{op.accountTimeStart} ]]>
+            </if>
+            <if test="op.accountTimeEnd != null">
+                <![CDATA[ AND p.succ_time <= #{op.accountTimeEnd} ]]>
+            </if>
+
+        </where>
+        ORDER BY status desc, p.succ_time desc
+    </select>
+
+
+    <select id="findPayedAmt" resultType="java.lang.Double">
+		SELECT 
+			SUM(a.tx_amt)
+		FROM 
+			loan_pay_log a
+		WHERE 
+			(a.status = 'SUCCESS' or a.status = '0000')
+			AND a.orig_order_no = #{origOrderNo}
+	</select>
+
+    <select id="successLogFilter" resultType="java.lang.String">
+        SELECT apply_id from loan_pay_log where apply_id in
+        <foreach collection="source" index="index" item="id" open="(" separator="," close=")">#{id}</foreach>
+        AND `status` in('512','514','513','P','S','0','1','2','0000','200','0300')
+    </select>
+
+    <!-- code y0621 -->
+    <select id="findPayUnsolvedOrders" resultType="PayLog">
+        select
+        <include refid="payLogColumns"/>
+        from loan_pay_log a
+        where a.status = '513'
+        and a.tx_type = 'withdraw'
+        and a.chl_code = 'XIANFENG'
+    </select>
+
+    <select id="findBaofooPayUnsolvedOrders" resultType="PayLog">
+        select
+        <include refid="payLogColumns"/>
+        from loan_pay_log a
+        where a.tx_type = 'withdraw'
+        and a.chl_code = 'BAOFOO'
+        and a.status in
+        <foreach item="status" collection="statusList" open="(" separator="," close=")">
+            #{status}
+        </foreach>
+        limit 100
+    </select>
+
+    <select id="findTRBaofooPayUnsolvedOrders" resultType="PayLog">
+        select
+        <include refid="payLogColumns"/>
+        from loan_pay_log a
+        where a.tx_type = 'withdraw'
+        and a.chl_code = 'TONGRONG'
+        and a.status in
+        <foreach item="status" collection="statusList" open="(" separator="," close=")">
+            #{status}
+        </foreach>
+        limit 100
+    </select>
+
+    <select id="findTonglianPayUnsolvedOrders" resultType="PayLog">
+        select
+        <include refid="payLogColumns"/>
+        from loan_pay_log a
+        where a.tx_type = 'withdraw'
+        and a.chl_code = 'TONGLIAN'
+        and a.status in
+        <foreach item="status" collection="statusList" open="(" separator="," close=")">
+            #{status}
+        </foreach>
+        limit 100
+    </select>
+
+    <select id="findTonglianLoanPayUnsolvedOrders" resultType="PayLog">
+        select
+        <include refid="payLogColumns"/>
+        from loan_pay_log a
+        where a.tx_type = 'withdraw'
+        and a.chl_code = 'TONGLIAN_LOAN'
+        and a.status in
+        <foreach item="status" collection="statusList" open="(" separator="," close=")">
+            #{status}
+        </foreach>
+        limit 100
+    </select>
+
+    <select id="getBFPayCount" resultType="java.util.HashMap">
+        SELECT
+        date_format( l.tx_time, '%Y-%m-%d' ) time,
+        sum( l.tx_amt ) AS allAmt,
+        count( 1 ) AS allTimes
+        FROM loan_pay_log l
+        LEFT JOIN loan_apply la ON l.apply_id = la.id
+        <where>
+            <if test="op.channelId != null and op.channelId != ''">
+                and la.channel_id in (${op.channelId})
+            </if>
+            <if test="op.status != null and op.status !=''">
+
+                <if test="op.status == 2 ">
+                    and l.chl_code ='BAOFOO'
+                </if>
+                <if test="op.status ==3 ">
+                    and l.chl_code is null
+                </if>
+                <if test="op.status == 4 ">
+                    and l.chl_code ='TONGLIAN_LOAN' and l.status='S'
+                </if>
+            </if>
+            <if test="op.applyStart != null and op.applyStart != '' ">
+                <![CDATA[
+					and date_format(l.tx_time,'%Y-%m-%d') >= DATE_FORMAT(#{op.applyStart},'%Y-%m-%d')
+				]]>
+            </if>
+            <if test="op.applyEnd != null and op.applyEnd != '' ">
+                <![CDATA[
+					and date_format(l.tx_time,'%Y-%m-%d') <= DATE_FORMAT(#{op.applyEnd},'%Y-%m-%d')
+				]]>
+            </if>
+        </where>
+        GROUP BY date_format( l.tx_time, '%Y-%m-%d' )
+    </select>
+
+
+    <select id="countBaofooPayUnsolvedAndSuccess" resultType="Long">
+        /*FORCE_MASTER*/
+        select count(*)
+        from loan_pay_log a
+        where apply_id=#{applyId}
+        and a.status in
+        <foreach item="status" collection="statusList" open="(" separator="," close=")">
+            #{status}
+        </foreach>
+    </select>
+
+    <select id="countTonglianPayUnsolvedAndSuccess" resultType="Long">
+        /*FORCE_MASTER*/
+        select count(*)
+        from loan_pay_log a
+        where apply_id=#{applyId}
+        and a.status in
+        <foreach item="status" collection="statusList" open="(" separator="," close=")">
+            #{status}
+        </foreach>
+    </select>
+
+    <select id="findWithdrawAmount" resultType="PayLog">
+        SELECT
+        <include refid="payLogColumns"/>
+        FROM
+        loan_pay_log a
+        WHERE
+        a.del = 0
+        AND a.chl_code = 'HANJS'
+        AND a.status = '512'
+        AND a.user_id = #{userId}
+        ORDER BY a.update_time DESC
+        LIMIT 1
+    </select>
+
+
+    <select id="equitableAssignmentList" resultType="com.rongdu.loans.loan.vo.WithdrawDetailListVO">
+        SELECT p.apply_id as applyId,p.id,p.user_id as userId,l.user_name as name,l.mobile,l.id_no as idNo,p.tx_type as
+        txType,p.tx_amt as txAmt,
+        p.tx_time as txTime, p.succ_time as succTime,p.status,p.chl_code,p.chl_name,p.remark, p.contract_url,
+        lr.loan_start_date as loanStartDate, lr.loan_end_date as loanEndDate
+        FROM
+        loan_pay_log p LEFT JOIN loan_apply l on p.apply_id = l.id LEFT JOIN loan_repay_plan lr on l.id = lr.apply_id
+        <where>
+            p.del = 0
+            <if test="op.companyId != null and op.companyId != ''">
+                and l.company_id = #{op.companyId}
+            </if>
+            <if test="op.productId != null and op.productId != ''">
+                and l.product_id in (${op.productId})
+            </if>
+            <if test="op.mobile != null and op.mobile != ''">
+                and l.mobile = #{op.mobile}
+            </if>
+            <if test="op.idNo != null and op.idNo != ''">
+                and l.id_no = #{op.idNo}
+            </if>
+            <if test="op.userName != null and op.userName != ''">
+                and l.user_name = #{op.userName}
+            </if>
+            <if test="op.status != null and op.status != ''">
+                and p.status = #{op.status}
+            </if>
+            <if test="op.txAmt != null and op.txAmt != ''">
+                and p.tx_amt = #{op.txAmt}
+            </if>
+            <if test="op.txType != null and op.txType != ''">
+                and p.tx_type = #{op.txType}
+            </if>
+            <if test="op.chlCode != null and op.chlCode != ''">
+                and p.chl_code = #{op.chlCode}
+            </if>
+            <if test="op.applyTimeStart != null ">
+                <![CDATA[ AND p.tx_time >= #{op.applyTimeStart} ]]>
+            </if>
+            <if test="op.applyTimeEnd != null">
+                <![CDATA[ AND p.tx_time <= #{op.applyTimeEnd} ]]>
+            </if>
+            <if test="op.accountTimeStart != null ">
+                <![CDATA[ AND p.succ_time >= #{op.accountTimeStart} ]]>
+            </if>
+            <if test="op.accountTimeEnd != null">
+                <![CDATA[ AND p.succ_time <= #{op.accountTimeEnd} ]]>
+            </if>
+
+        </where>
+        ORDER BY p.tx_time desc
+    </select>
+
+
+    <select id="sumHanjsCurrPayedAmt" resultType="BigDecimal">
+		select COALESCE(SUM(succ_amt),0) from loan_pay_log a
+		where succ_time >curdate() and chl_code = 'HANJS'
+	</select>
+</mapper>

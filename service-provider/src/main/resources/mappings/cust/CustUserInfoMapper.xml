@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.cust.dao.CustUserInfoDAO">
+    
+	<resultMap id="BaseResultMap" type="com.rongdu.loans.cust.entity.CustUserInfo">
+		<id column="ID" property="id" />
+		<result column="USER_NAME" property="userName" />
+		<result column="ID_TYPE" property="idType" />
+		<result column="ID_NO" property="idNo" />
+		<result column="MOBILE" property="mobile" />
+		<result column="SEX" property="sex" />
+		<result column="MARITAL" property="marital" />
+		<result column="DEGREE" property="degree" />
+		<result column="NATION" property="nation" />
+		<result column="RESIDE_TYPE" property="resideType" />
+		<result column="RESIDE_ADDR" property="resideAddr" />
+		<result column="RESIDE_YEAR" property="resideYear" />
+		<result column="RESIDE_PROVINCE" property="resideProvince" />
+		<result column="RESIDE_CITY" property="resideCity" />
+		<result column="RESIDE_DISTRICT" property="resideDistrict" />
+		<result column="REG_ADDR" property="regAddr" />
+		<result column="REG_PROVINCE" property="regProvince" />
+		<result column="REG_CITY" property="regCity" />
+		<result column="REG_DISTRICT" property="regDistrict" />
+		<result column="INDIV_MONTH_INCOME" property="indivMonthIncome" />
+		<result column="FAMILY_MONTH_INCOME" property="familyMonthIncome" />
+		<result column="PAF_NO" property="pafNo" />
+		<result column="SS_NO" property="ssNo" />
+		<result column="INDUSTRY" property="industry" />
+		<result column="COM_NAME" property="comName" />
+		<result column="WORK_ADDR" property="workAddr" />
+		<result column="WORK_PROVINCE" property="workProvince" />
+		<result column="WORK_CITY" property="workCity" />
+		<result column="WORK_DISTRICT" property="workDistrict" />
+		<result column="WORK_POSITION" property="workPosition" />
+		<result column="WORK_YEAR" property="workYear" />
+		<result column="PARENT_PROVINCE" property="parentProvince" />
+		<result column="PARENT_CITY" property="parentCity" />
+		<result column="PARENT_DISTRICT" property="parentDistrict" />
+		<result column="PARENT_ADDRESS" property="parentAddress" />
+		<result column="COM_TEL_ZONE" property="comTelZone" />
+		<result column="COM_TEL_NO" property="comTelNo" />
+		<result column="COM_TEL_EXT" property="comTelExt" />
+		<result column="STATUS" property="status" />
+		<result column="REMARK" property="remark" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="DEL" property="del" />
+	</resultMap>
+	
+	<resultMap id="simpleMap" type="com.rongdu.loans.cust.vo.CustUserInfoVO">
+		<id column="ID" property="userId" />
+		<result column="USER_NAME" property="userName" />
+		<result column="ID_TYPE" property="idType" />
+		<result column="ID_NO" property="idNo" />
+		<result column="MOBILE" property="mobile" />
+		<result column="SEX" property="sex" />
+		<result column="MARITAL" property="marital" />
+		<result column="DEGREE" property="degree" />
+		<result column="NATION" property="nation" />
+		<result column="RESIDE_TYPE" property="resideType" />
+		<result column="RESIDE_ADDR" property="resideAddr" />
+		<result column="RESIDE_YEAR" property="resideYear" />
+		<result column="RESIDE_PROVINCE" property="resideProvince" />
+		<result column="RESIDE_CITY" property="resideCity" />
+		<result column="RESIDE_DISTRICT" property="resideDistrict" />
+		<result column="REG_ADDR" property="regAddr" />
+		<result column="REG_PROVINCE" property="regProvince" />
+		<result column="REG_CITY" property="regAddr" />
+		<result column="REG_DISTRICT" property="regProvince" />
+		<result column="INDIV_MONTH_INCOME" property="indivMonthIncome" />
+		<result column="FAMILY_MONTH_INCOME" property="familyMonthIncome" />
+		<result column="PAF_NO" property="pafNo" />
+		<result column="SS_NO" property="ssNo" />
+		<result column="INDUSTRY" property="industry" />
+		<result column="COM_NAME" property="comName" />
+		<result column="WORK_ADDR" property="workAddr" />
+		<result column="WORK_PROVINCE" property="workProvince" />
+		<result column="WORK_CITY" property="workCity" />
+		<result column="WORK_DISTRICT" property="workDistrict" />
+		<result column="WORK_POSITION" property="workPosition" />
+		<result column="WORK_YEAR" property="workYear" />
+		<result column="PARENT_PROVINCE" property="parentProvince" />
+		<result column="PARENT_CITY" property="parentCity" />
+		<result column="PARENT_DISTRICT" property="parentDistrict" />
+		<result column="PARENT_ADDRESS" property="parentAddress" />
+		<result column="COM_TEL_ZONE" property="comTelZone" />
+		<result column="COM_TEL_NO" property="comTelNo" />
+		<result column="COM_TEL_EXT" property="comTelExt" />
+		<result column="STATUS" property="status" />
+	</resultMap>
+	
+	<resultMap id="tFLMap" type="com.rongdu.loans.cust.option.TFLBaseInfoOP">
+		<result column="MARITAL" property="marital" />
+		<result column="DEGREE" property="degree" />
+		<result column="RESIDE_ADDR" property="resideAddr" />
+		<result column="RESIDE_PROVINCE" property="resideProvince" />
+		<result column="RESIDE_CITY" property="resideCity" />
+		<result column="RESIDE_DISTRICT" property="resideDistrict" />
+		<result column="INDIV_MONTH_INCOME" property="indivMonthIncome" />
+		<result column="INDUSTRY" property="industry" />
+		<result column="WORK_ADDR" property="workAddr" />
+		<result column="WORK_PROVINCE" property="workProvince" />
+		<result column="WORK_CITY" property="workCity" />
+		<result column="WORK_DISTRICT" property="workDistrict" />
+		<result column="WORK_POSITION" property="workPosition" />
+		<result column="WORK_YEAR" property="workYear" />
+		<result column="PARENT_PROVINCE" property="parentProvince" />
+		<result column="PARENT_CITY" property="parentCity" />
+		<result column="PARENT_DISTRICT" property="parentDistrict" />
+		<result column="PARENT_ADDRESS" property="parentAddress" />
+		<result column="REMARK" property="remark" />
+	</resultMap>
+
+	<sql id="All_Column">
+		id,user_name, id_type, id_no, mobile, sex, marital, degree, nation,
+		 reside_type, reside_addr, reside_year, reside_province, reside_city,
+		  reside_district, reg_addr,reg_province, reg_city, reg_district,
+		  indiv_month_income, family_month_income, paf_no, ss_no, industry,
+		   com_name, work_addr, work_province, work_city, work_district,
+		    work_position, work_year,parent_province,parent_city,parent_district,
+		   parent_address, com_tel_zone, com_tel_no,
+		     com_tel_ext, status, remark, create_by, create_time, update_by, update_time, del
+	</sql>
+	
+    <sql id="Simple_Column">
+		 id, user_name, id_type, id_no, mobile, sex, marital, degree, nation,
+		 reside_type, reside_addr, reside_year, reside_province, reside_city,
+		  reside_district, reg_addr, reg_province, reg_city, reg_district, 
+		  indiv_month_income, family_month_income, paf_no, ss_no, industry,
+		   com_name, work_addr, work_province, work_city, work_district,
+		    work_position, work_year, parent_province,parent_city,parent_district,
+		   parent_address,com_tel_zone, com_tel_no, com_tel_ext, status
+	</sql>
+	
+	<sql id="TFLUserInfo_Column">
+		 marital, degree , reside_addr, reside_province, reside_city, 
+		 reside_district, indiv_month_income, industry, work_addr,
+		 work_province, work_city, work_district, work_position,
+		 parent_province,parent_city,parent_district,parent_address,
+		 work_year, remark
+	</sql>
+	
+	<sql id="Where_Obj">
+		<where>
+		    del = 0
+		    <if test="id!=null">
+				AND id = #{id}
+			</if>
+			<if test="userName!=null">
+				AND user_name = #{userName}
+			</if>
+			<if test="idNo!=null">
+				AND id_no = #{idNo}
+			</if>
+			<if test="mobile!=null">
+				AND mobile = #{mobile}
+			</if> 
+			<if test="sex!=null">
+			    AND sex = #{sex}
+			</if>
+			<if test="marital!=null">
+			    AND marital = #{marital}
+			</if>
+			<if test="degree!=null">
+			    AND degree = #{degree}
+			</if>
+			<if test="nation!=null">
+			    AND nation = #{nation}
+			</if>
+			<if test="resideType!=null">
+			    AND reside_type = #{resideType}
+			</if>
+			<if test="resideAddr!=null">
+			    AND reside_addr = #{resideAddr}
+			</if>
+			<if test="resideYear!=null">
+			    AND reside_year = #{resideYear}
+			</if>
+			<if test="resideProvince!=null">
+			    AND reside_province = #{resideProvince}
+			</if>
+			<if test="resideCity!=null">
+			    AND reside_city = #{resideCity}
+			</if>
+			<if test="categoryId!=null">
+			    AND reside_district = #{resideDistrict}
+			</if>
+			<if test="regAddr!=null">
+			    AND reg_addr = #{regAddr}
+			</if>
+			<if test="regProvince!=null">
+			    AND reg_province = #{regProvince}
+			</if>
+			<if test="regCity!=null">
+			    AND reg_city = #{regCity}
+			</if>
+			<if test="regDistrict!=null">
+			    AND reg_district = #{regDistrict}
+			</if>
+			<if test="indivMonthIncome!=null">
+			    AND indiv_month_income = #{indivMonthIncome}
+			</if>
+			<if test="familyMonthIncome!=null">
+			   fAND amily_month_income = #{familyMonthIncome}
+			</if>
+			<if test="pafNo!=null">
+			   AND paf_no = #{pafNo}
+			</if>
+			<if test="ssNo!=null">
+			   AND ss_no = #{ssNo}
+			</if>
+			<if test="industry!=null">
+			   AND industry = #{industry}
+			</if>
+			<if test="comName!=null">
+			   AND com_name = #{comName}
+			</if>
+			<if test="workAddr!=null">
+			   AND work_addr = #{workAddr}
+			</if>
+			<if test="workProvince!=null">
+			   AND work_province = #{workProvince}
+			</if>
+			<if test="workCity!=null">
+			   AND work_city = #{workCity}
+			</if>
+			<if test="workDistrict!=null">
+			   AND work_district = #{workDistrict}
+			</if>
+			<if test="workPosition!=null">
+			   AND work_position = #{workPosition}
+			</if>
+			<if test="workYear!=null">
+			   AND work_year = #{workYear}
+			</if>
+			<if test="comTelZone!=null">
+			   AND com_tel_zone = #{comTelZone}
+			</if>
+			<if test="comTelNo!=null">
+			   AND com_tel_no = #{comTelNo}
+			</if>
+			<if test="comTelExt!=null">
+			   AND com_tel_ext = #{comTelExt}
+			</if>
+			<if test="status!=null">
+			   AND status = #{status}
+			</if>
+	   </where>
+	</sql>
+	
+    <select id="countById" parameterType="string" resultType="int">
+	  select COUNT(id)
+	    from cust_user_info 
+	   where del = 0
+	     and id = #{id}
+	</select>
+	
+	<select id="getById" parameterType="string" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM cust_user_info
+	   WHERE del = 0
+	     AND id = #{id}
+	</select>
+	
+	<select id="getSimpleById" parameterType="string" resultMap="simpleMap">
+	  SELECT 
+		 <include refid="Simple_Column"/>
+		FROM cust_user_info
+	   WHERE del = 0
+	     AND id = #{id}
+	</select>
+	
+	<select id="getTFLUserInfo" parameterType="string" resultMap="tFLMap">
+	  SELECT 
+		 <include refid="TFLUserInfo_Column"/>
+		FROM cust_user_info
+	   WHERE del = 0
+	     AND id = #{id}
+	</select>
+
+	<select id="get" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM cust_user_info
+	     <include refid="Where_Obj"/>
+	   ORDER BY id
+	   LIMIT 1
+	</select>
+	
+	<select id="findList" resultType="list">
+		SELECT 
+		 <include refid="All_Column"/>
+		FROM cust_user_info
+	     <include refid="Where_Obj"/>
+	</select>
+	
+	<select id="findAllList" resultType="list">
+		SELECT 
+			<include refid="All_Column"/>
+		FROM cust_user_info
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cust_user_info(
+			id,
+			user_name,
+			id_type,
+			id_no,
+			mobile,
+			sex,
+			marital,
+			degree,
+			nation,
+			reside_type,
+			reside_addr,
+			reside_year,
+			reside_province,
+			reside_city,
+			reside_district,
+			reg_addr,
+			reg_province,
+			reg_city,
+			reg_district,
+			indiv_month_income,
+			family_month_income,
+			paf_no,
+			ss_no,
+			industry,
+			com_name,
+			work_addr,
+			work_province,
+			work_city,
+			work_district,
+			work_position,
+			work_year,
+			parent_province,
+			parent_city,
+			parent_district,
+			parent_address,
+			com_tel_zone,
+			com_tel_no,
+			com_tel_ext,
+			status,
+			remark,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			del
+		) VALUES (
+			#{id},
+			#{userName},
+			#{idType},
+			#{idNo},
+			#{mobile},
+			#{sex},
+			#{marital},
+			#{degree},
+			#{nation},
+			#{resideType},
+			#{resideAddr},
+			#{resideYear},
+			#{resideProvince},
+			#{resideCity},
+			#{resideDistrict},
+			#{regAddr},
+			#{regProvince},
+			#{regCity},
+			#{regDistrict},
+			#{indivMonthIncome},
+			#{familyMonthIncome},
+			#{pafNo},
+			#{ssNo},
+			#{industry},
+			#{comName},
+			#{workAddr},
+			#{workProvince},
+			#{workCity},
+			#{workDistrict},
+			#{workPosition},
+			#{workYear},
+			#{parentProvince},
+			#{parentCity},
+			#{parentDistrict},
+			#{parentAddress},
+			#{comTelZone},
+			#{comTelNo},
+			#{comTelExt},
+			#{status},
+			#{remark},
+			#{createBy},
+			#{createTime},
+			#{updateBy},
+			#{updateTime},
+			#{del}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cust_user_info SET
+		    <if test="userName!=null">
+			user_name = #{userName},
+			</if>
+			<if test="idType!=null">
+			id_type = #{idType},
+			</if>
+			<if test="idNo!=null">
+			id_no = #{idNo},
+			</if>
+			<if test="mobile!=null">
+			mobile = #{mobile},
+			</if>
+			<if test="sex!=null">
+			sex = #{sex},
+			</if>
+			<if test="marital!=null">
+			marital = #{marital},
+			</if>
+			<if test="degree!=null">
+			degree = #{degree},
+			</if>
+			<if test="nation!=null">
+			nation = #{nation},
+			</if>
+			<if test="resideType!=null">
+			reside_type = #{resideType},
+			</if>
+			<if test="resideAddr!=null">
+			reside_addr = #{resideAddr},
+			</if>
+			<if test="resideYear!=null">
+			reside_year = #{resideYear},
+			</if>
+			<if test="resideProvince!=null">
+			reside_province = #{resideProvince},
+			</if>
+			<if test="resideCity!=null">
+			reside_city = #{resideCity},
+			</if>
+			<if test="resideDistrict!=null">
+			reside_district = #{resideDistrict},
+			</if>
+			<if test="regAddr!=null">
+			reg_addr = #{regAddr},
+			</if>
+			<if test="parentAddress!=null">
+			parent_address = #{parentAddress},
+			</if>
+			<if test="regProvince!=null">
+			reg_province = #{regProvince},
+			</if>
+			<if test="regCity!=null">
+			reg_city = #{regCity},
+			</if>
+			<if test="regDistrict!=null">
+			reg_district = #{regDistrict},
+			</if>
+			<if test="indivMonthIncome!=null">
+			indiv_month_income = #{indivMonthIncome},
+			</if>
+			<if test="familyMonthIncome!=null">
+			family_month_income = #{familyMonthIncome},
+			</if>
+			<if test="pafNo!=null">
+			paf_no = #{pafNo},
+			</if>
+			<if test="ssNo!=null">
+			ss_no = #{ssNo},
+			</if>
+			<if test="industry!=null">
+			industry = #{industry},
+			</if>
+			<if test="comName!=null">
+			com_name = #{comName},
+			</if>
+			<if test="workAddr!=null">
+			work_addr = #{workAddr},
+			</if>
+			<if test="workProvince!=null">
+			work_province = #{workProvince},
+			</if>
+			<if test="workCity!=null">
+			work_city = #{workCity},
+			</if>
+			<if test="workDistrict!=null">
+			work_district = #{workDistrict},
+			</if>
+			<if test="workPosition!=null">
+			work_position = #{workPosition},
+			</if>
+			<if test="workYear!=null">
+			work_year = #{workYear},
+			</if>
+			<if test="parentProvince!=null">
+			parent_province = #{parentProvince},
+			</if>
+			<if test="parentCity!=null">
+			parent_city = #{parentCity},
+			</if>
+			<if test="parentDistrict!=null">
+			parent_district = #{parentDistrict},
+			</if>
+			<if test="parentAddress!=null">
+			parent_address = #{parentAddress},
+			</if>
+			<if test="comTelZone!=null">
+			com_tel_zone = #{comTelZone},
+			</if>
+			<if test="comTelNo!=null">
+			com_tel_no = #{comTelNo},
+			</if>
+			<if test="comTelExt!=null">
+			com_tel_ext = #{comTelExt},
+			</if>
+			<if test="status!=null">
+			status = #{status},
+			</if>
+			<if test="remark!=null">
+			remark = #{remark},
+			</if>
+			update_by = #{updateBy},
+			update_time = #{updateTime}
+		WHERE del = 0
+		  AND id = #{id}
+	</update>
+	
+	<update id="updateBaseinfo">
+		UPDATE cust_user_info SET
+		    <if test="userName!=null">
+			user_name = #{userName},
+			</if>
+			<if test="idType!=null">
+			id_type = #{idType},
+			</if>
+			<if test="idNo!=null">
+			id_no = #{idNo},
+			</if>
+			<if test="mobile!=null">
+			mobile = #{mobile},
+			</if>
+			marital = #{marital},
+			degree = #{degree},
+			reside_type = #{resideType},
+			reside_addr = #{resideAddr},
+			reside_year = #{resideYear},
+			reside_province = #{resideProvince},
+			reside_city = #{resideCity},
+			reside_district = #{resideDistrict},
+			industry = #{industry},
+			com_name = #{comName},
+			work_addr = #{workAddr},
+			work_province = #{workProvince},
+			work_city = #{workCity},
+			work_district = #{workDistrict},
+			work_position = #{workPosition},
+			work_year = #{workYear},
+			indiv_month_income = #{indivMonthIncome},
+			parent_province = #{parentProvince},
+			parent_city = #{parentCity},
+			parent_district = #{parentDistrict},
+			parent_address = #{parentAddress},
+			com_tel_zone = #{comTelZone},
+			com_tel_no = #{comTelNo},
+			com_tel_ext = #{comTelExt},
+			status = #{status},
+			remark = #{remark},
+			update_by = #{updateBy},
+			update_time = #{updateTime}
+		WHERE del = 0
+		  AND  id = #{id}
+	</update>
+	
+	<update id="updateById">
+		UPDATE cust_user_info SET
+		    <if test="userName!=null">
+			user_name = #{userName},
+			</if>
+			<if test="idType!=null">
+			id_type = #{idType},
+			</if>
+			<if test="idNo!=null">
+			id_no = #{idNo},
+			</if>
+			<if test="mobile!=null">
+			mobile = #{mobile},
+			</if>
+			<if test="sex!=null">
+			sex = #{sex},
+			</if>
+			<if test="nation!=null">
+			nation = #{nation},
+			</if>
+			<if test="regAddr!=null">
+			reg_addr = #{regAddr},
+			</if>
+			<if test="regProvince!=null">
+			reg_province = #{regProvince},
+			</if>
+			<if test="regCity!=null">
+			reg_city = #{regCity},
+			</if>
+			<if test="regDistrict!=null">
+			reg_district = #{regDistrict},
+			</if>
+			<if test="parentProvince!=null">
+			parent_province = #{parentProvince},
+			</if>
+			<if test="parentCity!=null">
+			parent_city = #{parentCity},
+			</if>
+			<if test="parentDistrict!=null">
+			parent_district = #{parentDistrict},
+			</if>
+			<if test="parentAddress!=null">
+			parent_address = #{parentAddress},
+			</if>
+			<if test="status!=null">
+			status = #{status},
+			</if>
+			update_by = #{updateBy},
+			update_time = #{updateTime}
+		WHERE del = 0
+		  AND id = #{id}
+	</update>
+	
+	<update id="deleteById">
+	    UPDATE cust_user_info SET
+	        <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		    </if>
+		    <if test="updateTime!=null">
+			  update_time = #{updateTime},
+		    </if> 
+	          del = 1
+		 WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+	    UPDATE cust_user_info SET
+	       <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		   </if>
+		   <if test="updateTime!=null">
+			   update_time = #{updateTime},
+		   </if> 
+	           del = 1
+		<include refid="Where_Obj"/>
+	</update>
+</mapper>

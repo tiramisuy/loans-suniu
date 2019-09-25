@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.cust.dao.SmsCodeDao">
+
+	<resultMap id="SmsCodeVo" type="com.rongdu.loans.cust.vo.SmsCodeVo">
+		<result property="mobile" column="mobile" />
+		<result property="smsCode" column="content" />
+		<result property="sendTime" column="send_time" />
+		<result property="contNo" column="cont_no" />
+		<result property="userName" column="user_name" />
+		<result property="repayDate" column="repay_date" />
+		<result property="totalAmount" column="total_amount" />
+		<result property="channelName" column="channel_name" />
+		<result property="cardNo" column="card_no" />
+	</resultMap>
+	
+	<sql id="pageOrderBy">
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy} DESC
+            </when>
+            <otherwise>
+                ORDER BY create_time DESC
+            </otherwise>
+        </choose>
+    </sql>
+    
+	<select id="getSmsCode" resultMap="SmsCodeVo" >
+		SELECT mobile, content, send_time 
+		from basic_sms_log b
+		<where>
+			del = 0 and type is not null 
+			<if test="op.mobile != null and op.mobile != ''">
+                and mobile = #{op.mobile}
+            </if>
+            <if test="op.type != null and op.type != '' and op.type == 'warn'">
+                and type = '4'
+            </if>
+            <if test="op.type != null and op.type != '' and op.type == 'code'">
+                and type in ('1','2','3','5')
+            </if>
+			<if test="op.productId != null and op.productId != ''">
+                and channel_code = #{op.productId}
+            </if>
+			<if test="op.sendStart != null and op.sendStart != ''">
+                <![CDATA[ and send_time >= #{op.sendStart} ]]>
+            </if>
+			<if test="op.sendEnd != null and op.sendEnd != ''">
+                <![CDATA[ and send_time <= #{op.sendEnd} ]]>
+            </if>
+		</where>
+	</select>
+	
+	<select id="exportSms" resultMap="SmsCodeVo" >
+		SELECT b.mobile,b.content,b.send_time,l.cont_no,l.user_name,l.repay_date,l.total_amount,b.channel_name,c.card_no
+		from basic_sms_log b 
+		LEFT JOIN loan_repay_plan_item l on b.remark = l.id
+		LEFT JOIN cust_user c ON b.user_id = c.id
+		<where>
+			b.del = 0 and b.type is not null 
+			<if test="op.mobile != null and op.mobile != ''">
+                and b.mobile = #{op.mobile}
+            </if>
+            <if test="op.type != null and op.type != '' and op.type == 'warn'">
+                and b.type = '4'
+            </if>
+            <if test="op.type != null and op.type != '' and op.type == 'code'">
+                and b.type in ('1','2','3')
+            </if>
+			<if test="op.productId != null and op.productId != ''">
+                and b.channel_code = #{op.productId}
+            </if>
+			<if test="op.sendStart != null and op.sendStart != ''">
+                <![CDATA[ and b.send_time >= #{op.sendStart} ]]>
+            </if>
+			<if test="op.sendEnd != null and op.sendEnd != ''">
+                <![CDATA[ and b.send_time <= #{op.sendEnd} ]]>
+            </if>
+		</where>
+		ORDER BY b.send_time DESC
+	</select>
+	
+</mapper>

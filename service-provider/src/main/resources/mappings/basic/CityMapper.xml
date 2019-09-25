@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.basic.dao.CityDAO">
+
+	<sql id="cityColumns">
+		a.id AS "id",
+		a.fid AS "fid",
+		a.name AS "name",
+		a.fname AS "fname"
+	</sql>
+	
+   	<sql id="orderBy">
+		ORDER BY a.id asc
+	</sql>
+	
+  	<select id="getAll" resultType="com.rongdu.loans.basic.entity.City">
+		SELECT 
+		<include refid="cityColumns"/>
+		FROM basic_city a
+	</select>
+
+  	<select id="getByProvinceId" resultType="com.rongdu.loans.basic.entity.City">
+		SELECT 
+		<include refid="cityColumns"/>
+		FROM basic_city a
+		WHERE a.fid = #{0}
+	</select>
+	
+	<select id="getById" resultType="string">
+		SELECT 
+		a.name
+		FROM basic_city a
+		WHERE a.id = #{0}
+	</select>
+	
+	 
+</mapper>

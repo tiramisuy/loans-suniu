@@ -1,0 +1,14 @@
+<style type="text/css">*{padding: 0;margin: 0;}table{width: 100%;height: 100%;}img{margin-left: -2px;cursor: pointer;}</style>
+<script type="text/javascript">
+	var hide = true;
+	var cols;
+	function toggle(){//ÇÐ»»ÏÔÊ¾×ó±ß¿ò
+		var mainFrameset = top.frames['mainFrame'].document.getElementById("mainFrameset");
+		cols = cols?cols:mainFrameset.cols;
+		mainFrameset.cols = hide?"0,10,*":cols;
+		hide = hide?false:true;
+	}
+</script>
+<table>
+  <tr><td><img src="../res/sys/img/admin/split.gif" onclick="toggle();"></td></tr>
+</table>

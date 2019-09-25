@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.UserDao">
+
+	<select id="getUserByRole" resultType="com.rongdu.loans.loan.entity.User">
+		SELECT id,login_name AS loginName,no,email,phone,mobile,`name`,user_type as userType from sys_user WHERE id in (
+		SELECT user_id from sys_user_role where role_id = (
+		SELECT id from sys_role where `enname` = #{role} and del_flag = 0
+		)
+		) and del_flag=0 and allot_flag = 1
+	</select>
+	
+	<select id="getUserMobile" resultType="java.lang.String">
+		select mobile from sys_user
+	</select>
+	
+	<select id="getUserByNo" resultType="com.rongdu.loans.loan.entity.User">
+		select id,login_name AS loginName,no,email,phone,mobile,`name`,user_type as userType,call_id as callId from sys_user where no=#{no} and del_flag=0 limit 1
+	</select>
+	
+	<select id="getUserByCallId" resultType="com.rongdu.loans.loan.entity.User">
+		select id,login_name AS loginName,no,email,phone,mobile,`name`,user_type as userType,call_id as callId from sys_user where call_id=#{callId} and del_flag=0 limit 1
+	</select>
+				
+		
+	<select id="getRoleUserByCondition" resultType="User" parameterType="java.util.Map">
+		SELECT id,login_name AS loginName,no,email,phone,mobile,`name`,user_type as userType,company_id as companyId ,allot_flag as allotFlag from sys_user WHERE id in (
+		SELECT user_id from sys_user_role where role_id in ( SELECT id from sys_role where `enname` like CONCAT('%',#{role},'%') and del_flag = 0)
+		) and del_flag=0
+		
+			<if test="userName != null and userName != '' ">
+				and name like CONCAT('%',#{userName},'%') 
+			</if>
+			<if test="allotFlag != null and allotFlag != '' ">
+				and allot_flag = #{allotFlag}
+			</if>
+		
+	</select>
+	
+	
+	
+</mapper>

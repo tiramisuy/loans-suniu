@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.ContractDAO">
+
+	<resultMap id="BaseMap" type="com.rongdu.loans.loan.entity.Contract">
+		<id column="ID" property="id" />
+		<result column="APPLY_ID" property="applyId" />
+		<result column="user_id" property="userId" />
+		<result column="USER_NAME" property="userName" />
+		<result column="MOBILE" property="mobile" />
+		<result column="ID_NO" property="idNo" />
+		<result column="ID_TYPE" property="idType" />
+		<result column="LOAN_START_DATE" property="loanStartDate" />
+		<result column="LOAN_END_DATE" property="loanEndDate" />
+		<result column="TOTAL_AMOUNT" property="totalAmount" />
+		<result column="PRINCIPAL" property="principal" />
+		<result column="INTEREST" property="interest" />
+		<result column="SERV_FEE" property="servFee" />
+		<result column="PREPAY_FEE" property="prepayFee" />
+		<result column="OVERDUE_RATE" property="overdueRate" />
+		<result column="OVERDUE_FEE" property="overdueFee" />
+		<result column="DEDUCTION" property="deduction" />
+		<result column="TOTAL_TERM" property="totalTerm" />
+		<result column="STATUS" property="status" />
+		<result column="CONT_TIME" property="contTime" />
+		<result column="PAY_TIME" property="payTime" />
+		<result column="LOAN_DAYS" property="loanDays" />
+		<result column="REPAY_METHOD" property="repayMethod" />
+		<result column="GRACE_TYPE" property="graceType" />
+		<result column="GRACE_DAY" property="graceDay" />
+		<result column="FIX_PENALTY_INT" property="fixPenaltyInt" />
+		<result column="MAX_PENALTY_INT" property="maxPenaltyInt" />
+		<result column="MIN_PENALTY_INT" property="minPenaltyInt" />
+		<result column="COMP_INT" property="compInt" />
+		<result column="REMARK" property="remark" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="DEL" property="del" />
+		<result column="PRODUCT_ID" property="productId" />
+		<result column="PROMOTION_CASE_ID" property="promotionCaseId" />
+
+	</resultMap>
+	
+	<sql id="All_Column">
+		id, apply_id, user_id, user_name, mobile, id_no, id_type, loan_start_date,
+		 loan_end_date, total_amount, principal, interest, serv_fee, prepay_fee,
+		  overdue_rate, overdue_fee, deduction, total_term, status, cont_time, pay_time, loan_days,
+		   repay_method, grace_type, grace_day, fix_penalty_int, max_penalty_int,
+		   min_penalty_int, comp_int,product_id,promotion_case_id,
+		    remark, create_by, create_time, update_by, update_time, del
+	</sql>
+
+	<select id="getByApplyId"  resultMap="BaseMap">
+	  SELECT
+		<include refid="All_Column"/>
+		FROM loan_contract
+	   WHERE del = 0
+		 AND apply_id = #{applyId}
+	</select>
+	
+	<select id="getUnFinishContractByUserId"  resultMap="BaseMap">
+	  SELECT
+		<include refid="All_Column"/>
+		FROM loan_contract
+	   WHERE del = 0
+	     AND status = 0
+		 AND user_id = #{userId}
+	</select>
+	
+	<select id="getRecentThreeDaysRecords"  resultMap="BaseMap">
+	  SELECT
+		     apply_id, user_id, mobile, id_no, user_name, principal, loan_days, pay_time
+		FROM loan_contract
+	   WHERE DATEDIFF(CURRENT_TIMESTAMP, pay_time) &lt; 4
+		 AND del = 0
+	</select>
+	
+	<update id="updateStatus">
+		UPDATE loan_contract SET
+		       <if test="totalAmount!=null">
+		       total_amount = #{totalAmount},
+		       </if>
+		       <if test="prepayFee!=null">
+		       prepay_fee = #{prepayFee},
+		       </if>
+		       status = #{status},
+			   update_by = #{updateBy},
+			   update_time = #{updateTime}
+		WHERE status = 0
+		  AND apply_id = #{applyId}
+	</update>
+	
+	<insert id="insert">
+		INSERT INTO loan_contract(
+			id,
+			apply_id,
+			user_id,
+			user_name,
+			mobile,
+			id_no,
+			id_type,
+			product_id,
+			promotion_case_id,
+			loan_start_date,
+			loan_end_date,
+			total_amount,
+			principal,
+			overdue_rate,
+			overdue_fee,
+			interest,
+			serv_fee,
+			prepay_fee,
+			deduction,
+			total_term,
+			status,
+			cont_time,
+			pay_time,
+			loan_days,
+			repay_method,
+			grace_type,
+			grace_day,
+			fix_penalty_int,
+			max_penalty_int,
+			min_penalty_int,
+			comp_int,
+			remark,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			del
+		) VALUES (
+			#{id},
+			#{applyId},
+			#{userId},
+			#{userName},
+			#{mobile},
+			#{idNo},
+			#{idType},
+			#{productId},
+			#{promotionCaseId},
+			#{loanStartDate},
+			#{loanEndDate},
+			#{totalAmount},
+			#{principal},
+			#{overdueRate},
+			#{overdueFee},
+			#{interest},
+			#{servFee},
+			#{prepayFee},
+			#{deduction},
+			#{totalTerm},
+			#{status},
+			#{contTime},
+			#{payTime},
+			#{loanDays},
+			#{repayMethod},
+			#{graceType},
+			#{graceDay},
+			#{fixPenaltyInt},
+			#{maxPenaltyInt},
+			#{minPenaltyInt},
+			#{compInt},
+			#{remark},
+			#{createBy},
+			#{createTime},
+			#{updateBy},
+			#{updateTime},
+			#{del}
+		)
+	</insert>
+
+	<select id="findByIdList" resultMap="BaseMap">
+		select
+		<include refid="All_Column" />
+		from loan_contract
+		where id IN
+		<foreach item="id" collection="idList" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+	
+	<update id="updateForDelay">
+		UPDATE loan_contract SET
+		       loan_end_date = #{loanEndDate},
+		       loan_days=#{loanDays}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateforRepayTime">
+		UPDATE loan_contract SET
+			loan_start_date = #{loanStartDate},
+			 loan_end_date = #{loanEndDate},
+			 cont_time = #{contTime},
+			<if test="updateBy!=null">
+			   update_by = #{updateBy},
+		   </if>
+		   <if test="updateTime!=null">
+			   update_time = #{updateTime},
+		   </if>
+			 pay_time =#{payTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delByApplyId">
+		delete from loan_contract where apply_id=#{applyId}
+	</update>
+	
+	
+</mapper>

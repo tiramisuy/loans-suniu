@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:s="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd"
+	default-autowire="byType" default-lazy-init="true">
+
+	<description>SpringSecurity安全配置</description>
+	
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"> 
+		<property name="basename" value="classpath:org/springframework/security/messages_zh_CN"/>  
+	</bean>       	
+
+	<!-- http安全配置 -->
+	<s:http access-denied-page="/no-auth.html" use-expressions="true">
+		<s:intercept-url pattern="/login.jsp" filters="none" />
+		<s:intercept-url pattern="/login2.jsp" filters="none" />
+		<s:intercept-url pattern="/timeout.html" filters="none" />
+		<s:intercept-url pattern="/upload/**" filters="none"/>
+		<s:intercept-url pattern="/ueditor/**" filters="none"/>
+		<s:intercept-url pattern="/res/**"  filters="none"/>
+		<s:intercept-url pattern="/www/**"  filters="none"/>
+		<!--<s:intercept-url pattern="/acl/**"  access="hasAnyRole('admin')"/>-->
+ 		<s:intercept-url pattern="/**" access="isAuthenticated()" />
+	<!-- -->
+	<s:form-login login-page="/login.jsp" authentication-success-handler-ref="authenticationSuccessHandler" authentication-failure-handler-ref="authenticationFailureHandler"
+		default-target-url="/index.html" authentication-failure-url="/login.jsp" always-use-default-target="true"/>
+		<s:logout logout-success-url="/login.jsp" />
+		<s:session-management invalid-session-url="/timeout.html" session-fixation-protection="none">
+         	<s:concurrency-control error-if-maximum-exceeded="true" max-sessions="3" expired-url="/login.jsp?error=3"/>
+    	 </s:session-management>			
+	</s:http>
+	
+	<s:authentication-manager alias="authenticationManager">
+		<s:authentication-provider ref="authenticationProvider" />
+	</s:authentication-manager>		
+	<bean id="authenticationProvider" class="com.rongdu.loans.service.security.DaoAuthenticationProvider">
+    	<property name="userDetailsService" ref="userDetailsService" /> 
+    	<property name="hideUserNotFoundExceptions" value="false" />
+    	<property name="passwordEncoder" ref="passwordEncoder"/>   	
+    	<property name="saltSource" ref="saltSource"/>
+	</bean>		
+	<bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder"/>
+	<bean id="saltSource" class="org.springframework.security.authentication.dao.ReflectionSaltSource">
+		<property name="userPropertyToUse" value="salt" />
+	</bean>
+	
+	<bean id="userDetailsService" class="com.rongdu.loans.service.security.UserDetailsServiceImpl" />
+	<bean id="authenticationSuccessHandler" class="com.rongdu.loans.service.security.AuthenticationSuccessHandler">
+		<property name="defaultTargetUrl" value="/index.html"/>
+		<property name="alwaysUseDefaultTargetUrl" value="true" />
+	</bean>
+	<bean id="authenticationFailureHandler" class="com.rongdu.loans.service.security.AuthenticationFailureHandler"/>
+
+</beans>

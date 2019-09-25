@@ -1,0 +1,631 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.ShopWithholdDao">
+
+	<sql id="shopWithholdColumns">
+		a.id AS "id",
+		a.apply_id AS "applyId",
+		a.cust_user_id AS "custUserId",
+		a.withhold_number AS "withholdNumber",
+		a.withhold_time AS
+		"withholdTime",
+		a.withhold_status AS "withholdStatus",
+		a.withhold_fee AS "withholdFee",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time
+		AS "updateTime",
+		a.del AS "del"
+	</sql>
+
+	<sql id="shopWithholdJoins">
+	</sql>
+
+	<sql id="insertValues">
+		(
+		#{id},
+		#{applyId},
+		#{custUserId},
+		#{withholdNumber},
+		#{withholdTime},
+		#{withholdStatus},
+		#{withholdFee},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+		)
+	</sql>
+
+	<sql id="insertBatchValues">
+		(
+		#{entity.id},
+		#{entity.applyId},
+		#{entity.custUserId},
+		#{entity.withholdNumber},
+		#{entity.withholdTime},
+		#{entity.withholdStatus},
+		#{entity.withholdFee},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+		)
+	</sql>
+
+	<sql id="insertColumns">
+		(
+		id,
+		apply_id,
+		cust_user_id,
+		withhold_number,
+		withhold_time,
+		withhold_status,
+		withhold_fee,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+		)
+	</sql>
+
+	<sql id="updateColumns">
+		apply_id = #{applyId},
+		cust_user_id = #{custUserId},
+		withhold_number =#{withholdNumber},
+		withhold_time = #{withholdTime},
+		withhold_status =#{withholdStatus},
+		withhold_fee = #{withholdFee},
+		remark = #{remark},
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+	</sql>
+
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.applyId != null">
+				apply_id = #{entity.applyId},
+			</if>
+			<if test="entity.custUserId != null">
+				cust_user_id = #{entity.custUserId},
+			</if>
+
+			<if test="entity.withholdNumber != null">
+				withhold_number = #{entity.withholdNumber},
+			</if>
+			<if test="entity.withholdTime != null">
+				withhold_time = #{entity.withholdTime},
+			</if>
+			<if test="entity.withholdStatus != null">
+				withhold_status = #{entity.withholdStatus},
+			</if>
+			<if test="entity.withholdFee != null">
+				withhold_fee = #{entity.withholdFee},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+
+
+
+	<sql id="updateNoApplyIdColumns">
+		<set>
+			<if test="entity.custUserId != null">
+				cust_user_id = #{entity.custUserId},
+			</if>
+			<if test="entity.withholdNumber != null">
+				withhold_number = #{entity.withholdNumber},
+			</if>
+			<if test="entity.withholdTime != null">
+				withhold_time = #{entity.withholdTime},
+			</if>
+			<if test="entity.withholdStatus != null">
+				withhold_status = #{entity.withholdStatus},
+			</if>
+			<if test="entity.withholdFee != null">
+				withhold_fee = #{entity.withholdFee},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="("
+										close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+	<sql id="whereByCriteria">
+		<where>
+			<if test="criteria.valid">
+				<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+					<foreach collection="criteria.pairList" item="pair">
+						<choose>
+							<when test="pair.criterion.singleValue">
+								${pair.logic} ${pair.criterion.column}
+								${pair.criterion.match}
+								${pair.criterion.value}
+							</when>
+							<when test="pair.criterion.betweenValue">
+								${pair.logic} ${pair.criterion.column}
+								${pair.criterion.match}
+								${pair.criterion.value} and
+								${pair.criterion.secondValue}
+							</when>
+							<when test="pair.criterion.listValue">
+								${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+								<foreach collection="pair.criterion.value" item="item" open="("
+									close=")" separator=",">
+									#{item}
+								</foreach>
+							</when>
+						</choose>
+					</foreach>
+				</trim>
+			</if>
+		</where>
+	</sql>
+
+	<sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+
+	<sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+
+	<select id="get" resultType="ShopWithhold">
+		SELECT
+		<include refid="shopWithholdColumns" />
+		FROM loan_shop_withhold a
+		<include refid="shopWithholdJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getById" resultType="ShopWithhold">
+		SELECT
+		<include refid="shopWithholdColumns" />
+		FROM loan_shop_withhold a
+		<include refid="shopWithholdJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+
+
+
+	<select id="findByApplyId" resultType="ShopWithhold">
+		SELECT
+		<include refid="shopWithholdColumns" />
+		FROM loan_shop_withhold a
+		<include refid="shopWithholdJoins" />
+		WHERE a.apply_id = #{applyId}
+	</select>
+
+
+	<select id="getByCriteria" resultType="ShopWithhold">
+		SELECT
+		<include refid="shopWithholdColumns" />
+		FROM loan_shop_withhold a
+		<include refid="shopWithholdJoins" />
+		<include refid="whereByCriteria" />
+	</select>
+
+	<select id="findAllByCriteria" resultType="ShopWithhold">
+		SELECT
+		<include refid="shopWithholdColumns" />
+		FROM loan_shop_withhold a
+		<include refid="shopWithholdJoins" />
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+
+	<select id="findAllByCriteriaList" resultType="ShopWithhold">
+		SELECT
+		<include refid="shopWithholdColumns" />
+		FROM loan_shop_withhold a
+		<include refid="shopWithholdJoins" />
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+
+	<select id="getPage" resultType="ShopWithhold">
+		SELECT
+		<include refid="shopWithholdColumns" />
+		FROM loan_shop_withhold a
+		<include refid="shopWithholdJoins" />
+		<include refid="pageOrderBy" />
+	</select>
+
+	<select id="getPageByCriteria" resultType="ShopWithhold">
+		SELECT
+		<include refid="shopWithholdColumns" />
+		FROM loan_shop_withhold a
+		<include refid="shopWithholdJoins" />
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+
+	<select id="getPageByCriteriaList" resultType="ShopWithhold">
+		SELECT
+		<include refid="shopWithholdColumns" />
+		FROM loan_shop_withhold a
+		<include refid="shopWithholdJoins" />
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM loan_shop_withhold
+		<include refid="shopWithholdJoins" />
+		<include refid="whereByCriteria" />
+	</select>
+
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM loan_shop_withhold
+		<include refid="shopWithholdJoins" />
+		<include refid="whereByCriteriaList" />
+	</select>
+
+	<insert id="insert">
+		INSERT INTO loan_shop_withhold
+		<include refid="insertColumns" />
+		VALUES
+		<include refid="insertValues" />
+	</insert>
+
+	<insert id="insertBatch">
+		INSERT INTO loan_shop_withhold
+		<include refid="insertColumns" />
+		VALUES
+		<foreach collection="list" item="entity" index="index"
+			separator=",">
+			<include refid="insertBatchValues" />
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE loan_shop_withhold SET
+		<include refid="updateSelectiveColumns" />
+		WHERE id = #{id}
+	</update>
+
+
+	<update id="updateByApplyId">
+		UPDATE loan_shop_withhold SET
+		<include refid="updateNoApplyIdColumns" />
+		WHERE apply_id = #{applyId}
+
+	</update>
+
+
+	<update id="updateShopWithHold">
+		UPDATE loan_shop_withhold
+		<set>
+			<if test="custUserId != null">
+				cust_user_id = #{custUserId},
+			</if>
+			<if test="withholdNumber != null">
+				withhold_number = #{withholdNumber},
+			</if>
+			<if test="withholdTime != null">
+				withhold_time = #{withholdTime},
+			</if>
+			<if test="withholdStatus != null">
+				withhold_status = #{withholdStatus},
+			</if>
+			<if test="withholdFee != null">
+				withhold_fee = #{withholdFee},
+			</if>
+			<if test="remark != null">
+				remark = #{remark},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime},
+			</if>
+		</set>
+		where id = #{id}
+
+	</update>
+
+
+
+
+	<update id="updateByCriteriaSelective">
+		UPDATE loan_shop_withhold
+		<include refid="updateSelectiveColumns" />
+		<include refid="whereByCriteria" />
+	</update>
+
+	<update id="updateByCriteriaListSelective">
+		UPDATE loan_shop_withhold
+		<include refid="updateSelectiveColumns" />
+		<include refid="whereByCriteriaList" />
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE loan_shop_withhold
+		<include refid="updateSelectiveColumns" />
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE loan_shop_withhold
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteByCriteria">
+		UPDATE loan_shop_withhold
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria" />
+	</update>
+
+	<update id="deleteBatch">
+		UPDATE loan_shop_withhold
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="("
+			separator="," close=")">#{id} </foreach>
+	</update>
+
+	<update id="deleteByCriteriaList">
+		UPDATE loan_shop_withhold
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList" />
+	</update>
+
+	<update id="deleteTruely">
+		DELETE FROM loan_shop_withhold
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM loan_shop_withhold
+		<include refid="whereByCriteria" />
+	</update>
+
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM loan_shop_withhold
+		<include refid="whereByCriteriaList" />
+	</update>
+
+	<update id="deleteBatchTruely">
+		DELETE FROM loan_shop_withhold
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="("
+			separator="," close=")">#{id} </foreach>
+	</update>
+
+
+
+	<select id="selectShopWithHoldList" resultType="com.rongdu.loans.loan.vo.ShopWithholdVO">
+		SELECT
+		a.id AS "id",
+		a.apply_id AS "applyId",
+		a.cust_user_id AS
+		"custUserId",
+		a.withhold_number AS "withholdNumber",
+		a.withhold_time AS
+		"withholdTime",
+		a.withhold_status AS "withholdStatus",
+		a.withhold_fee AS
+		"withholdFee",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time
+		AS "updateTime",
+		a.del AS "del",
+		c.real_name AS realName,
+		c.id_no as idNo,
+		c.mobile as mobile
+		FROM loan_shop_withhold a left join cust_user c on
+		a.cust_user_id = c.id
+		<where>
+			a.del=0
+			<if test="op.realName != null and op.realName != '' ">
+				and c.real_name = #{op.realName}
+			</if>
+			<if test="op.searchStrat != null and op.searchStrat != '' ">
+				and a.withhold_time &gt;= #{op.searchStrat}
+			</if>
+			<if test="op.searchEnd != null and op.searchEnd != '' ">
+				and a.withhold_time &lt;= #{op.searchEnd}
+			</if>
+			<if test="op.mobile != null and op.mobile != '' ">
+				and c.mobile = #{op.mobile}
+			</if>
+			<if test="op.withholdStatus != null">
+				and a.withhold_status = #{op.withholdStatus}
+			</if>
+			<if test="op.idNo != null and op.idNo !=''">
+				and c.id_no = #{op.idNo}
+			</if>
+		</where>
+		order by a.withhold_time desc
+	</select>
+
+	<select id="selectFaildShopWithHold" resultType="com.rongdu.loans.loan.vo.ShopWithholdVO">
+		SELECT
+		<include refid="shopWithholdColumns" />
+		FROM loan_shop_withhold a
+		where a.del = 0 and a.withhold_status = 1 
+		and	a.withhold_number &lt; 4
+		and a.create_time>DATE_ADD(now(), INTERVAL -7 DAY)
+	</select>
+
+
+	 <resultMap id="LoanApplyMap" type="com.rongdu.loans.loan.entity.LoanApply">
+        <id column="ID" property="id"/>
+        <result column="CONT_NO" property="contNo"/>
+        <result column="APPLY_DATE" property="applyDate"/>
+        <result column="APPLY_TIME" property="applyTime"/>
+        <result column="user_id" property="userId"/>
+        <result column="USER_NAME" property="userName"/>
+        <result column="ID_NO" property="idNo"/>
+        <result column="MOBILE" property="mobile"/>
+        <result column="USER_CREDIT_LINE" property="userCreditLine"/>
+        <result column="PRODUCT_ID" property="productId"/>
+        <result column="PRODUCT_TYPE" property="productType"/>
+        <result column="PRODUCT_NAME" property="productName"/>
+        <result column="PROMOTION_CASE_ID" property="promotionCaseId"/>
+        <result column="PURPOSE" property="purpose"/>
+        <result column="APPLY_AMT" property="applyAmt"/>
+        <result column="APPROVE_AMT" property="approveAmt"/>
+        <result column="APPLY_TERM" property="applyTerm"/>
+        <result column="APPROVE_TERM" property="approveTerm"/>
+        <result column="BASIC_RATE" property="basicRate"/>
+        <result column="ACTUAL_RATE" property="actualRate"/>
+        <result column="INTEREST" property="interest"/>
+        <result column="SERV_FEE" property="servFee"/>
+        <result column="SERV_FEE_RATE" property="servFeeRate"/>
+        <result column="OVERDUE_RATE" property="overdueRate"/>
+        <result column="OVERDUE_FEE" property="overdueFee"/>
+        <result column="REPAY_FREQ" property="repayFreq"/>
+        <result column="REPAY_UNIT" property="repayUnit"/>
+        <result column="TERM" property="term"/>
+        <result column="REPAY_METHOD" property="repayMethod"/>
+        <result column="DISCOUNT" property="discount"/>
+        <result column="DISCOUNT_REASON" property="discountReason"/>
+        <result column="DISCOUNT_AMT" property="discountAmt"/>
+        <result column="DISCOUNT_RATE" property="discountRate"/>
+        <result column="GRACE_DAY" property="graceDay"/>
+        <result column="ORG_ID" property="orgId"/>
+        <result column="ORG_NAME" property="orgName"/>
+        <result column="INPUT_TIME" property="inputTime"/>
+        <result column="OPERATOR_ID" property="operatorId"/>
+        <result column="OPERATOR_NAME" property="operatorName"/>
+        <result column="APPROVER_ID" property="approverId"/>
+        <result column="APPROVER_NAME" property="approverName"/>
+        <result column="STAGE" property="stage"/>
+        <result column="STATUS" property="status"/>
+        <result column="APPLY_STATUS" property="applyStatus"/>
+        <result column="APPROVE_RESULT" property="approveResult"/>
+        <result column="APPROVE_TIME" property="approveTime"/>
+        <result column="CHANNEL_ID" property="channelId"/>
+        <result column="SALER_ID" property="salerId"/>
+        <result column="EXT_INFO" property="extInfo"/>
+        <result column="SOURCE" property="source"/>
+        <result column="COMPANY_ID" property="companyId"/>
+        <result column="TEMINAL_ID" property="teminalId"/>
+        <result column="IP" property="ip"/>
+        <result column="REMARK" property="remark"/>
+        <result column="CREATE_BY" property="createBy"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="UPDATE_BY" property="updateBy"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="DEL" property="del"/>
+        <result column="pay_channel" property="payChannel"/>
+    </resultMap>
+
+ 	<sql id="apply_All_Column">
+		l.id, l.cont_no, l.apply_date, l.apply_time, l.user_id, l.user_name, l.id_no, l.mobile,
+		l.user_credit_line, l.product_id, l.product_type, l.product_name, l.promotion_case_id, l.purpose,
+		l.apply_amt, l.approve_amt, l.apply_term, l.approve_term, l.basic_rate, l.actual_rate,
+		l.interest, l.serv_fee, l.serv_fee_rate, l.overdue_rate, l.overdue_fee, l.repay_freq, l.repay_unit, l.term, l.repay_method, l.discount,
+		l.discount_reason, l.discount_amt, l.discount_rate, l.grace_day, l.org_id, l.org_name,
+		l.input_time, l.operator_id, l.operator_name, l.approver_id, l.approver_name, l.stage, l.status,
+		l.apply_status, l.approve_result, l.approve_time, l.channel_id, l.saler_id, l.ext_info, l.source,l.company_id, l.teminal_id, l.ip,
+		l.remark, l.create_by, a.create_time, l.update_by, l.update_time, l.del,l.pay_channel
+	</sql>
+	
+	
+	<select id="getLoanApply" resultMap="LoanApplyMap">
+        SELECT
+        	<include refid="apply_All_Column"/>
+       FROM loan_shop_withhold a
+		  LEFT JOIN cust_user c
+		    ON a.cust_user_id = c.id
+		  LEFT JOIN loan_apply l
+		    ON a.apply_id = l.id
+		<where>
+			a.del=0
+			<if test="op.realName != null and op.realName != '' ">
+				and c.real_name = #{op.realName}
+			</if>
+			<if test="op.searchStrat != null and op.searchStrat != '' ">
+				and a.withhold_time &gt;= #{op.searchStrat}
+			</if>
+			<if test="op.searchEnd != null and op.searchEnd != '' ">
+				and a.withhold_time &lt;= #{op.searchEnd}
+			</if>
+			<if test="op.mobile != null and op.mobile != '' ">
+				and c.mobile = #{op.mobile}
+			</if>
+			<if test="op.withholdStatus != null">
+				and a.withhold_status = #{op.withholdStatus}
+			</if>
+		</where>
+		order by a.withhold_time desc
+    </select>
+	
+	
+
+
+</mapper>

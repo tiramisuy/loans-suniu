@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.oa.dao.DataDownloadDao">
+    
+	<sql id="dataDownloadColumns">
+		a.id AS "id",
+		a.type AS "type",
+		a.title AS "title",
+		a.data_url AS "dataUrl",
+		a.start_time AS "startTime",
+		a.end_time AS "endTime",
+		a.remark AS "remark",
+		a.create_time AS "createTime",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+	
+	<sql id="dataDownloadJoins">
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{id},
+		#{type},
+		#{title},
+		#{dataUrl},
+		#{startTime},
+		#{endTime},
+		#{remark},
+		#{createBy.id},
+		#{createTime},
+		#{updateBy.id},
+		#{updateTime},
+		#{del}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.type},
+		#{entity.title},
+		#{entity.dataUrl},
+		#{entity.startTime},
+		#{entity.endTime},
+		#{entity.remark},
+		#{entity.createBy.id},
+		#{entity.createTime},
+		#{entity.updateBy.id},
+		#{entity.updateTime},
+		#{entity.del}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		id,
+		type,
+		title,
+		data_url,
+		start_time,
+		end_time,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		type = #{type},
+		title = #{title},
+		data_url = #{dataUrl},
+		start_time = #{startTime},
+		end_time = #{endTime},
+		remark = #{remark},
+		update_by = #{updateBy.id},
+		update_time = #{updateTime}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.type != null">
+				type = #{entity.type},
+			</if>
+			<if test="entity.title != null">
+				title = #{entity.title},
+			</if>
+			<if test="entity.dataUrl != null">
+				data_url = #{entity.dataUrl},
+			</if>
+			<if test="entity.startTime != null">
+				start_time = #{entity.startTime},
+			</if>
+			<if test="entity.endTime != null">
+				end_time = #{entity.endTime},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy.id},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+  	<select id="get" resultType="DataDownload">
+		SELECT 
+		<include refid="dataDownloadColumns"/>
+		FROM data_download a
+		<include refid="dataDownloadJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+  	<select id="getById" resultType="DataDownload">
+		SELECT 
+		<include refid="dataDownloadColumns"/>
+		FROM data_download a
+		<include refid="dataDownloadJoins"/>
+		WHERE a.id = #{id}
+	</select>
+		
+    <select id="getByCriteria" resultType="DataDownload">
+		SELECT 
+		<include refid="dataDownloadColumns"/>
+		FROM data_download a
+		<include refid="dataDownloadJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findList" resultType="DataDownload">
+		SELECT 
+		<include refid="dataDownloadColumns"/>
+		FROM data_download a
+		<include refid="dataDownloadJoins"/>
+		<where>
+			a.del = #{del}
+			<if test="title != null and title != ''">
+				and a.title like 
+				<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+				<if test="dbName == 'mysql'">CONCAT('%', #{title}, '%')</if>
+			</if>
+			<if test="startTime != null">
+				and start_time &gt;= #{startTime}
+			</if>
+			<if test="endTime != null">
+				and end_time &lt; #{endTime}
+			</if>
+			<if test="type != null">
+				and type = #{type}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DataDownload">
+		SELECT 
+		<include refid="dataDownloadColumns"/>
+		FROM data_download a
+		<include refid="dataDownloadJoins"/>
+		<where>
+			a.del = #{del}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="getPage" resultType="DataDownload">
+		SELECT 
+		<include refid="dataDownloadColumns"/>
+		FROM data_download a
+		<include refid="dataDownloadJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="DataDownload">
+		SELECT 
+		<include refid="dataDownloadColumns"/>
+		FROM data_download a
+		<include refid="dataDownloadJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="DataDownload">
+		SELECT 
+		<include refid="dataDownloadColumns"/>
+		FROM data_download a
+		<include refid="dataDownloadJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM data_download
+		<include refid="dataDownloadJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM data_download
+		<include refid="dataDownloadJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO data_download
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+	
+	<insert id="insertBatch">
+		INSERT INTO data_download
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	<update id="update">
+		UPDATE data_download SET 
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE data_download 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE data_download 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE data_download		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE data_download
+		SET del = 1
+		,update_by=#{updateBy.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByCriteria">
+		UPDATE data_download
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE data_download 
+		SET del = 1
+		,update_by=#{entity.updateBy.id}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE data_download
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM data_download
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM data_download
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM data_download
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM data_download
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	
+	 
+</mapper>

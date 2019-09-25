@@ -1,0 +1,29 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	   http://code.alibabatech.com/schema/dubbo
+	   http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 提供方应用信息，用于计算依赖关系 -->
+	<dubbo:application name="loans-batch" owner="loans"/>
+
+	<!-- 使用zookeeper注册中心暴露服务地址 -->
+	<dubbo:registry protocol="zookeeper" address="${dubbo.registry.address}" file="${dubbo.default.cache.path}"/>
+
+	<dubbo:consumer check="false" timeout="999999" loadbalance="roundrobin" retries="0" validation="true" group="${dubbo.consumer.default.group}" version="${dubbo.consumer.default.version}"/>
+
+	<!-- 调用服务接口 -->	
+	<dubbo:reference interface="com.rongdu.loans.app.service.AppBankLimitService" id="appBankLimitService" timeout="86400000"/>
+	<dubbo:reference interface="com.rongdu.loans.scheduler.service.SchedulerService" id="schedulerService" retries="0" timeout="864000000"/>
+	<dubbo:reference interface="com.rongdu.loans.risk.service.AutoApproveService" id="autoApproveService" timeout="86400000"/>
+	<dubbo:reference interface="com.rongdu.loans.basic.service.AlarmService" id="alarmService" timeout="86400000"/>
+	<dubbo:reference interface="com.rongdu.loans.pay.service.BaofooWithdrawService" id="baofooWithdrawService" timeout="86400000"/>
+	<dubbo:reference interface="com.rongdu.loans.pay.service.TonglianWithdrawService" id="tonglianWithdrawService" timeout="86400000"/>
+	<dubbo:reference interface="com.rongdu.loans.loan.service.XianJinBaiKaService" id="xianJinBaiKaService" timeout="86400000"/>
+	<dubbo:reference interface="com.rongdu.loans.loan.service.RongService" id="rongService" timeout="86400000"/>
+	<dubbo:reference interface="com.rongdu.loans.loan.service.JDQService" id="jdqService" timeout="86400000"/>
+	<dubbo:reference interface="com.rongdu.loans.loan.service.DWDService" id="dwdService" timeout="86400000"/>
+	<dubbo:reference interface="com.rongdu.loans.loan.service.SLLService" id="sllService" timeout="86400000"/>
+</beans>

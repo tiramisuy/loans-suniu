@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.risk.dao.HitRuleDao">
+    
+	<sql id="hitRuleColumns">
+		a.id AS "id",
+		a.parent_rule_id AS "parentRuleId",
+		a.risk_type_code AS "riskTypeCode",
+		a.risk_type_name AS "riskTypeName",
+		a.source AS "source",
+		a.name AS "name",
+		a.rule_code AS "ruleCode",
+		a.rule_name AS "ruleName",
+		a.risk_rank AS "riskRank",
+		a.score AS "score",
+		a.decision AS "decision",
+		a.sort AS "sort",
+		a.user_id AS "userId",
+		a.apply_id AS "applyId",
+		a.rule_id AS "ruleId",
+		a.value AS "value",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+	
+	<sql id="hitRuleJoins">
+
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{id},
+		#{parentRuleId},
+		#{riskTypeCode},
+		#{riskTypeName},
+		#{source},
+		#{name},
+		#{ruleCode},
+		#{ruleName},
+		#{riskRank},
+		#{score},
+		#{decision},
+		#{sort},
+		#{userId},
+		#{applyId},
+		#{ruleId},
+		#{value},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.parentRuleId},
+		#{entity.riskTypeCode},
+		#{entity.riskTypeName},
+		#{entity.source},
+		#{entity.name},
+		#{entity.ruleCode},
+		#{entity.ruleName},
+		#{entity.riskRank},
+		#{entity.score},
+		#{entity.decision},
+		#{entity.sort},
+		#{entity.userId},
+		#{entity.applyId},
+		#{entity.ruleId},
+		#{entity.value},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		id,
+		parent_rule_id,
+		risk_type_code,
+		risk_type_name,
+		source,
+		name,
+		rule_code,
+		rule_name,
+		risk_rank,
+		score,
+		decision,
+		sort,
+		user_id,
+		apply_id,
+		rule_id,
+		value,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		parent_rule_id = #{parentRuleId},
+		risk_type_code = #{riskTypeCode},
+		risk_type_name = #{riskTypeName},
+		source = #{source},
+		name = #{name},
+		rule_code = #{ruleCode},
+		rule_name = #{ruleName},
+		risk_rank = #{riskRank},
+		score = #{score},
+		decision = #{decision},
+		sort = #{sort},
+		user_id = #{userId},
+		apply_id = #{applyId},
+		rule_id = #{ruleId},
+		value = #{value},
+		remark = #{remark},
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.parentRuleId != null">
+				parent_rule_id = #{entity.parentRuleId},
+			</if>
+			<if test="entity.riskTypeCode != null">
+				risk_type_code = #{entity.riskTypeCode},
+			</if>
+			<if test="entity.riskTypeName != null">
+				risk_type_name = #{entity.riskTypeName},
+			</if>
+			<if test="entity.source != null">
+				source = #{entity.source},
+			</if>
+			<if test="entity.name != null">
+				name = #{entity.name},
+			</if>
+			<if test="entity.ruleCode != null">
+				rule_code = #{entity.ruleCode},
+			</if>
+			<if test="entity.ruleName != null">
+				rule_name = #{entity.ruleName},
+			</if>
+			<if test="entity.riskRank != null">
+				risk_rank = #{entity.riskRank},
+			</if>
+			<if test="entity.score != null">
+				score = #{entity.score},
+			</if>
+			<if test="entity.decision != null">
+				decision = #{entity.decision},
+			</if>
+			<if test="entity.sort != null">
+				sort = #{entity.sort},
+			</if>
+			<if test="entity.userId != null">
+				user_id = #{entity.userId},
+			</if>
+			<if test="entity.applyId != null">
+				apply_id = #{entity.applyId},
+			</if>
+			<if test="entity.ruleId != null">
+				rule_id = #{entity.ruleId},
+			</if>
+			<if test="entity.value != null">
+				value = #{entity.value},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.source, a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+  	<select id="get" resultType="HitRule">
+		SELECT 
+		<include refid="hitRuleColumns"/>
+		FROM risk_hit_rule a
+		<include refid="hitRuleJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+  	<select id="getById" resultType="HitRule">
+		SELECT 
+		<include refid="hitRuleColumns"/>
+		FROM risk_hit_rule a
+		<include refid="hitRuleJoins"/>
+		WHERE a.id = #{id}
+	</select>
+		
+    <select id="getByCriteria" resultType="HitRule">
+		SELECT 
+		<include refid="hitRuleColumns"/>
+		FROM risk_hit_rule a
+		<include refid="hitRuleJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultType="HitRule">
+		SELECT 
+		<include refid="hitRuleColumns"/>
+		FROM risk_hit_rule a
+		<include refid="hitRuleJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultType="HitRule">
+		SELECT 
+		<include refid="hitRuleColumns"/>
+		FROM risk_hit_rule a
+		<include refid="hitRuleJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultType="HitRule">
+		SELECT 
+		<include refid="hitRuleColumns"/>
+		FROM risk_hit_rule a
+		<include refid="hitRuleJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="HitRule">
+		SELECT 
+		<include refid="hitRuleColumns"/>
+		FROM risk_hit_rule a
+		<include refid="hitRuleJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="HitRule">
+		SELECT 
+		<include refid="hitRuleColumns"/>
+		FROM risk_hit_rule a
+		<include refid="hitRuleJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM risk_hit_rule
+		<include refid="hitRuleJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM risk_hit_rule
+		<include refid="hitRuleJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO risk_hit_rule
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+	
+	<insert id="insertBatch">
+		INSERT INTO risk_hit_rule
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	<update id="update">
+		UPDATE risk_hit_rule SET 
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE risk_hit_rule 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE risk_hit_rule 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE risk_hit_rule		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE risk_hit_rule
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByCriteria">
+		UPDATE risk_hit_rule
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE risk_hit_rule 
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE risk_hit_rule
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM risk_hit_rule
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM risk_hit_rule
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM risk_hit_rule
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM risk_hit_rule
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	
+	 
+</mapper>

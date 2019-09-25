@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>index.html</title>
+
+<meta name="keywords" content="keyword1,keyword2,keyword3">
+<meta name="description" content="this is my page">
+<meta name="content-type" content="text/html; charset=UTF-8">
+
+<!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="http://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.min.js"></script>
+<script src="https://cdn.bootcss.com/json2/20160511/json_parse_state.min.js"></script>
+
+<script type="text/javascript">
+
+//------------------将此代码写入公共JS文件-------------------
+JsonpUtils = {
+		version : '1.0',
+		name:'RongDu Jsonp Utils'
+	};
+
+JsonpUtils.md5Sign = function md5Sign(params,appKey){
+		var element = "";
+		var array = new Array();
+		var arrayIndex = 0;
+		if(appKey){
+			params.appKey=appKey;
+		}else{
+			alert("缺少秘钥");
+			return;
+		}		
+		for ( var key in params) {
+			if("tokenId"!=key&&"userId"!=key&&"dispatherUrl"!=key){
+				element = key + "=" + params[key];
+				array[arrayIndex++] = element;
+			}
+		}
+		array.sort();
+		var signStr = "";
+		for (var i = 0; i < array.length; i++) {
+        	if(signStr){
+        		signStr+="&"+array[i];
+        	}else{
+        		signStr+=array[i];
+        	}
+    	};
+    	sign = md5(signStr).toUpperCase();
+    	if(params.appKey){
+    		delete params.appKey;
+    	}
+    	return sign;
+	}
+	
+JsonpUtils.addHeaders = 	function(params,userId,tokenId,sign,dispatherUrl){
+    	if(userId&&tokenId&&sign&&dispatherUrl){
+    		params["_userId"]=userId;
+    		params["_tokenId"]=tokenId;
+    		params["_sign"]=sign;
+    		params["_dispatherUrl"]=dispatherUrl;
+    	}
+	}
+
+//需要认证的接口调用此方法
+JsonpUtils.jsonpAuth = function(params,successCallback){
+		$.ajax({
+			type : "get",
+			url : "http://loans-api.rongdu.com/api/anon/h5/jsonpDispather.jsonp",
+			dataType : "jsonp",
+			 jsonp : "_callback",
+			data : params,
+			success : successCallback
+		});
+}
+
+//不需要认证的接口调用此方法
+JsonpUtils.jsonp = function(params,url,successCallback){
+		$.ajax({
+			type : "get",
+			url : url,
+			dataType : "jsonp",
+			data : params,
+			success : successCallback
+		});
+}
+//------------------将此代码写入公共JS文件-------------------
+
+$(function() {
+		//------------------示例1-需要认证的接口-------------------
+		var tokenId = "9b72fc158ea44a2ab0315bc288ec3771";
+		var userId = "fdf35d9bb37d4102bdcae7c09121602a";
+		var appKey = "0688153717";
+		var sign = "";
+		//请求的URL
+		var dispatherUrl = "http://loans-api.rongdu.com/api/cust/readMsg";
+		//请求参数
+		var params = {
+			msgId : $("#msgId").val(),
+			viewSource : $("#viewSource").val()
+		};
+		//对请求进行签名
+    	sign = JsonpUtils.md5Sign(params,appKey);
+    	//将请求头作为一般参数传递到转发器
+    	JsonpUtils.addHeaders(params,userId,tokenId,sign,dispatherUrl);
+	
+		$("#submit").click(function() {
+			JsonpUtils.jsonpAuth(params,function(result){
+				if ("SUCCESS" == result.code) {
+					$("#result").val(JSON.stringify(result,null,"\t"));
+				} else {
+					alert("错误代码：" + result.code+ "，错误信息：" + result.msg);
+				}
+			});
+		});
+		
+		//------------------示例2-不需要认证的接口-------------------
+		//请求参数
+		var params1 = {
+			notificationId : $("#notificationId").val()
+		};
+		var url = "http://loans-api.rongdu.com/api/anon/basic/getNotificationDetail.jsonp";
+		$("#submit1").click(function() {
+			JsonpUtils.jsonp(params1,url,function(result){
+			if ("SUCCESS" == result.code) {
+				$("#result1").val(JSON.stringify(result,null,"\t"));
+			 } else {
+				alert("错误代码：" + result.code+ "，错误信息：" + result.msg);
+			 }
+		  });
+	 });
+		
+		
+});
+</script>
+
+</head>
+
+<body>
+	<h1>API请求示例（需要认证的接口）- 获取站内信</h1>
+	<form id="form" name="form" action="#">
+		<table>
+			<tr>
+				<td>消息ID：</td>
+				<td><input type="text" name="msgId" id="msgId" value="5"></td>
+			</tr>
+			<tr>
+				<td>来&nbsp;&nbsp;&nbsp;源：</td>
+				<td><input type="text" id="viewSource" name="viewSource" value="2">在哪个终端查看（1-ios，2-android，3-H5，4-网站）</td>
+			</tr>
+			<tr>
+				<td>提&nbsp;&nbsp;&nbsp;交：</td>
+				<td><button id="submit" value="点击这里">点击这里</button></td>
+			</tr>
+			<tr>
+				<td>响应结果：</td>
+				<td><textarea rows="8" cols="80" name="result" id="result"></textarea></td>
+			</tr>
+		</table>
+	</form>
+	
+	<h1>API请求示例（不需要认证的接口）- 单条公告明细</h1>
+	<form id="form1" name="form1" action="#">
+		<table>
+			<tr>
+				<td>公告ID：</td>
+				<td><input type="text" name="notificationId" id="notificationId" value="3"></td>
+			</tr>
+			<tr>
+				<td>提&nbsp;&nbsp;&nbsp;交：</td>
+				<td><button id="submit1" value="点击这里">点击这里</button></td>
+			</tr>
+			<tr>
+				<td>响应结果：</td>
+				<td><textarea rows="8" cols="80" name="result1" id="result1"></textarea></td>
+			</tr>
+		</table>
+	</form>
+	
+</body>
+</html>

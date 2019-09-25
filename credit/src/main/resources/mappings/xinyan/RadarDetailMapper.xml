@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.xinyan.dao.RadarDetailDao">
+
+	<sql id="radarDetailColumns">
+		a.id AS "id",
+		a.user_id AS "userId",
+		a.apply_id AS "applyId",
+		a.mobile AS "mobile",
+		a.user_name AS "userName",
+		a.score AS "score",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS
+		"createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+
+	<sql id="radarDetailJoins">
+	</sql>
+
+	<sql id="insertValues">
+		(
+		#{id},
+		#{userId},
+		#{applyId},
+		#{mobile},
+		#{userName},
+		#{score},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+		)
+	</sql>
+
+	<sql id="insertBatchValues">
+		(
+		#{entity.id},
+		#{entity.userId},
+		#{entity.applyId},
+		#{entity.mobile},
+		#{entity.userName},
+		#{entity.score},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+		)
+	</sql>
+
+	<sql id="insertColumns">
+		(
+		id,
+		user_id,
+		apply_id,
+		mobile,
+		user_name,
+		score,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+		)
+	</sql>
+
+	<sql id="updateColumns">
+		user_id = #{userId},
+		apply_id = #{applyId},
+		mobile =
+		#{mobile},
+		user_name =
+		#{userName},
+		score = #{score},
+		remark = #{remark},
+		update_by =
+		#{updateBy},
+		update_time = #{updateTime}
+	</sql>
+
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.userId != null">
+				user_id = #{entity.userId},
+			</if>
+			<if test="entity.applyId != null">
+				apply_id = #{entity.applyId},
+			</if>
+			<if test="entity.mobile != null">
+				mobile = #{entity.mobile},
+			</if>
+			<if test="entity.userName != null">
+				user_name = #{entity.userName},
+			</if>
+			<if test="entity.score != null">
+				score = #{entity.score},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="("
+										close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+	<sql id="whereByCriteria">
+		<where>
+			<if test="criteria.valid">
+				<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+					<foreach collection="criteria.pairList" item="pair">
+						<choose>
+							<when test="pair.criterion.singleValue">
+								${pair.logic} ${pair.criterion.column}
+								${pair.criterion.match}
+								${pair.criterion.value}
+							</when>
+							<when test="pair.criterion.betweenValue">
+								${pair.logic} ${pair.criterion.column}
+								${pair.criterion.match}
+								${pair.criterion.value} and
+								${pair.criterion.secondValue}
+							</when>
+							<when test="pair.criterion.listValue">
+								${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+								<foreach collection="pair.criterion.value" item="item" open="("
+									close=")" separator=",">
+									#{item}
+								</foreach>
+							</when>
+						</choose>
+					</foreach>
+				</trim>
+			</if>
+		</where>
+	</sql>
+
+	<sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+
+	<sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+
+	<select id="get" resultType="RadarDetail">
+		SELECT
+		<include refid="radarDetailColumns" />
+		FROM xinyan_radar_detail a
+		<include refid="radarDetailJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getById" resultType="RadarDetail">
+		SELECT
+		<include refid="radarDetailColumns" />
+		FROM xinyan_radar_detail a
+		<include refid="radarDetailJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByCriteria" resultType="RadarDetail">
+		SELECT
+		<include refid="radarDetailColumns" />
+		FROM xinyan_radar_detail a
+		<include refid="radarDetailJoins" />
+		<include refid="whereByCriteria" />
+	</select>
+
+	<select id="findAllByCriteria" resultType="RadarDetail">
+		SELECT
+		<include refid="radarDetailColumns" />
+		FROM xinyan_radar_detail a
+		<include refid="radarDetailJoins" />
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+
+	<select id="findAllByCriteriaList" resultType="RadarDetail">
+		SELECT
+		<include refid="radarDetailColumns" />
+		FROM xinyan_radar_detail a
+		<include refid="radarDetailJoins" />
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+
+	<select id="getPage" resultType="RadarDetail">
+		SELECT
+		<include refid="radarDetailColumns" />
+		FROM xinyan_radar_detail a
+		<include refid="radarDetailJoins" />
+		<include refid="pageOrderBy" />
+	</select>
+
+	<select id="getPageByCriteria" resultType="RadarDetail">
+		SELECT
+		<include refid="radarDetailColumns" />
+		FROM xinyan_radar_detail a
+		<include refid="radarDetailJoins" />
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+
+	<select id="getPageByCriteriaList" resultType="RadarDetail">
+		SELECT
+		<include refid="radarDetailColumns" />
+		FROM xinyan_radar_detail a
+		<include refid="radarDetailJoins" />
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM xinyan_radar_detail
+		<include refid="radarDetailJoins" />
+		<include refid="whereByCriteria" />
+	</select>
+
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM xinyan_radar_detail
+		<include refid="radarDetailJoins" />
+		<include refid="whereByCriteriaList" />
+	</select>
+
+	<insert id="insert">
+		INSERT INTO xinyan_radar_detail
+		<include refid="insertColumns" />
+		VALUES
+		<include refid="insertValues" />
+	</insert>
+
+	<insert id="insertBatch">
+		INSERT INTO xinyan_radar_detail
+		<include refid="insertColumns" />
+		VALUES
+		<foreach collection="list" item="entity" index="index"
+			separator=",">
+			<include refid="insertBatchValues" />
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE xinyan_radar_detail SET
+		<include refid="updateColumns" />
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateByCriteriaSelective">
+		UPDATE xinyan_radar_detail
+		<include refid="updateSelectiveColumns" />
+		<include refid="whereByCriteria" />
+	</update>
+
+	<update id="updateByCriteriaListSelective">
+		UPDATE xinyan_radar_detail
+		<include refid="updateSelectiveColumns" />
+		<include refid="whereByCriteriaList" />
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE xinyan_radar_detail
+		<include refid="updateSelectiveColumns" />
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE xinyan_radar_detail
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteByCriteria">
+		UPDATE xinyan_radar_detail
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria" />
+	</update>
+
+	<update id="deleteBatch">
+		UPDATE xinyan_radar_detail
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="("
+			separator="," close=")">#{id} </foreach>
+	</update>
+
+	<update id="deleteByCriteriaList">
+		UPDATE xinyan_radar_detail
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList" />
+	</update>
+
+	<update id="deleteTruely">
+		DELETE FROM xinyan_radar_detail
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM xinyan_radar_detail
+		<include refid="whereByCriteria" />
+	</update>
+
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM xinyan_radar_detail
+		<include refid="whereByCriteriaList" />
+	</update>
+
+	<update id="deleteBatchTruely">
+		DELETE FROM xinyan_radar_detail
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="("
+			separator="," close=")">#{id} </foreach>
+	</update>
+
+
+
+</mapper>

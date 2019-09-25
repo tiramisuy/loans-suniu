@@ -1,0 +1,779 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.pay.dao.RepayLogDAO">
+    
+	<sql id="repayLogColumns">
+		a.id AS "id",
+		a.apply_id AS "applyId",
+		a.contract_id AS "contractId",
+		a.repay_plan_item_id AS "repayPlanItemId",
+		a.user_id AS "userId",
+		a.user_name AS "userName",
+		a.id_no AS "idNo",
+		a.mobile AS "mobile",
+		a.tx_type AS "txType",
+		a.tx_date AS "txDate",
+		a.tx_time AS "txTime",
+		a.tx_amt AS "txAmt",
+		a.tx_fee AS "txFee",
+		a.terminal AS "terminal",
+		a.terminal_id AS "terminalId",
+		a.chl_order_no AS "chlOrderNo",
+		a.chl_code AS "chlCode",
+		a.chl_name AS "chlName",
+		a.bind_id AS "bindId",
+		a.bank_code AS "bankCode",
+		a.card_no AS "cardNo",
+		a.bank_name AS "bankName",
+		a.ip AS "ip",
+		a.goods_id AS "goodsId",
+		a.goods_name AS "goodsName",
+		a.goods_num AS "goodsNum",
+		a.gold_coins AS "goldCoins",
+		a.order_info AS "orderInfo",
+		a.status AS "status",
+		a.succ_amt AS "succAmt",
+		a.succ_time AS "succTime",
+		a.pay_status AS "payStatus",
+		a.pay_type AS "payType",
+		a.coupon_id AS "couponId",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+	
+	<sql id="repayLogJoins">
+
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{id},
+		#{applyId},
+		#{contractId},
+		#{repayPlanItemId},
+		#{userId},
+		#{userName},
+		#{idNo},
+		#{mobile},
+		#{txType},
+		#{txDate},
+		#{txTime},
+		#{txAmt},
+		#{txFee},
+		#{terminal},
+		#{terminalId},
+		#{chlOrderNo},
+		#{chlCode},
+		#{chlName},
+		#{bindId},
+		#{bankCode},
+		#{cardNo},
+		#{bankName},
+		#{ip},
+		#{goodsId},
+		#{goodsName},
+		#{goodsNum},
+		#{goldCoins},
+		#{orderInfo},
+		#{status},
+		#{succAmt},
+		#{succTime},
+		#{payStatus},
+		#{payType},
+		#{couponId},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.applyId},
+		#{entity.contractId},
+		#{entity.repayPlanItemId},
+		#{entity.userId},
+		#{entity.userName},
+		#{entity.idNo},
+		#{entity.mobile},
+		#{entity.txType},
+		#{entity.txDate},
+		#{entity.txTime},
+		#{entity.txAmt},
+		#{entity.txFee},
+		#{entity.terminal},
+		#{entity.terminalId},
+		#{entity.chlOrderNo},
+		#{entity.chlCode},
+		#{entity.chlName},
+		#{entity.bindId},
+		#{entity.bankCode},
+		#{entity.cardNo},
+		#{entity.bankName},
+		#{entity.ip},
+		#{entity.goodsId},
+		#{entity.goodsName},
+		#{entity.goodsNum},
+		#{entity.goldCoins},
+		#{entity.orderInfo},
+		#{entity.status},
+		#{entity.succAmt},
+		#{entity.succTime},
+		#{entity.payStatus},
+		#{entity.payType},
+		#{entity.couponId},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		id,
+		apply_id,
+		contract_id,
+		repay_plan_item_id,
+		user_id,
+		user_name,
+		id_no,
+		mobile,
+		tx_type,
+		tx_date,
+		tx_time,
+		tx_amt,
+		tx_fee,
+		terminal,
+		terminal_id,
+		chl_order_no,
+		chl_code,
+		chl_name,
+		bind_id,
+		bank_code,
+		card_no,
+		bank_name,
+		ip,
+		goods_id,
+		goods_name,
+		goods_num,
+		gold_coins,
+		order_info,
+		status,
+		succ_amt,
+		succ_time,
+		pay_status,
+		pay_type,
+		coupon_id,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		apply_id = #{applyId},
+		contract_id = #{contractId},
+		repay_plan_item_id = #{repayPlanItemId},
+		user_id = #{userId},
+		user_name = #{userName},
+		id_no = #{idNo},
+		mobile = #{mobile},
+		tx_type = #{txType},
+		tx_date = #{txDate},
+		tx_time = #{txTime},
+		tx_amt = #{txAmt},
+		tx_fee = #{txFee},
+		terminal = #{terminal},
+		terminal_id = #{terminalId},
+		chl_order_no = #{chlOrderNo},
+		chl_code = #{chlCode},
+		chl_name = #{chlName},
+		bank_code = #{bankCode},
+		bank_name = #{bankName},
+		ip = #{ip},
+		goods_id = #{goodsId},
+		goods_name = #{goodsName},
+		goods_num = #{goodsNum},
+		gold_coins = #{goldCoins},
+		order_info = #{orderInfo},
+		status = #{status},
+		succ_amt = #{succAmt},
+		succ_time = #{succTime},
+		pay_status = #{payStatus},
+		pay_type = #{payType},
+		coupon_id = #{couponId},
+		remark = #{remark},
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.applyId != null">
+				apply_id = #{entity.applyId},
+			</if>
+			<if test="entity.contractId != null">
+				contract_id = #{entity.contractId},
+			</if>
+			<if test="entity.repayPlanItemId != null">
+				repay_plan_item_id = #{entity.repayPlanItemId},
+			</if>
+			<if test="entity.userId != null">
+				user_id = #{entity.userId},
+			</if>
+			<if test="entity.userName != null">
+				user_name = #{entity.userName},
+			</if>
+			<if test="entity.txType != null">
+				tx_type = #{entity.txType},
+			</if>
+			<if test="entity.txDate != null">
+				tx_date = #{entity.txDate},
+			</if>
+			<if test="entity.txTime != null">
+				tx_time = #{entity.txTime},
+			</if>
+			<if test="entity.txAmt != null">
+				tx_amt = #{entity.txAmt},
+			</if>
+			<if test="entity.txFee != null">
+				tx_fee = #{entity.txFee},
+			</if>
+			<if test="entity.terminal != null">
+				terminal = #{entity.terminal},
+			</if>
+			<if test="entity.terminalId != null">
+				terminal_id = #{entity.terminalId},
+			</if>
+			<if test="entity.chlOrderNo != null">
+				chl_order_no = #{entity.chlOrderNo},
+			</if>
+			<if test="entity.chlCode != null">
+				chl_code = #{entity.chlCode},
+			</if>
+			<if test="entity.chlName != null">
+				chl_name = #{entity.chlName},
+			</if>
+			<if test="entity.bankCode != null">
+				bank_code = #{entity.bankCode},
+			</if>
+			<if test="entity.bankName != null">
+				bank_name = #{entity.bankName},
+			</if>
+			<if test="entity.ip != null">
+				ip = #{entity.ip},
+			</if>
+			<if test="entity.goodsId != null">
+				goods_id = #{entity.goodsId},
+			</if>
+			<if test="entity.goodsName != null">
+				goods_name = #{entity.goodsName},
+			</if>
+			<if test="entity.goodsNum != null">
+				goods_num = #{entity.goodsNum},
+			</if>
+			<if test="entity.goldCoins != null">
+				gold_coins = #{entity.goldCoins},
+			</if>
+			<if test="entity.orderInfo != null">
+				order_info = #{entity.orderInfo},
+			</if>
+			<if test="entity.status != null">
+				status = #{entity.status},
+			</if>
+			<if test="entity.succAmt != null">
+				succ_amt = #{entity.succAmt},
+			</if>
+			<if test="entity.succTime != null">
+				succ_time = #{entity.succTime},
+			</if>
+			<if test="entity.payStatus != null">
+				pay_status = #{entity.payStatus},
+			</if>
+			<if test="entity.payType != null">
+				pay_type = #{entity.payType},
+			</if>
+			<if test="entity.payType != null">
+				coupon_id = #{entity.couponId},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+  	<select id="get" resultType="RepayLog">
+		SELECT 
+		<include refid="repayLogColumns"/>
+		FROM loan_repay_log a
+		<include refid="repayLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+  	<select id="getById" resultType="RepayLog">
+		SELECT 
+		<include refid="repayLogColumns"/>
+		FROM loan_repay_log a
+		<include refid="repayLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+		
+    <select id="getByCriteria" resultType="RepayLog">
+		SELECT 
+		<include refid="repayLogColumns"/>
+		FROM loan_repay_log a
+		<include refid="repayLogJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultType="RepayLog">
+		SELECT 
+		<include refid="repayLogColumns"/>
+		FROM loan_repay_log a
+		<include refid="repayLogJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultType="RepayLog">
+		SELECT 
+		<include refid="repayLogColumns"/>
+		FROM loan_repay_log a
+		<include refid="repayLogJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultType="RepayLog">
+		SELECT 
+		<include refid="repayLogColumns"/>
+		FROM loan_repay_log a
+		<include refid="repayLogJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="RepayLog">
+		SELECT 
+		<include refid="repayLogColumns"/>
+		FROM loan_repay_log a
+		<include refid="repayLogJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="RepayLog">
+		SELECT 
+		<include refid="repayLogColumns"/>
+		FROM loan_repay_log a
+		<include refid="repayLogJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="findByRepayPlanItemId" resultType="RepayLog">
+		SELECT
+		<include refid="repayLogColumns"/>
+		FROM loan_repay_log a
+		WHERE a.repay_plan_item_id = #{repayPlanItemId}
+		ORDER BY a.create_time DESC
+		LIMIT 1
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM loan_repay_log
+		<include refid="repayLogJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM loan_repay_log
+		<include refid="repayLogJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<!-- code y0615 添加先锋代扣处理中状态“I” -->
+	<!-- 添加海尔代扣处理中状态“P” -->
+	<select id="countPayingByRepayPlanItemId" resultType="Long">
+		/*FORCE_MASTER*/
+		SELECT COUNT(1) FROM loan_repay_log a 
+		where a.repay_plan_item_id = #{repayPlanItemId}
+		AND a.`status` IN (
+			'BF00100',
+			'BF00112',
+			'BF00113',
+			'BF00115',
+			'BF00144',
+			'BF00202',
+			'BF00114',
+			'I',
+			'P'
+		) 
+	</select>
+	
+	<select id="countPayingByIdNo" resultType="Long">
+		/*FORCE_MASTER*/
+		SELECT COUNT(1) FROM loan_repay_log a 
+		where a.id_no = #{idNo}
+		AND a.pay_type = '7'
+		AND a.`status` IN (
+			'BF00100',
+			'BF00112',
+			'BF00113',
+			'BF00115',
+			'BF00144',
+			'BF00202',
+			'BF00114',
+			'I',
+			'P'
+		) 
+	</select>
+	
+	<!-- code y0602 添加先锋代扣处理中状态“I” -->
+	<select id="countPayingByApplyId" resultType="Long">
+		/*FORCE_MASTER*/
+		SELECT COUNT(1) FROM loan_repay_log a 
+		where a.apply_id = #{applyId}
+		AND a.`status` IN (
+			'BF00100',
+			'BF00112',
+			'BF00113',
+			'BF00115',
+			'BF00144',
+			'BF00202',
+			'BF00114',
+			'I',
+			'P'
+		) 
+	</select>
+	
+	<!-- code y0602 添加先锋代扣处理中状态“I”,通联只查询 状态为I的订单.失败的不管 -->
+	<select id="findUnsolvedOrders" resultType="com.rongdu.loans.loan.vo.RepayLogVO">
+		SELECT <include refid="repayLogColumns"/>
+		FROM loan_repay_log a 
+		where a.`status` IN (
+			'BF00100',
+			'BF00112',
+			'BF00113',
+			'BF00115',
+			'BF00144',
+			'BF00202',
+			'BF00114',
+			'I',
+			'P'
+		) 
+		<![CDATA[ and a.tx_time>DATE_ADD(now(), INTERVAL -3 day) and a.tx_time<DATE_ADD(now(), INTERVAL -1 minute)]]>
+		limit 200
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO loan_repay_log
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+	
+	<insert id="insertBatch">
+		INSERT INTO loan_repay_log
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	<update id="update">
+		UPDATE loan_repay_log SET 
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE loan_repay_log 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE loan_repay_log 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE loan_repay_log		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE loan_repay_log
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByCriteria">
+		UPDATE loan_repay_log
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE loan_repay_log 
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE loan_repay_log
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM loan_repay_log
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM loan_repay_log
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM loan_repay_log
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM loan_repay_log
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<select id="getRepayLogList" resultType="com.rongdu.loans.loan.vo.RepayLogListVO">
+		SELECT
+		l.apply_id,
+		l.contract_id,
+		l.id,
+		l.user_id,
+		l.tx_amt,
+		l.tx_type,
+		l.tx_time,
+		l.remark,
+		l.STATUS,
+		l.pay_type,
+		l.chl_code,
+		l.chl_name,
+		l.user_name,
+		l.id_no,
+		l.mobile,
+		l.order_info,
+		a.product_name,
+		a.product_id,
+		l.card_no,
+		l.bank_name
+		FROM loan_repay_log l 
+		LEFT JOIN loan_apply a 
+		ON l.apply_id = a.id
+		WHERE
+		l.del = 0
+		<if test="op.realName != null and op.realName != ''">
+			and l.user_name = #{op.realName}
+		</if>
+		<if test="op.mobile != null and op.mobile != ''">
+			and l.mobile = #{op.mobile}
+		</if>
+		<if test="op.idNo != null and op.idNo != ''">
+			and l.id_no = #{op.idNo}
+		</if>
+		<if test="op.txAmt != null and op.txAmt != ''">
+			and l.tx_amt = #{op.txAmt}
+		</if>
+		<if test="op.txType != null and op.txType != ''">
+			and l.tx_type = #{op.txType}
+		</if>
+		<if test="op.payType != null and op.payType != ''">
+			and l.pay_type = #{op.payType}
+		</if>
+		<if test="op.chlCode != null and op.chlCode != ''">
+			and l.chl_code = #{op.chlCode}
+		</if>
+		<if test="op.status != null and op.status != '' and op.status == 1">
+			and (l.`status` = 'SUCCESS' or l.status = 'S')
+		</if>
+		<if test="op.status != null and op.status != '' and op.status == 0">
+			<![CDATA[ and l.`status` = 'F' ]]>
+		</if>
+		<if test="op.status != null and op.status != '' and op.status == 2">
+			<![CDATA[ and l.`status` IN (
+				'BF00100',
+				'BF00112',
+				'BF00113',
+				'BF00115',
+				'BF00144',
+				'BF00202',
+				'BF00114',
+				'I',
+				'P'
+			)  ]]>
+		</if>
+		<if test="op.repayTimeStart != null ">
+			<![CDATA[ and l.tx_time >= #{op.repayTimeStart} ]]>
+		</if>
+		<if test="op.repayTimeEnd != null ">
+			<![CDATA[ and l.tx_time <= #{op.repayTimeEnd} ]]>
+		</if>
+		<if test="op.productId != null and op.productId != '' and op.productId != 'KOUDAI'">
+			and a.product_id = #{op.productId}
+		</if>
+		<if test="op.productId != null and op.productId != '' and op.productId == 'KOUDAI'">
+			and a.product_id = 'XJD' and a.term = 1 <![CDATA[ and a.apply_time >= '2018-09-26 00:00:00']]>
+		</if>	
+		 <if test="op.termType != null and op.termType != '' ">
+            	<choose>
+		            <when test="op.termType == 1">
+		               and a.term = 1
+		            </when>
+		             <when test="op.termType == 2">
+		               and a.term = 3
+		            </when>
+		             <when test="op.termType == 3">
+		               and a.term = 6
+		            </when>
+		            <when test="op.termType == 4">
+		               and a.term = 4
+		            </when>
+		            <otherwise>
+		                and a.term NOT IN (1,3,6,4)
+		            </otherwise>
+            	</choose>
+            </if>
+            <if test="op.remarkNo != null">
+            	<choose>
+            		<when test="op.remarkNo == 1">
+            				and l.`status` = 'BF00232'
+            		</when>
+            		<when test="op.remarkNo == 2">
+            				<![CDATA[ and l.`status` IN (
+									'BF00127',
+									'F40003'
+								)  ]]>
+            		</when>
+            		<when test="op.remarkNo == 3">
+            				and l.`status` = 'BF00108'
+            		</when>
+            		<when test="op.remarkNo == 4">
+            				and l.`status` = 'BF08704'
+            		</when>
+            		<when test="op.remarkNo == 5">
+            				and l.`status` = 'BF00327'
+            		</when>
+            	</choose>
+            </if>
+		ORDER BY l.create_time desc
+	</select>
+	
+	 
+</mapper>

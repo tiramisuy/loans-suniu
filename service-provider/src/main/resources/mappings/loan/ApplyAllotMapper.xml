@@ -1,0 +1,883 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.ApplyAllotDao">
+    
+	<sql id="applyAllotColumns">
+		a.id AS "id",
+		a.cont_no AS "contNo",
+		a.apply_date AS "applyDate",
+		a.apply_time AS "applyTime",
+		a.user_id AS "user.id",
+		a.user_name AS "userName",
+		a.id_no AS "idNo",
+		a.mobile AS "mobile",
+		a.user_credit_line AS "userCreditLine",
+		a.product_id AS "productId",
+		a.product_type AS "productType",
+		a.product_name AS "productName",
+		a.promotion_case_id AS "promotionCaseId",
+		a.purpose AS "purpose",
+		a.apply_amt AS "applyAmt",
+		a.approve_amt AS "approveAmt",
+		a.apply_term AS "applyTerm",
+		a.approve_term AS "approveTerm",
+		a.basic_rate AS "basicRate",
+		a.actual_rate AS "actualRate",
+		a.interest AS "interest",
+		a.serv_fee_rate AS "servFeeRate",
+		a.serv_fee AS "servFee",
+		a.overdue_rate AS "overdueRate",
+		a.overdue_fee AS "overdueFee",
+		a.repay_freq AS "repayFreq",
+		a.repay_unit AS "repayUnit",
+		a.term AS "term",
+		a.repay_method AS "repayMethod",
+		a.discount AS "discount",
+		a.discount_reason AS "discountReason",
+		a.discount_amt AS "discountAmt",
+		a.discount_rate AS "discountRate",
+		a.grace_day AS "graceDay",
+		a.org_id AS "orgId",
+		a.org_name AS "orgName",
+		a.input_time AS "inputTime",
+		a.operator_id AS "operatorId",
+		a.operator_name AS "operatorName",
+		a.approver_id AS "approverId",
+		a.approver_name AS "approverName",
+		a.stage AS "stage",
+		a.status AS "status",
+		a.apply_status AS "applyStatus",
+		a.approve_result AS "approveResult",
+		a.approve_time AS "approveTime",
+		a.channel_id AS "channelId",
+		a.saler_id AS "salerId",
+		a.ext_info AS "extInfo",
+		a.source AS "source",
+		a.company_id AS "companyId",
+		a.teminal_id AS "teminalId",
+		a.ip AS "ip",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del",
+		u5.name AS "user.name"
+	</sql>
+	
+	<sql id="applyAllotJoins">
+		LEFT JOIN sys_user u5 ON u5.id = a.user_id
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{allot.id},
+		#{allot.contNo},
+		#{allot.applyDate},
+		#{allot.applyTime},
+		#{allot.userId},
+		#{allot.userName},
+		#{allot.idNo},
+		#{allot.mobile},
+		#{allot.userCreditLine},
+		#{allot.productId},
+		#{allot.productType},
+		#{allot.productName},
+		#{allot.promotionCaseId},
+		#{allot.purpose},
+		#{allot.applyAmt},
+		#{allot.approveAmt},
+		#{allot.applyTerm},
+		#{allot.approveTerm},
+		#{allot.basicRate},
+		#{allot.actualRate},
+		#{allot.interest},
+		#{allot.servFeeRate},
+		#{allot.servFee},
+		#{allot.overdueRate},
+		#{allot.overdueFee},
+		#{allot.repayFreq},
+		#{allot.repayUnit},
+		#{allot.term},
+		#{allot.repayMethod},
+		#{allot.discount},
+		#{allot.discountReason},
+		#{allot.discountAmt},
+		#{allot.discountRate},
+		#{allot.graceDay},
+		#{allot.orgId},
+		#{allot.orgName},
+		#{allot.inputTime},
+		#{allot.operatorId},
+		#{allot.operatorName},
+		#{allot.approverId},
+		#{allot.approverName},
+		#{allot.stage},
+		#{allot.status},
+		#{allot.applyStatus},
+		#{allot.approveResult},
+		#{allot.approveTime},
+		#{allot.channelId},
+		#{allot.salerId},
+		#{allot.extInfo},
+		#{allot.source},
+		#{allot.companyId},
+		#{allot.teminalId},
+		#{allot.ip},
+		#{allot.remark},
+		#{allot.createBy},
+		#{allot.createTime},
+		#{allot.updateBy},
+		#{allot.updateTime},
+		#{allot.del}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.contNo},
+		#{entity.applyDate},
+		#{entity.applyTime},
+		#{entity.user.id},
+		#{entity.userName},
+		#{entity.idNo},
+		#{entity.mobile},
+		#{entity.userCreditLine},
+		#{entity.productId},
+		#{entity.productType},
+		#{entity.productName},
+		#{entity.promotionCaseId},
+		#{entity.purpose},
+		#{entity.applyAmt},
+		#{entity.approveAmt},
+		#{entity.applyTerm},
+		#{entity.approveTerm},
+		#{entity.basicRate},
+		#{entity.actualRate},
+		#{entity.interest},
+		#{entity.servFeeRate},
+		#{entity.servFee},
+		#{entity.overdueRate},
+		#{entity.overdueFee},
+		#{entity.repayFreq},
+		#{entity.repayUnit},
+		#{entity.term},
+		#{entity.repayMethod},
+		#{entity.discount},
+		#{entity.discountReason},
+		#{entity.discountAmt},
+		#{entity.discountRate},
+		#{entity.graceDay},
+		#{entity.orgId},
+		#{entity.orgName},
+		#{entity.inputTime},
+		#{entity.operatorId},
+		#{entity.operatorName},
+		#{entity.approverId},
+		#{entity.approverName},
+		#{entity.stage},
+		#{entity.status},
+		#{entity.applyStatus},
+		#{entity.approveResult},
+		#{entity.approveTime},
+		#{entity.channelId},
+		#{entity.salerId},
+		#{entity.extInfo},
+		#{entity.source},
+		#{entity.companyId},
+		#{entity.teminalId},
+		#{entity.ip},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		id,
+		cont_no,
+		apply_date,
+		apply_time,
+		user_id,
+		user_name,
+		id_no,
+		mobile,
+		user_credit_line,
+		product_id,
+		product_type,
+		product_name,
+		promotion_case_id,
+		purpose,
+		apply_amt,
+		approve_amt,
+		apply_term,
+		approve_term,
+		basic_rate,
+		actual_rate,
+		interest,
+		serv_fee_rate,
+		serv_fee,
+		overdue_rate,
+		overdue_fee,
+		repay_freq,
+		repay_unit,
+		term,
+		repay_method,
+		discount,
+		discount_reason,
+		discount_amt,
+		discount_rate,
+		grace_day,
+		org_id,
+		org_name,
+		input_time,
+		operator_id,
+		operator_name,
+		approver_id,
+		approver_name,
+		stage,
+		status,
+		apply_status,
+		approve_result,
+		approve_time,
+		channel_id,
+		saler_id,
+		ext_info,
+		source,
+		company_id,
+		teminal_id,
+		ip,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		cont_no = #{contNo},
+		apply_date = #{applyDate},
+		apply_time = #{applyTime},
+		user_id = #{user.id},
+		user_name = #{userName},
+		id_no = #{idNo},
+		mobile = #{mobile},
+		user_credit_line = #{userCreditLine},
+		product_id = #{productId},
+		product_type = #{productType},
+		product_name = #{productName},
+		promotion_case_id = #{promotionCaseId},
+		purpose = #{purpose},
+		apply_amt = #{applyAmt},
+		approve_amt = #{approveAmt},
+		apply_term = #{applyTerm},
+		approve_term = #{approveTerm},
+		basic_rate = #{basicRate},
+		actual_rate = #{actualRate},
+		interest = #{interest},
+		serv_fee_rate = #{servFeeRate},
+		serv_fee = #{servFee},
+		overdue_rate = #{overdueRate},
+		overdue_fee = #{overdueFee},
+		repay_freq = #{repayFreq},
+		repay_unit = #{repayUnit},
+		term = #{term},
+		repay_method = #{repayMethod},
+		discount = #{discount},
+		discount_reason = #{discountReason},
+		discount_amt = #{discountAmt},
+		discount_rate = #{discountRate},
+		grace_day = #{graceDay},
+		org_id = #{orgId},
+		org_name = #{orgName},
+		input_time = #{inputTime},
+		operator_id = #{operatorId},
+		operator_name = #{operatorName},
+		approver_id = #{approverId},
+		approver_name = #{approverName},
+		stage = #{stage},
+		status = #{status},
+		apply_status = #{applyStatus},
+		approve_result = #{approveResult},
+		approve_time = #{approveTime},
+		channel_id = #{channelId},
+		saler_id = #{salerId},
+		ext_info = #{extInfo},
+		source = #{source},
+		company_id = #{companyId},
+		teminal_id = #{teminalId},
+		ip = #{ip},
+		remark = #{remark},
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.contNo != null">
+				cont_no = #{entity.contNo},
+			</if>
+			<if test="entity.applyDate != null">
+				apply_date = #{entity.applyDate},
+			</if>
+			<if test="entity.applyTime != null">
+				apply_time = #{entity.applyTime},
+			</if>
+			<if test="entity.user.id != null">
+				user_id = #{entity.user.id},
+			</if>
+			<if test="entity.userName != null">
+				user_name = #{entity.userName},
+			</if>
+			<if test="entity.idNo != null">
+				id_no = #{entity.idNo},
+			</if>
+			<if test="entity.mobile != null">
+				mobile = #{entity.mobile},
+			</if>
+			<if test="entity.userCreditLine != null">
+				user_credit_line = #{entity.userCreditLine},
+			</if>
+			<if test="entity.productId != null">
+				product_id = #{entity.productId},
+			</if>
+			<if test="entity.productType != null">
+				product_type = #{entity.productType},
+			</if>
+			<if test="entity.productName != null">
+				product_name = #{entity.productName},
+			</if>
+			<if test="entity.promotionCaseId != null">
+				promotion_case_id = #{entity.promotionCaseId},
+			</if>
+			<if test="entity.purpose != null">
+				purpose = #{entity.purpose},
+			</if>
+			<if test="entity.applyAmt != null">
+				apply_amt = #{entity.applyAmt},
+			</if>
+			<if test="entity.approveAmt != null">
+				approve_amt = #{entity.approveAmt},
+			</if>
+			<if test="entity.applyTerm != null">
+				apply_term = #{entity.applyTerm},
+			</if>
+			<if test="entity.approveTerm != null">
+				approve_term = #{entity.approveTerm},
+			</if>
+			<if test="entity.basicRate != null">
+				basic_rate = #{entity.basicRate},
+			</if>
+			<if test="entity.actualRate != null">
+				actual_rate = #{entity.actualRate},
+			</if>
+			<if test="entity.interest != null">
+				interest = #{entity.interest},
+			</if>
+			<if test="entity.servFeeRate != null">
+				serv_fee_rate = #{entity.servFeeRate},
+			</if>
+			<if test="entity.servFee != null">
+				serv_fee = #{entity.servFee},
+			</if>
+			<if test="entity.overdueRate != null">
+				overdue_rate = #{entity.overdueRate},
+			</if>
+			<if test="entity.overdueFee != null">
+				overdue_fee = #{entity.overdueFee},
+			</if>
+			<if test="entity.repayFreq != null">
+				repay_freq = #{entity.repayFreq},
+			</if>
+			<if test="entity.repayUnit != null">
+				repay_unit = #{entity.repayUnit},
+			</if>
+			<if test="entity.term != null">
+				term = #{entity.term},
+			</if>
+			<if test="entity.repayMethod != null">
+				repay_method = #{entity.repayMethod},
+			</if>
+			<if test="entity.discount != null">
+				discount = #{entity.discount},
+			</if>
+			<if test="entity.discountReason != null">
+				discount_reason = #{entity.discountReason},
+			</if>
+			<if test="entity.discountAmt != null">
+				discount_amt = #{entity.discountAmt},
+			</if>
+			<if test="entity.discountRate != null">
+				discount_rate = #{entity.discountRate},
+			</if>
+			<if test="entity.graceDay != null">
+				grace_day = #{entity.graceDay},
+			</if>
+			<if test="entity.orgId != null">
+				org_id = #{entity.orgId},
+			</if>
+			<if test="entity.orgName != null">
+				org_name = #{entity.orgName},
+			</if>
+			<if test="entity.inputTime != null">
+				input_time = #{entity.inputTime},
+			</if>
+			<if test="entity.operatorId != null">
+				operator_id = #{entity.operatorId},
+			</if>
+			<if test="entity.operatorName != null">
+				operator_name = #{entity.operatorName},
+			</if>
+			<if test="entity.approverId != null">
+				approver_id = #{entity.approverId},
+			</if>
+			<if test="entity.approverName != null">
+				approver_name = #{entity.approverName},
+			</if>
+			<if test="entity.stage != null">
+				stage = #{entity.stage},
+			</if>
+			<if test="entity.status != null">
+				status = #{entity.status},
+			</if>
+			<if test="entity.applyStatus != null">
+				apply_status = #{entity.applyStatus},
+			</if>
+			<if test="entity.approveResult != null">
+				approve_result = #{entity.approveResult},
+			</if>
+			<if test="entity.approveTime != null">
+				approve_time = #{entity.approveTime},
+			</if>
+			<if test="entity.channelId != null">
+				channel_id = #{entity.channelId},
+			</if>
+			<if test="entity.salerId != null">
+				saler_id = #{entity.salerId},
+			</if>
+			<if test="entity.extInfo != null">
+				ext_info = #{entity.extInfo},
+			</if>
+			<if test="entity.source != null">
+				source = #{entity.source},
+			</if>
+			<if test="entity.companyId != null">
+				company_id = #{entity.companyId},
+			</if>
+			<if test="entity.teminalId != null">
+				teminal_id = #{entity.teminalId},
+			</if>
+			<if test="entity.ip != null">
+				ip = #{entity.ip},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+  	<select id="get" resultType="ApplyAllot">
+		SELECT 
+		<include refid="applyAllotColumns"/>
+		FROM loan_apply_allot a
+		<include refid="applyAllotJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+  	<select id="getById" resultType="ApplyAllot">
+		SELECT 
+		<include refid="applyAllotColumns"/>
+		FROM loan_apply_allot a
+		<include refid="applyAllotJoins"/>
+		WHERE a.id = #{id}
+	</select>
+		
+    <select id="getByCriteria" resultType="ApplyAllot">
+		SELECT 
+		<include refid="applyAllotColumns"/>
+		FROM loan_apply_allot a
+		<include refid="applyAllotJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultType="ApplyAllot">
+		SELECT 
+		<include refid="applyAllotColumns"/>
+		FROM loan_apply_allot a
+		<include refid="applyAllotJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultType="ApplyAllot">
+		SELECT 
+		<include refid="applyAllotColumns"/>
+		FROM loan_apply_allot a
+		<include refid="applyAllotJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultType="ApplyAllot">
+		SELECT 
+		<include refid="applyAllotColumns"/>
+		FROM loan_apply_allot a
+		<include refid="applyAllotJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="ApplyAllot">
+		SELECT 
+		<include refid="applyAllotColumns"/>
+		FROM loan_apply_allot a
+		<include refid="applyAllotJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="ApplyAllot">
+		SELECT 
+		<include refid="applyAllotColumns"/>
+		FROM loan_apply_allot a
+		<include refid="applyAllotJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM loan_apply_allot
+		<include refid="applyAllotJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM loan_apply_allot
+		<include refid="applyAllotJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO loan_apply_allot
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+	
+	<insert id="insertBatch">
+		INSERT INTO loan_apply_allot
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	<update id="update">
+		UPDATE loan_apply_allot SET 
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE loan_apply_allot 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE loan_apply_allot 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE loan_apply_allot		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE loan_apply_allot
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByCriteria">
+		UPDATE loan_apply_allot
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE loan_apply_allot 
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE loan_apply_allot
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM loan_apply_allot
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM loan_apply_allot
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM loan_apply_allot
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM loan_apply_allot
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	 <select id="getAllotApplyList" resultType="com.rongdu.loans.loan.vo.ApplyAllotVO">
+       SELECT
+		  t.id,
+		  t.cont_no,
+		  t.user_id        AS userId,
+		  t.user_name      AS userName,
+		  t.mobile,
+		  t.id_no          AS idNo,
+		  t.product_id     AS productId,
+		  t.product_name   AS productName,
+		  t.apply_amt      AS applyAmt,
+		  t.approve_amt    AS approveAmt,
+		  t.apply_term     AS applyTerm,
+		  t.approve_term   AS approveTerm,
+		  t.repay_method   AS repayMethod,
+		  t.term,
+		  t.basic_rate     AS basicRate,
+		  t.discount_rate  AS discountRate,
+		  t.company_id     AS companyId,
+		  t.apply_time     AS applyTime,
+		  t.approver_name  AS approverName,
+		  t.status,
+		  t.approve_time   AS TIME,
+		  t.approve_result AS checkStatus,
+		  t.channel_id     AS channel
+		FROM loan_apply_allot t
+        <where>
+            t.del = 0
+            <if test="applyListOP.companyId != null and applyListOP.companyId != ''">
+                and t.company_id = #{applyListOP.companyId}
+            </if>
+            <if test="applyListOP.productId != null and applyListOP.productId != ''">
+                and t.product_id in (${applyListOP.productId})
+            </if>
+            <if test="applyListOP.auditor != null and applyListOP.auditor != ''">
+                and t.approver_name = #{applyListOP.auditor}
+            </if>
+            <if test="applyListOP.channel != null and applyListOP.channel != ''">
+                and t.channel_id = #{applyListOP.channel}
+            </if>
+            <if test="applyListOP.mobile != null and applyListOP.mobile != ''">
+                and t.mobile = #{applyListOP.mobile}
+            </if>
+            <if test="applyListOP.idNo != null and applyListOP.idNo != ''">
+                and t.id_no = #{applyListOP.idNo}
+            </if>
+            <if test="applyListOP.userName != null and applyListOP.userName != ''">
+                and t.user_name = #{applyListOP.userName}
+            </if>
+            <if test="applyListOP.status != null and applyListOP.status != ''">
+                and t.status = #{applyListOP.status}
+            </if>
+            <if test="applyListOP.applyTimeStart != null ">
+                <![CDATA[ AND t.apply_time >= #{applyListOP.applyTimeStart} ]]>
+            </if>
+            <if test="applyListOP.applyTimeEnd != null">
+                <![CDATA[ AND t.apply_time <= #{applyListOP.applyTimeEnd} ]]>
+            </if>
+            <if test="applyListOP.statusList != null and applyListOP.statusList.size() > 0">
+                and t.`status` in
+                <foreach item="status" collection="applyListOP.statusList" open="(" separator="," close=")">
+                    #{status}
+                </foreach>
+            </if>
+            <if test="applyListOP.stage != null and applyListOP.stage != 1">
+                <if test="applyListOP.checkStatus != null and applyListOP.checkStatus != ''">
+                    and t.`approve_result` = #{applyListOP.checkStatus}
+                </if>
+                <if test="applyListOP.checkTimeStart != null ">
+                    <![CDATA[ AND t.approve_time >= #{applyListOP.checkTimeStart} ]]>
+                </if>
+                <if test="applyListOP.checkTimeEnd != null">
+                    <![CDATA[ AND t.approve_time <= #{applyListOP.checkTimeEnd} ]]>
+                </if>
+            </if>
+            
+        </where>
+        <include refid="pageOrderBy"/>
+    </select>
+    
+    
+    <insert id="insertAllot">
+		INSERT INTO loan_apply_allot
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+    
+    
+    <update id="updateAllot">
+    	UPDATE loan_apply_allot  
+		<include refid="updateAllotColumns"/>
+		WHERE id = #{op.id}
+    </update>
+    
+    <sql id="updateAllotColumns">	
+    	<set>
+     		<if test="op.status != null">
+                status = #{op.status},
+           </if>
+           <if test="op.applyStatus != null">
+           		apply_status = #{op.applyStatus},
+           </if>
+           <if test="op.approveResult != null and op.approveResult != ''">
+           		approve_result = #{op.approveResult},
+           </if>
+           
+            <if test="op.approveTime != null and op.approveTime != ''">
+           		approve_time = #{op.approveTime},
+           </if>
+           <if test="op.stage != null ">
+           		stage = #{op.stage},
+           </if>
+           
+             <if test="op.approverId != null and op.approverId != ''">
+           		approver_id = #{op.approverId},
+           </if>
+           
+             <if test="op.approverName != null and op.approverName != ''">
+           		approver_name = #{op.approverName},
+           </if>
+             <if test="op.updateBy != null and op.updateBy != ''">
+           		update_by = #{op.updateBy},
+           </if>
+           <if test="op.updateTime != null and op.updateTime != ''">
+           		update_time = #{op.updateTime},
+           </if>
+            <if test="op.remark != null and op.remark != ''">
+           		remark = #{op.remark},
+           </if>
+            <if test="op.contNo != null and op.contNo != ''">
+           		cont_no = #{op.contNo},
+           </if>
+           <if test="op.companyId != null and op.companyId != '' ">
+           		company_id = #{op.companyId},
+           </if>
+            <if test="op.del != null ">
+           		del = #{op.del},
+           </if>
+        </set>
+	</sql>
+    
+    
+	 
+</mapper>

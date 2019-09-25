@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.OverdueCountDao">
+
+	<select id="overdueCountList" resultType="com.rongdu.loans.loan.vo.OverdueCountVO">
+		SELECT
+			a.operator_name AS 'operatorName',
+			COUNT(a.operator_name) AS 'stageNum',
+			SUM(c.principal) AS 'principal',
+			SUM(c.interest) AS 'interest',
+			SUM(c.serv_fee) AS 'servFee',
+			SUM(c.overdue_fee) AS 'overdueFee',
+			SUM(c.deduction) AS 'deduction',
+			SUM(c.payed_principal) AS 'payedPrincipal',
+			SUM(c.payed_interest) AS 'payedInterest',
+			SUM(c.unpay_principal) AS 'unpayPrincipal',
+			SUM(c.unpay_interest) AS 'unpayInterest',
+			SUM(c.penalty) AS 'penalty',
+			SUM(CASE WHEN c.repay_type = 'manualdelay' THEN 1 WHEN c.repay_type = 'mandelay' THEN 1 ELSE 0 END ) AS 'mandelay',
+			SUM(CASE WHEN c.repay_type = 'manualdelay' THEN c.actual_repay_amt WHEN c.repay_type = 'mandelay' THEN c.actual_repay_amt ELSE 0 END  ) AS 'mandelayFee',  
+			SUM(CASE WHEN c.status =1 THEN 1 ELSE 0 END) AS 'backNum'
+		FROM loan_overdue a
+		LEFT JOIN loan_repay_plan_item c ON a.id = c.id
+		<where>
+			and  a.del = 0 AND a.operator_name IS NOT NULL 
+			<if test="op.operatorName != null and op.operatorName != '' ">
+				and a.operator_name = #{op.operatorName}
+			</if>
+			<if test="op.searchStrat != null and op.searchStrat != '' ">
+				and a.overdue_start_date  &gt;= #{op.searchStrat}
+			</if>
+			<if test="op.searchEnd != null and op.searchEnd != ''">
+				and a.overdue_start_date &lt;= #{op.searchEnd}
+			</if>
+		</where>
+		GROUP BY a.operator_name
+		
+		
+	</select>
+
+
+
+
+</mapper>

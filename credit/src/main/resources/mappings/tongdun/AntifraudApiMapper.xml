@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.tongdun.dao.AntifraudApiDao">
+    
+	<sql id="antifraudApiColumns">
+		a.id AS "id",
+		a.user_id AS "userId",
+		a.apply_id AS "applyId",
+		a.final_score AS "finalScore",
+		a.final_decision AS "finalDecision",
+		a.policy_name AS "policyName",
+		a.spend_time AS "spendTime",
+		a.policy_set_name AS "policySetName",
+		a.risk_type AS "riskType",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+	
+	<sql id="antifraudApiJoins">
+
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{id},
+		#{userId},
+		#{applyId},
+		#{finalScore},
+		#{finalDecision},
+		#{policyName},
+		#{spendTime},
+		#{policySetName},
+		#{riskType},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.userId},
+		#{entity.applyId},
+		#{entity.finalScore},
+		#{entity.finalDecision},
+		#{entity.policyName},
+		#{entity.spendTime},
+		#{entity.policySetName},
+		#{entity.riskType},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		id,
+		user_id,
+		apply_id,
+		final_score,
+		final_decision,
+		policy_name,
+		spend_time,
+		policy_set_name,
+		risk_type,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		user_id = #{userId},
+		apply_id = #{applyId},
+		final_score = #{finalScore},
+		final_decision = #{finalDecision},
+		policy_name = #{policyName},
+		spend_time = #{spendTime},
+		policy_set_name = #{policySetName},
+		risk_type = #{riskType},
+		remark = #{remark},
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.userId != null">
+				user_id = #{entity.userId},
+			</if>
+			<if test="entity.applyId != null">
+				apply_id = #{entity.applyId},
+			</if>
+			<if test="entity.finalScore != null">
+				final_score = #{entity.finalScore},
+			</if>
+			<if test="entity.finalDecision != null">
+				final_decision = #{entity.finalDecision},
+			</if>
+			<if test="entity.policyName != null">
+				policy_name = #{entity.policyName},
+			</if>
+			<if test="entity.spendTime != null">
+				spend_time = #{entity.spendTime},
+			</if>
+			<if test="entity.policySetName != null">
+				policy_set_name = #{entity.policySetName},
+			</if>
+			<if test="entity.riskType != null">
+				risk_type = #{entity.riskType},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+  	<select id="get" resultType="AntifraudApi">
+		SELECT 
+		<include refid="antifraudApiColumns"/>
+		FROM tongdun_antifraud_api a
+		<include refid="antifraudApiJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+  	<select id="getById" resultType="AntifraudApi">
+		SELECT 
+		<include refid="antifraudApiColumns"/>
+		FROM tongdun_antifraud_api a
+		<include refid="antifraudApiJoins"/>
+		WHERE a.id = #{id}
+	</select>
+		
+    <select id="getByCriteria" resultType="AntifraudApi">
+		SELECT 
+		<include refid="antifraudApiColumns"/>
+		FROM tongdun_antifraud_api a
+		<include refid="antifraudApiJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultType="AntifraudApi">
+		SELECT 
+		<include refid="antifraudApiColumns"/>
+		FROM tongdun_antifraud_api a
+		<include refid="antifraudApiJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultType="AntifraudApi">
+		SELECT 
+		<include refid="antifraudApiColumns"/>
+		FROM tongdun_antifraud_api a
+		<include refid="antifraudApiJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultType="AntifraudApi">
+		SELECT 
+		<include refid="antifraudApiColumns"/>
+		FROM tongdun_antifraud_api a
+		<include refid="antifraudApiJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="AntifraudApi">
+		SELECT 
+		<include refid="antifraudApiColumns"/>
+		FROM tongdun_antifraud_api a
+		<include refid="antifraudApiJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="AntifraudApi">
+		SELECT 
+		<include refid="antifraudApiColumns"/>
+		FROM tongdun_antifraud_api a
+		<include refid="antifraudApiJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM tongdun_antifraud_api
+		<include refid="antifraudApiJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM tongdun_antifraud_api
+		<include refid="antifraudApiJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO tongdun_antifraud_api
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+	
+	<insert id="insertBatch">
+		INSERT INTO tongdun_antifraud_api
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	<update id="update">
+		UPDATE tongdun_antifraud_api SET 
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE tongdun_antifraud_api 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE tongdun_antifraud_api 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE tongdun_antifraud_api		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE tongdun_antifraud_api
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByCriteria">
+		UPDATE tongdun_antifraud_api
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE tongdun_antifraud_api 
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE tongdun_antifraud_api
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM tongdun_antifraud_api
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM tongdun_antifraud_api
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM tongdun_antifraud_api
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM tongdun_antifraud_api
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	
+	 
+</mapper>

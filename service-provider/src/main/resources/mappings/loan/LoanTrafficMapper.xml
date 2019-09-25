@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.LoanTrafficDAO">
+    
+	<select id="getExtensionPlatformListByCondition" parameterType="java.util.Map" resultType="java.util.Map">
+		select
+			`id`, `type` ,`name`,`min_amt` as minAmt ,`max_amt` as maxAmt,`min_term` as minTerm , `max_term` as maxTerm,
+			`repay_unit` as repayUnit,`logo_url` as logoUrl ,`platform_url` as platformUrl ,`desc` ,`hits` ,`scort` ,`status` , `remark` ,
+			`create_by` as createBy ,DATE_FORMAT(create_time, '%Y-%c-%d %h:%i:%s' ) as createTime ,
+			`update_by` as updateBy ,DATE_FORMAT(update_time, '%Y-%c-%d %h:%i:%s' )as updateTime,`del` 
+		from 
+			loan_traffic a
+		where 
+			status = 1 and del= 0
+		<if test="id != null and id != '' ">
+			and id  = #{id}
+		</if>
+		order by scort
+	</select>
+	
+	<update id="addHitLoanTraffic" parameterType="java.lang.String">
+		update 
+			loan_traffic
+		set 
+			hits = hits + 1
+		where 
+			id  = #{id} and status = 1 and del= 0
+	</update>
+	
+	
+	
+	
+	
+	<sql id="loanTrafficColumns">
+		a.id AS "id",
+		a.type AS "type",
+		a.name AS "name",
+		a.min_amt AS "minAmt",
+		a.max_amt AS "maxAmt",
+		a.min_term AS "minTerm",
+		a.max_term AS "maxTerm",
+		a.repay_unit AS "repayUnit",
+		a.logo_url AS "logoUrl",
+		a.platform_url AS "platformUrl",
+		a.desc AS "desc",
+		a.hits AS "hits",
+		a.scort AS "scort",
+		a.status AS "status",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+	
+	<sql id="loanTrafficJoins">
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{type},
+		#{name},
+		#{minAmt},
+		#{maxAmt},
+		#{minTerm},
+		#{maxTerm},
+		#{repayUnit},
+		#{logoUrl},
+		#{platformUrl},
+		#{desc},
+		#{hits},
+		#{scort},
+		#{status},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.type},
+		#{entity.name},
+		#{entity.minAmt},
+		#{entity.maxAmt},
+		#{entity.minTerm},
+		#{entity.maxTerm},
+		#{entity.repayUnit},
+		#{entity.logoUrl},
+		#{entity.platformUrl},
+		#{entity.desc},
+		#{entity.hits},
+		#{entity.scort},
+		#{entity.status},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		type,
+		name,
+		min_amt,
+		max_amt,
+		min_term,
+		max_term,
+		repay_unit,
+		logo_url,
+		platform_url,
+		`desc`,
+		hits,
+		scort,
+		status,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		type = #{type},
+		name = #{name},
+		min_amt = #{minAmt},
+		max_amt = #{maxAmt},
+		min_term = #{minTerm},
+		max_term = #{maxTerm},
+		repay_unit = #{repayUnit},
+		logo_url = #{logoUrl},
+		platform_url = #{platformUrl},
+		`desc` = #{desc},
+		hits = #{hits},
+		scort = #{scort},
+		status = #{status},
+		remark = #{remark}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.type != null">
+				type = #{entity.type},
+			</if>
+			<if test="entity.name != null">
+				name = #{entity.name},
+			</if>
+			<if test="entity.minAmt != null">
+				min_amt = #{entity.minAmt},
+			</if>
+			<if test="entity.maxAmt != null">
+				max_amt = #{entity.maxAmt},
+			</if>
+			<if test="entity.minTerm != null">
+				min_term = #{entity.minTerm},
+			</if>
+			<if test="entity.maxTerm != null">
+				max_term = #{entity.maxTerm},
+			</if>
+			<if test="entity.repayUnit != null">
+				repay_unit = #{entity.repayUnit},
+			</if>
+			<if test="entity.logoUrl != null">
+				logo_url = #{entity.logoUrl},
+			</if>
+			<if test="entity.platformUrl != null">
+				platform_url = #{entity.platformUrl},
+			</if>
+			<if test="entity.desc != null">
+				`desc` = #{entity.desc},
+			</if>
+			<if test="entity.hits != null">
+				hits = #{entity.hits},
+			</if>
+			<if test="entity.scort != null">
+				scort = #{entity.scort},
+			</if>
+			<if test="entity.status != null">
+				status = #{entity.status},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+  	<select id="get" resultType="LoanTraffic">
+		SELECT 
+		<include refid="loanTrafficColumns"/>
+		FROM loan_traffic a
+		<include refid="loanTrafficJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+  	<select id="getById" resultType="LoanTraffic">
+		SELECT 
+		<include refid="loanTrafficColumns"/>
+		FROM loan_traffic a
+		<include refid="loanTrafficJoins"/>
+		WHERE a.id = #{id}
+	</select>
+		
+    <select id="getByCriteria" resultType="LoanTraffic">
+		SELECT 
+		<include refid="loanTrafficColumns"/>
+		FROM loan_traffic a
+		<include refid="loanTrafficJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultType="LoanTraffic">
+		SELECT 
+		<include refid="loanTrafficColumns"/>
+		FROM loan_traffic a
+		<include refid="loanTrafficJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultType="LoanTraffic">
+		SELECT 
+		<include refid="loanTrafficColumns"/>
+		FROM loan_traffic a
+		<include refid="loanTrafficJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultType="LoanTraffic">
+		SELECT 
+		<include refid="loanTrafficColumns"/>
+		FROM loan_traffic a
+		<include refid="loanTrafficJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="LoanTraffic">
+		SELECT 
+		<include refid="loanTrafficColumns"/>
+		FROM loan_traffic a
+		<include refid="loanTrafficJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="LoanTraffic">
+		SELECT 
+		<include refid="loanTrafficColumns"/>
+		FROM loan_traffic a
+		<include refid="loanTrafficJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM loan_traffic
+		<include refid="loanTrafficJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM loan_traffic
+		<include refid="loanTrafficJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO loan_traffic
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+	
+	<insert id="insertBatch">
+		INSERT INTO loan_traffic
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	<update id="update">
+		UPDATE loan_traffic SET 
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE loan_traffic 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE loan_traffic 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE loan_traffic		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE loan_traffic
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByCriteria">
+		UPDATE loan_traffic
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE loan_traffic 
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE loan_traffic
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM loan_traffic
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM loan_traffic
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM loan_traffic
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM loan_traffic
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+</mapper>

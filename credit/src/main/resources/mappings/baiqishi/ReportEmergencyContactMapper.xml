@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.baiqishi.dao.ReportEmergencyContactDao">
+    
+	<sql id="reportEmergencyContactColumns">
+		a.id AS "id",
+		a.user_id AS "userId",
+		a.report_id AS "reportId",
+		a.name AS "name",
+		a.relation AS "relation",
+		a.mobile AS "mobile",
+		a.belong_to AS "belongTo",
+		a.latest_connect_time AS "latestConnectTime",
+		a.first_connect_time AS "firstConnectTime",
+		a.three_days_connect_count AS "threeDaysConnectCount",
+		a.three_days_connect_duration AS "threeDaysConnectDuration",
+		a.seven_days_connect_count AS "sevenDaysConnectCount",
+		a.seven_days_connect_duration AS "sevenDaysConnectDuration",
+		a.thirty_days_connect_count AS "thirtyDaysConnectCount",
+		a.thirty_days_connect_duration AS "thirtyDaysConnectDuration",
+		a.connect_count AS "connectCount",
+		a.connect_duration AS "connectDuration",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+	
+	<sql id="reportEmergencyContactJoins">
+
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{id},
+		#{userId},
+		#{reportId},
+		#{name},
+		#{relation},
+		#{mobile},
+		#{belongTo},
+		#{latestConnectTime},
+		#{firstConnectTime},
+		#{threeDaysConnectCount},
+		#{threeDaysConnectDuration},
+		#{sevenDaysConnectCount},
+		#{sevenDaysConnectDuration},
+		#{thirtyDaysConnectCount},
+		#{thirtyDaysConnectDuration},
+		#{connectCount},
+		#{connectDuration},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.userId},
+		#{entity.reportId},
+		#{entity.name},
+		#{entity.relation},
+		#{entity.mobile},
+		#{entity.belongTo},
+		#{entity.latestConnectTime},
+		#{entity.firstConnectTime},
+		#{entity.threeDaysConnectCount},
+		#{entity.threeDaysConnectDuration},
+		#{entity.sevenDaysConnectCount},
+		#{entity.sevenDaysConnectDuration},
+		#{entity.thirtyDaysConnectCount},
+		#{entity.thirtyDaysConnectDuration},
+		#{entity.connectCount},
+		#{entity.connectDuration},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		id,
+		user_id,
+		report_id,
+		name,
+		relation,
+		mobile,
+		belong_to,
+		latest_connect_time,
+		first_connect_time,
+		three_days_connect_count,
+		three_days_connect_duration,
+		seven_days_connect_count,
+		seven_days_connect_duration,
+		thirty_days_connect_count,
+		thirty_days_connect_duration,
+		connect_count,
+		connect_duration,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		user_id = #{userId},
+		report_id = #{reportId},
+		name = #{name},
+		relation = #{relation},
+		mobile = #{mobile},
+		belong_to = #{belongTo},
+		latest_connect_time = #{latestConnectTime},
+		first_connect_time = #{firstConnectTime},
+		three_days_connect_count = #{threeDaysConnectCount},
+		three_days_connect_duration = #{threeDaysConnectDuration},
+		seven_days_connect_count = #{sevenDaysConnectCount},
+		seven_days_connect_duration = #{sevenDaysConnectDuration},
+		thirty_days_connect_count = #{thirtyDaysConnectCount},
+		thirty_days_connect_duration = #{thirtyDaysConnectDuration},
+		connect_count = #{connectCount},
+		connect_duration = #{connectDuration},
+		remark = #{remark},
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.userId != null">
+				user_id = #{entity.userId},
+			</if>
+			<if test="entity.reportId != null">
+				report_id = #{entity.reportId},
+			</if>
+			<if test="entity.name != null">
+				name = #{entity.name},
+			</if>
+			<if test="entity.relation != null">
+				relation = #{entity.relation},
+			</if>
+			<if test="entity.mobile != null">
+				mobile = #{entity.mobile},
+			</if>
+			<if test="entity.belongTo != null">
+				belong_to = #{entity.belongTo},
+			</if>
+			<if test="entity.latestConnectTime != null">
+				latest_connect_time = #{entity.latestConnectTime},
+			</if>
+			<if test="entity.firstConnectTime != null">
+				first_connect_time = #{entity.firstConnectTime},
+			</if>
+			<if test="entity.threeDaysConnectCount != null">
+				three_days_connect_count = #{entity.threeDaysConnectCount},
+			</if>
+			<if test="entity.threeDaysConnectDuration != null">
+				three_days_connect_duration = #{entity.threeDaysConnectDuration},
+			</if>
+			<if test="entity.sevenDaysConnectCount != null">
+				seven_days_connect_count = #{entity.sevenDaysConnectCount},
+			</if>
+			<if test="entity.sevenDaysConnectDuration != null">
+				seven_days_connect_duration = #{entity.sevenDaysConnectDuration},
+			</if>
+			<if test="entity.thirtyDaysConnectCount != null">
+				thirty_days_connect_count = #{entity.thirtyDaysConnectCount},
+			</if>
+			<if test="entity.thirtyDaysConnectDuration != null">
+				thirty_days_connect_duration = #{entity.thirtyDaysConnectDuration},
+			</if>
+			<if test="entity.connectCount != null">
+				connect_count = #{entity.connectCount},
+			</if>
+			<if test="entity.connectDuration != null">
+				connect_duration = #{entity.connectDuration},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+  	<select id="get" resultType="ReportEmergencyContact">
+		SELECT 
+		<include refid="reportEmergencyContactColumns"/>
+		FROM baiqishi_report_emergency_contact a
+		<include refid="reportEmergencyContactJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+  	<select id="getById" resultType="ReportEmergencyContact">
+		SELECT 
+		<include refid="reportEmergencyContactColumns"/>
+		FROM baiqishi_report_emergency_contact a
+		<include refid="reportEmergencyContactJoins"/>
+		WHERE a.id = #{id}
+	</select>
+		
+    <select id="getByCriteria" resultType="ReportEmergencyContact">
+		SELECT 
+		<include refid="reportEmergencyContactColumns"/>
+		FROM baiqishi_report_emergency_contact a
+		<include refid="reportEmergencyContactJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultType="ReportEmergencyContact">
+		SELECT 
+		<include refid="reportEmergencyContactColumns"/>
+		FROM baiqishi_report_emergency_contact a
+		<include refid="reportEmergencyContactJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultType="ReportEmergencyContact">
+		SELECT 
+		<include refid="reportEmergencyContactColumns"/>
+		FROM baiqishi_report_emergency_contact a
+		<include refid="reportEmergencyContactJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultType="ReportEmergencyContact">
+		SELECT 
+		<include refid="reportEmergencyContactColumns"/>
+		FROM baiqishi_report_emergency_contact a
+		<include refid="reportEmergencyContactJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="ReportEmergencyContact">
+		SELECT 
+		<include refid="reportEmergencyContactColumns"/>
+		FROM baiqishi_report_emergency_contact a
+		<include refid="reportEmergencyContactJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="ReportEmergencyContact">
+		SELECT 
+		<include refid="reportEmergencyContactColumns"/>
+		FROM baiqishi_report_emergency_contact a
+		<include refid="reportEmergencyContactJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM baiqishi_report_emergency_contact
+		<include refid="reportEmergencyContactJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM baiqishi_report_emergency_contact
+		<include refid="reportEmergencyContactJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO baiqishi_report_emergency_contact
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+	
+	<insert id="insertBatch">
+		INSERT INTO baiqishi_report_emergency_contact
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	<update id="update">
+		UPDATE baiqishi_report_emergency_contact SET 
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE baiqishi_report_emergency_contact 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE baiqishi_report_emergency_contact 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE baiqishi_report_emergency_contact		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE baiqishi_report_emergency_contact
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByCriteria">
+		UPDATE baiqishi_report_emergency_contact
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE baiqishi_report_emergency_contact 
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE baiqishi_report_emergency_contact
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM baiqishi_report_emergency_contact
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM baiqishi_report_emergency_contact
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM baiqishi_report_emergency_contact
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM baiqishi_report_emergency_contact
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	
+	 
+</mapper>

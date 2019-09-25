@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.moxie.dao.EmailReportNotifyDao">
+    
+	<sql id="emailReportNotifyColumns">
+		a.id AS "id",
+		a.task_id AS "taskId",
+		a.user_id AS "userId",
+		a.email AS "email",
+		a.email_id AS "emailId",
+		a.result AS "result",
+		a.message AS "message",
+		a.timestamp AS "timestamp",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.remark AS "remark",
+		a.del AS "del"
+	</sql>
+	
+	<sql id="emailReportNotifyJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{id},
+		#{taskId},
+		#{userId},
+		#{email},
+		#{emailId},
+		#{result},
+		#{message},
+		#{timestamp},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{remark},
+		#{del}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.taskId},
+		#{entity.userId},
+		#{entity.email},
+		#{entity.emailId},
+		#{entity.result},
+		#{entity.message},
+		#{entity.timestamp},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.remark},
+		#{entity.del}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		id,
+		task_id,
+		user_id,
+		email,
+		email_id,
+		result,
+		message,
+		timestamp,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		remark,
+		del
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		task_id = #{taskId},
+		user_id = #{userId},
+		email = #{email},
+		email_id = #{emailId},
+		result = #{result},
+		message = #{message},
+		timestamp = #{timestamp},
+		update_by = #{updateBy},
+		update_time = #{updateTime},
+		remark = #{remark}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.taskId != null">
+				task_id = #{entity.taskId},
+			</if>
+			<if test="entity.userId != null">
+				user_id = #{entity.userId},
+			</if>
+			<if test="entity.email != null">
+				email = #{entity.email},
+			</if>
+			<if test="entity.emailId != null">
+				email_id = #{entity.emailId},
+			</if>
+			<if test="entity.result != null">
+				result = #{entity.result},
+			</if>
+			<if test="entity.message != null">
+				message = #{entity.message},
+			</if>
+			<if test="entity.timestamp != null">
+				timestamp = #{entity.timestamp},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+  	<select id="get" resultType="EmailReportNotify">
+		SELECT 
+		<include refid="emailReportNotifyColumns"/>
+		FROM moxie_email_report_notify a
+		<include refid="emailReportNotifyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+  	<select id="getById" resultType="EmailReportNotify">
+		SELECT 
+		<include refid="emailReportNotifyColumns"/>
+		FROM moxie_email_report_notify a
+		<include refid="emailReportNotifyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+		
+    <select id="getByCriteria" resultType="EmailReportNotify">
+		SELECT 
+		<include refid="emailReportNotifyColumns"/>
+		FROM moxie_email_report_notify a
+		<include refid="emailReportNotifyJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultType="EmailReportNotify">
+		SELECT 
+		<include refid="emailReportNotifyColumns"/>
+		FROM moxie_email_report_notify a
+		<include refid="emailReportNotifyJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultType="EmailReportNotify">
+		SELECT 
+		<include refid="emailReportNotifyColumns"/>
+		FROM moxie_email_report_notify a
+		<include refid="emailReportNotifyJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultType="EmailReportNotify">
+		SELECT 
+		<include refid="emailReportNotifyColumns"/>
+		FROM moxie_email_report_notify a
+		<include refid="emailReportNotifyJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="EmailReportNotify">
+		SELECT 
+		<include refid="emailReportNotifyColumns"/>
+		FROM moxie_email_report_notify a
+		<include refid="emailReportNotifyJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="EmailReportNotify">
+		SELECT 
+		<include refid="emailReportNotifyColumns"/>
+		FROM moxie_email_report_notify a
+		<include refid="emailReportNotifyJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM moxie_email_report_notify
+		<include refid="emailReportNotifyJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM moxie_email_report_notify
+		<include refid="emailReportNotifyJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO moxie_email_report_notify
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+	
+	<insert id="insertBatch">
+		INSERT INTO moxie_email_report_notify
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	<update id="update">
+		UPDATE moxie_email_report_notify SET 
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE moxie_email_report_notify 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE moxie_email_report_notify 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE moxie_email_report_notify		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE moxie_email_report_notify
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByCriteria">
+		UPDATE moxie_email_report_notify
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE moxie_email_report_notify 
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE moxie_email_report_notify
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM moxie_email_report_notify
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM moxie_email_report_notify
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM moxie_email_report_notify
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM moxie_email_report_notify
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	
+	 
+</mapper>

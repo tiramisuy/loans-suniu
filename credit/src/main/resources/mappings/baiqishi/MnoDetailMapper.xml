@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.baiqishi.dao.MnoDetailDao">
+    
+	<sql id="mnoDetailColumns">
+		a.id AS "id",
+		a.user_id AS "userId",
+		a.apply_id AS "applyId",
+		a.store_time AS "storeTime",
+		a.mobile AS "mobile",
+		a.is_real_check AS "isRealCheck",
+		a.bound_cert_no AS "boundCertNo",
+		a.bound_name AS "boundName",
+		a.open_time AS "openTime",
+		a.mon_type AS "monType",
+		a.belong_to AS "belongTo",
+		a.relation_mobiles AS "relationMobiles",
+		a.status AS "status",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+	
+	<sql id="mnoDetailJoins">
+
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{id},
+		#{userId},
+		#{applyId},
+		#{storeTime},
+		#{mobile},
+		#{isRealCheck},
+		#{boundCertNo},
+		#{boundName},
+		#{openTime},
+		#{monType},
+		#{belongTo},
+		#{relationMobiles},
+		#{status},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.userId},
+		#{entity.applyId},
+		#{entity.storeTime},
+		#{entity.mobile},
+		#{entity.isRealCheck},
+		#{entity.boundCertNo},
+		#{entity.boundName},
+		#{entity.openTime},
+		#{entity.monType},
+		#{entity.belongTo},
+		#{entity.relationMobiles},
+		#{entity.status},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		id,
+		user_id,
+		apply_id,
+		store_time,
+		mobile,
+		is_real_check,
+		bound_cert_no,
+		bound_name,
+		open_time,
+		mon_type,
+		belong_to,
+		relation_mobiles,
+		status,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		user_id = #{userId},
+		apply_id = #{applyId},
+		store_time = #{storeTime},
+		mobile = #{mobile},
+		is_real_check = #{isRealCheck},
+		bound_cert_no = #{boundCertNo},
+		bound_name = #{boundName},
+		open_time = #{openTime},
+		mon_type = #{monType},
+		belong_to = #{belongTo},
+		relation_mobiles = #{relationMobiles},
+		status = #{status},
+		remark = #{remark},
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.userId != null">
+				user_id = #{entity.userId},
+			</if>
+			<if test="entity.applyId != null">
+				apply_id = #{entity.applyId},
+			</if>
+			<if test="entity.storeTime != null">
+				store_time = #{entity.storeTime},
+			</if>
+			<if test="entity.mobile != null">
+				mobile = #{entity.mobile},
+			</if>
+			<if test="entity.isRealCheck != null">
+				is_real_check = #{entity.isRealCheck},
+			</if>
+			<if test="entity.boundCertNo != null">
+				bound_cert_no = #{entity.boundCertNo},
+			</if>
+			<if test="entity.boundName != null">
+				bound_name = #{entity.boundName},
+			</if>
+			<if test="entity.openTime != null">
+				open_time = #{entity.openTime},
+			</if>
+			<if test="entity.monType != null">
+				mon_type = #{entity.monType},
+			</if>
+			<if test="entity.belongTo != null">
+				belong_to = #{entity.belongTo},
+			</if>
+			<if test="entity.relationMobiles != null">
+				relation_mobiles = #{entity.relationMobiles},
+			</if>
+			<if test="entity.status != null">
+				status = #{entity.status},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+  	<select id="get" resultType="MnoDetail">
+		SELECT 
+		<include refid="mnoDetailColumns"/>
+		FROM baiqishi_mno_detail a
+		<include refid="mnoDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+  	<select id="getById" resultType="MnoDetail">
+		SELECT 
+		<include refid="mnoDetailColumns"/>
+		FROM baiqishi_mno_detail a
+		<include refid="mnoDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+		
+    <select id="getByCriteria" resultType="MnoDetail">
+		SELECT 
+		<include refid="mnoDetailColumns"/>
+		FROM baiqishi_mno_detail a
+		<include refid="mnoDetailJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultType="MnoDetail">
+		SELECT 
+		<include refid="mnoDetailColumns"/>
+		FROM baiqishi_mno_detail a
+		<include refid="mnoDetailJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultType="MnoDetail">
+		SELECT 
+		<include refid="mnoDetailColumns"/>
+		FROM baiqishi_mno_detail a
+		<include refid="mnoDetailJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultType="MnoDetail">
+		SELECT 
+		<include refid="mnoDetailColumns"/>
+		FROM baiqishi_mno_detail a
+		<include refid="mnoDetailJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="MnoDetail">
+		SELECT 
+		<include refid="mnoDetailColumns"/>
+		FROM baiqishi_mno_detail a
+		<include refid="mnoDetailJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="MnoDetail">
+		SELECT 
+		<include refid="mnoDetailColumns"/>
+		FROM baiqishi_mno_detail a
+		<include refid="mnoDetailJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM baiqishi_mno_detail
+		<include refid="mnoDetailJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM baiqishi_mno_detail
+		<include refid="mnoDetailJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO baiqishi_mno_detail
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+	
+	<insert id="insertBatch">
+		INSERT INTO baiqishi_mno_detail
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	<update id="update">
+		UPDATE baiqishi_mno_detail SET 
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE baiqishi_mno_detail 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE baiqishi_mno_detail 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE baiqishi_mno_detail		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE baiqishi_mno_detail
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByCriteria">
+		UPDATE baiqishi_mno_detail
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE baiqishi_mno_detail 
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE baiqishi_mno_detail
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM baiqishi_mno_detail
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM baiqishi_mno_detail
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM baiqishi_mno_detail
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM baiqishi_mno_detail
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	
+	 
+</mapper>

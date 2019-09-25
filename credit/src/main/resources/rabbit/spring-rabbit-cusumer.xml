@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-4.0.xsd   http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit.xsd">
+	
+	<!-- 配置线程池 -->  
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <!-- 核心线程数，默认为1 -->
+        <property name="corePoolSize" value="10" />
+        <!-- 最大线程数，默认为Integer.MAX_VALUE -->
+        <property name="maxPoolSize" value="50" />
+        <!-- 队列最大长度，一般需要设置值>=notifyScheduledMainExecutor.maxNum；默认为Integer.MAX_VALUE -->
+        <property name="queueCapacity" value="1000" />
+        <!-- 线程池维护线程所允许的空闲时间，默认为60s -->
+        <property name="keepAliveSeconds" value="300" />
+        <!-- 线程池对拒绝任务（无线程可用）的处理策略，目前只支持AbortPolicy、CallerRunsPolicy；默认为后者 -->
+        <property name="rejectedExecutionHandler">
+            <!-- AbortPolicy:直接抛出java.util.concurrent.RejectedExecutionException异常 -->
+            <!-- CallerRunsPolicy:主线程直接执行该任务，执行完之后尝试添加下一个任务到线程池中，可以有效降低向线程池内添加任务的速度 -->
+            <!-- DiscardOldestPolicy:抛弃旧的任务、暂不支持；会导致被丢弃的任务无法再次被执行 -->
+            <!-- DiscardPolicy:抛弃当前任务、暂不支持；会导致被丢弃的任务无法再次被执行 -->
+            <bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy" />
+        </property>
+    </bean>
+	
+	<!-- 连接服务配置  -->
+    <rabbit:connection-factory id="connectionFactory"
+               host="${rabbit.host}" port="${rabbit.port}" username="${rabbit.username}" password="${rabbit.password}" publisher-confirms="true"  />
+
+    <rabbit:admin connection-factory="connectionFactory" id="amqpAdmin" />
+
+    <!-- queue 队列声明 -->
+    <rabbit:queue id="apiInvokeLogQueue" durable="true"  auto-delete="false" exclusive="false" name="apiInvokeLogQueue"/>
+    <!-- <rabbit:queue id="prepareAutoApproveQueue" durable="true"  auto-delete="false" exclusive="false" name="prepareAutoApproveQueue" /> -->
+    <!-- <rabbit:queue id="autoApproveQueue" durable="true"  auto-delete="false" exclusive="false" name="autoApproveQueue" /> -->
+    <rabbit:queue id="moxieEmailReportQueue" durable="true"  auto-delete="false" exclusive="false" name="moxieEmailReportQueue" />
+    <rabbit:queue id="moxieBankReportQueue" durable="true"  auto-delete="false" exclusive="false" name="moxieBankReportQueue" />
+    <rabbit:queue id="pullRongTJReportQuene" durable="true" auto-delete="false" exclusive="false"
+                  name="pullRongTJReportQuene"/>
+
+    <!-- 安融共享队列 -->
+    <rabbit:queue id="pushANRONGSharedARQuene" durable="true"  auto-delete="false" exclusive="false" name="pushANRONGSharedARQuene" />
+    <rabbit:queue id="pushANRONGSharedORQuene" durable="true"  auto-delete="false" exclusive="false" name="pushANRONGSharedORQuene" />
+
+
+    <!-- exchange queue binging key 绑定 -->
+    <rabbit:direct-exchange name="mq-exchange" durable="true" auto-delete="false" id="mq-exchange">
+        <rabbit:bindings>
+            <rabbit:binding queue="apiInvokeLogQueue" key="apiInvokeLogQueue"/>
+            <!-- <rabbit:binding queue="autoApproveQueue" key="autoApproveQueue" /> -->
+            <!-- <rabbit:binding queue="prepareAutoApproveQueue" key="prepareAutoApproveQueue" /> -->
+            <rabbit:binding queue="moxieEmailReportQueue" key="moxieEmailReportQueue" />
+            <rabbit:binding queue="moxieBankReportQueue" key="moxieBankReportQueue" />
+            <rabbit:binding queue="pullRongTJReportQuene" key="pullRongTJReportQuene"/>
+            <!-- 安融共享队列 -->
+            <rabbit:binding queue="pushANRONGSharedARQuene" key="pushANRONGSharedARQuene" />
+            <rabbit:binding queue="pushANRONGSharedORQuene" key="pushANRONGSharedORQuene" />
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+	
+    <!-- spring template声明  -->
+    <rabbit:template exchange="mq-exchange" id="amqpTemplate"
+                     connection-factory="connectionFactory" message-converter="jsonMessageConverter"
+                     confirm-callback="confirmCallBackListener"
+                     return-callback="returnCallBackListener"
+                     mandatory="true" />                    
+
+    <!-- 监听容器：当有消息到达时会通知监听在对应的队列上的监听对象 -->
+    <rabbit:listener-container  connection-factory="connectionFactory" acknowledge="manual" task-executor="taskExecutor" concurrency="1">
+        <rabbit:listener queues="apiInvokeLogQueue" ref="apiInvokeLogConsumer"/>
+        <!-- <rabbit:listener queues="autoApproveQueue" ref="autoApproveConsumer" /> -->
+        <!-- <rabbit:listener queues="prepareAutoApproveQueue" ref="prepareAutoApproveConsumer" /> -->
+        <rabbit:listener queues="moxieEmailReportQueue" ref="moxieEmailReportConsumer" />
+        <rabbit:listener queues="moxieBankReportQueue" ref="moxieBankReportConsumer" />
+        <rabbit:listener queues="pullRongTJReportQuene" ref="rongTJReportPullConsumer"/>
+
+        <!-- 安融消息消费者-->
+        <rabbit:listener queues="pushANRONGSharedARQuene" ref="AnRongShareApproveConsumer" />
+        <rabbit:listener queues="pushANRONGSharedORQuene" ref="AnRongShareOrderConsumer" />
+    </rabbit:listener-container>
+</beans>

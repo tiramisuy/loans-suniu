@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.OperationLogDAO">
+    
+	<resultMap id="BaseResultMap" type="com.rongdu.loans.loan.entity.OperationLog">
+		<id column="ID" property="id" />
+        <result column="user_id" property="userId" />
+		<result column="APPLY_ID" property="applyId" />
+		<result column="STAGE" property="stage" />
+		<result column="STATUS" property="status" />
+		<result column="PREVIOUS_STAGE" property="previousStage" />
+		<result column="PREVIOUS_STATUS" property="previousStatus" />
+		<result column="OPERATOR_ID" property="operatorId" />
+		<result column="OPERATOR_NAME" property="operatorName" />
+		<result column="TIME" property="time" />
+		<result column="SOURCE" property="source" />
+		<result column="IP" property="ip" />
+		<result column="REFUSE_ID" property="refuseId" />
+		<result column="REMARK" property="remark" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="DEL" property="del" />
+	</resultMap>
+	
+	<sql id="All_Column">
+		id, user_id, apply_id, stage, status, previous_stage, previous_status, operator_id, operator_name, time, ip, refuse_id, remark, create_by, create_time, update_by, update_time, del
+	</sql>
+	
+	<sql id="insertColumns">
+		(
+		id, user_id, apply_id, stage, status, previous_stage, previous_status, operator_id, operator_name, time, ip, refuse_id, remark, create_by, create_time, update_by, update_time, del
+		)
+	</sql>
+
+	<sql id="insertBatchValues">
+		(
+		#{entity.id},#{entity.userId},#{entity.applyId},#{entity.stage},#{entity.status},#{entity.previousStage},#{entity.previousStatus},#{entity.operatorId},#{entity.operatorName},#{entity.time},#{entity.ip},#{entity.refuseId},#{entity.remark},#{entity.createBy},#{entity.createTime},#{entity.updateBy},#{entity.updateTime},#{entity.del}
+		)
+	</sql>
+	
+	<sql id="Where_Obj">
+		<where>
+		    del = 0
+		    <if test="id!=null">
+				AND id = #{id}
+			</if>
+			<if test="name!=null">
+				AND user_id = #{userId}
+			</if>
+			<if test="type!=null">
+				AND apply_id = #{applyId}
+			</if>
+			<if test="stage!=null">
+				AND stage = #{stage}
+			</if> 
+			<if test="status!=null">
+			    AND status = #{status}
+			</if>
+			<if test="minAmt!=null">
+			    AND previous_stage = #{previousStage}
+			</if>
+			<if test="maxAmt!=null">
+			    AND previous_status = #{previousStatus}
+			</if>
+			<if test="operatorId!=null">
+			    AND operator_id = #{operatorId}
+			</if>
+			<if test="operatorName!=null">
+			    AND operator_name = #{operatorName}
+			</if>
+			<if test="time!=null">
+			    AND time = #{time}
+			</if>
+			<if test="ip!=null">
+			    AND ip = #{ip}
+			</if>
+			<if test="refuseId!=null">
+			    AND refuse_id = #{refuseId}
+			</if>
+	   </where>
+	</sql>
+    	
+	<select id="getById" parameterType="string" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM loan_operation_log
+	   WHERE del = 0
+	     AND id = #{id}
+	</select>
+	
+	<select id="getByApplyId" parameterType="string" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM loan_operation_log
+	   WHERE del = 0
+	     AND apply_id = #{applyId}
+	     ORDER BY status ASC
+	</select>
+	
+	<select id="getByUserId" parameterType="string" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM loan_operation_log
+	   WHERE del = 0
+	     AND user_id = #{userId} AND <![CDATA[ STATUS < 171 ]]>
+	     GROUP BY stage
+	     ORDER BY time ASC
+	</select>
+	
+	<select id="getUnAuditbyUserId" parameterType="string" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM loan_operation_log
+	   WHERE del = 0
+	     AND <![CDATA[ STATUS < 171 ]]>     
+	     AND user_id = #{userId}
+	     ORDER BY status, time ASC
+	</select>
+	
+	<select id="get" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM loan_operation_log
+	     <include refid="Where_Obj"/>
+	   ORDER BY id
+	   LIMIT 1
+	</select>
+	
+	<select id="findList" resultType="list">
+		SELECT 
+		 <include refid="All_Column"/>
+		FROM loan_operation_log
+	     <include refid="Where_Obj"/>
+	</select>
+	
+	<select id="findAllList" resultType="list">
+		SELECT 
+			<include refid="All_Column"/>
+		FROM loan_operation_log	
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO loan_operation_log(
+			id,
+			user_id,
+			apply_id,
+			stage,
+			status,
+			previous_stage,
+			previous_status,
+			operator_id,
+			operator_name,
+			time,
+			source,
+			ip,
+			refuse_id,
+			remark,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			del
+		) VALUES (
+			#{id},
+			#{userId},
+			#{applyId},
+			#{stage},
+			#{status},
+			#{previousStage},
+			#{previousStatus},
+			#{operatorId},
+			#{operatorName},
+			#{time},
+			#{source},
+			#{ip},
+			#{refuseId},
+			#{remark},
+			#{createBy},
+			#{createTime},
+			#{updateBy},
+			#{updateTime},
+			#{del}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE loan_operation_log SET
+			<if test="userId!=null">
+			user_id = #{userId},
+			</if>
+			<if test="applyId!=null">
+			apply_id = #{applyId},
+			</if>
+			<if test="stage!=null">
+			stage = #{stage},
+			</if>
+			<if test="status!=null">
+			status = #{status},
+			</if>
+			<if test="previousStage!=null">
+			previous_stage = #{previousStage},
+			</if>
+			<if test="previousStatus!=null">
+			previous_status = #{previousStatus},
+			</if>
+			<if test="operatorId!=null">
+			operator_id = #{operatorId},
+			</if>
+			<if test="operatorName!=null">
+			operator_name = #{operatorName},
+			</if>
+			<if test="time!=null">
+			time = #{time},
+			</if>
+			<if test="source!=null">
+			source = #{source},
+			</if>
+			<if test="ip!=null">
+			ip = #{ip},
+			</if>
+			<if test="refuseId!=null">
+			refuse_id = #{refuseId},
+			</if>
+			<if test="remark!=null">
+			remark = #{remark},
+			</if>
+			update_by = #{updateBy},
+			update_time = #{updateTime}
+		WHERE id = #{id}
+	</update>
+		
+	
+	
+	<update id="deleteById">
+	    UPDATE loan_operation_log SET
+	        <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		    </if>
+		    <if test="updateTime!=null">
+			  update_time = #{updateTime},
+		    </if> 
+	          del = 1
+		 WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+	    UPDATE loan_operation_log SET
+	       <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		   </if>
+		   <if test="updateTime!=null">
+			   update_time = #{updateTime},
+		   </if> 
+	           del = 1
+		<include refid="Where_Obj"/>
+	</update>
+	
+	<insert id="insertBatch">
+		INSERT INTO loan_operation_log
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" separator=",">
+			<include refid="insertBatchValues"/>
+		</foreach>
+	</insert>
+
+
+	
+	<update id="delAuthByStatus">
+		DELETE FROM loan_operation_log
+		WHERE user_id = #{userId} and status = #{status}
+	</update>
+</mapper>

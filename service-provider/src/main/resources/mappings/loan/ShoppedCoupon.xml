@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.ShoppedCouponDAO">
+
+     <sql id="pageOrderBy">
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY c.create_time DESC
+            </otherwise>
+        </choose>
+    </sql>
+    
+    <select id="getShoppedCouponList" resultType="com.rongdu.loans.loan.vo.ShoppedCouponVO">
+    	SELECT c.apply_id AS applyId, c.coupon_name AS couponName, c.amount AS amount,
+			   c.start_time AS startTime, c.end_time AS endTime, c.status AS status,
+			   l.user_name AS userName, l.mobile As mobile, l.approve_time AS approveTime   	
+    	FROM cust_coupon c 
+    	LEFT JOIN loan_apply l ON c.apply_id = l.id
+    	<where>
+    		c.del = 0 and c.type = 9
+            <if test="op.mobile != null and op.mobile != ''">
+                and l.mobile = #{op.mobile}
+            </if>
+            <if test="op.userName != null and op.userName != ''">
+                and l.user_name = #{op.userName}
+            </if>
+            <if test="op.applyId != null and op.applyId != ''">
+                and l.apply_id = #{op.applyId}
+            </if>     		
+    	</where>
+    	<include refid="pageOrderBy"/>
+    </select>
+    
+        <select id="countShoppedCoupon" resultType="int">
+    	SELECT count(*)	
+    	FROM cust_coupon c
+    	<where>
+    		c.del = 0 and c.type = 9
+            <if test="op.applyId != null and op.applyId != ''">
+                and c.apply_id = #{op.applyId}
+            </if>     		
+    	</where>
+    </select>    
+</mapper>

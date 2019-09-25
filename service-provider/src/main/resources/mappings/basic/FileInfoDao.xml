@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.basic.dao.FileInfoDAO">
+    
+	<sql id="fileInfoColumns">
+		a.id AS "id",
+		a.user_id AS "userId",
+		a.apply_id AS "applyId",
+		a.biz_code AS "bizCode",
+		a.biz_name AS "bizName",
+		a.file_name AS "fileName",
+		a.orig_name AS "origName",
+		a.file_type AS "fileType",
+		a.file_ext AS "fileExt",
+		a.file_size AS "fileSize",
+		a.file_size_desc AS "fileSizeDesc",
+		a.server AS "server",
+		a.relative_path AS "relativePath",
+		a.absolute_path AS "absolutePath",
+		a.url AS "url",
+		a.source AS "source",
+		a.ip AS "ip",
+		a.status AS "status",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+	
+	<sql id="fileInfoJoins">
+		LEFT JOIN sys_user u2 ON u2.id = a.user_id
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{id},
+		#{userId},
+		#{applyId},
+		#{bizCode},
+		#{bizName},
+		#{fileName},
+		#{origName},
+		#{fileType},
+		#{fileExt},
+		#{fileSize},
+		#{fileSizeDesc},
+		#{server},
+		#{relativePath},
+		#{absolutePath},
+		#{url},
+		#{source},
+		#{ip},
+		#{status},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.userId},
+		#{entity.applyId},
+		#{entity.bizCode},
+		#{entity.bizName},
+		#{entity.fileName},
+		#{entity.origName},
+		#{entity.fileType},
+		#{entity.fileExt},
+		#{entity.fileSize},
+		#{entity.fileSizeDesc},
+		#{entity.server},
+		#{entity.relativePath},
+		#{entity.absolutePath},
+		#{entity.url},
+		#{entity.source},
+		#{entity.ip},
+		#{entity.status},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		id,
+		user_id,
+		apply_id,
+		biz_code,
+		biz_name,
+		file_name,
+		orig_name,
+		file_type,
+		file_ext,
+		file_size,
+		file_size_desc,
+		server,
+		relative_path,
+		absolute_path,
+		url,
+		source,
+		ip,
+		status,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		user_id = #{userId},
+		apply_id = #{applyId},
+		biz_code = #{bizCode},
+		biz_name = #{bizName},
+		file_name = #{fileName},
+		orig_name = #{origName},
+		file_type = #{fileType},
+		file_ext = #{fileExt},
+		file_size = #{fileSize},
+		file_size_desc = #{fileSizeDesc},
+		server = #{server},
+		relative_path = #{relativePath},
+		absolute_path = #{absolutePath},
+		url = #{url},
+		source = #{source},
+		ip = #{ip},
+		status = #{status},
+		remark = #{remark},
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.userId != null">
+				user_id = #{entity.userId},
+			</if>
+			<if test="entity.applyId != null">
+				apply_id = #{entity.applyId},
+			</if>
+			<if test="entity.bizCode != null">
+				biz_code = #{entity.bizCode},
+			</if>
+			<if test="entity.bizName != null">
+				biz_name = #{entity.bizName},
+			</if>
+			<if test="entity.fileName != null">
+				file_name = #{entity.fileName},
+			</if>
+			<if test="entity.origName != null">
+				orig_name = #{entity.origName},
+			</if>
+			<if test="entity.fileType != null">
+				file_type = #{entity.fileType},
+			</if>
+			<if test="entity.fileExt != null">
+				file_ext = #{entity.fileExt},
+			</if>
+			<if test="entity.fileSize != null">
+				file_size = #{entity.fileSize},
+			</if>
+			<if test="entity.fileSizeDesc != null">
+				file_size_desc = #{entity.fileSizeDesc},
+			</if>
+			<if test="entity.server != null">
+				server = #{entity.server},
+			</if>
+			<if test="entity.relativePath != null">
+				relative_path = #{entity.relativePath},
+			</if>
+			<if test="entity.absolutePath != null">
+				absolute_path = #{entity.absolutePath},
+			</if>
+			<if test="entity.url != null">
+				url = #{entity.url},
+			</if>
+			<if test="entity.source != null">
+				source = #{entity.source},
+			</if>
+			<if test="entity.ip != null">
+				ip = #{entity.ip},
+			</if>
+			<if test="entity.status != null">
+				status = #{entity.status},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+  	<select id="get" resultType="FileInfo">
+		SELECT 
+		<include refid="fileInfoColumns"/>
+		FROM basic_file_info a
+		<include refid="fileInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+  	<select id="getById" resultType="FileInfo">
+		SELECT 
+		<include refid="fileInfoColumns"/>
+		FROM basic_file_info a
+		<include refid="fileInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+		
+    <select id="getByCriteria" resultType="FileInfo">
+		SELECT 
+		<include refid="fileInfoColumns"/>
+		FROM basic_file_info a
+		<include refid="fileInfoJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultType="FileInfo">
+		SELECT 
+		<include refid="fileInfoColumns"/>
+		FROM basic_file_info a
+		<include refid="fileInfoJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultType="FileInfo">
+		SELECT 
+		<include refid="fileInfoColumns"/>
+		FROM basic_file_info a
+		<include refid="fileInfoJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultType="FileInfo">
+		SELECT 
+		<include refid="fileInfoColumns"/>
+		FROM basic_file_info a
+		<include refid="fileInfoJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="FileInfo">
+		SELECT 
+		<include refid="fileInfoColumns"/>
+		FROM basic_file_info a
+		<include refid="fileInfoJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="FileInfo">
+		SELECT 
+		<include refid="fileInfoColumns"/>
+		FROM basic_file_info a
+		<include refid="fileInfoJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM basic_file_info
+		<include refid="fileInfoJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM basic_file_info
+		<include refid="fileInfoJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO basic_file_info
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+	
+	<insert id="insertBatch">
+		INSERT INTO basic_file_info
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	<update id="update">
+		UPDATE basic_file_info SET 
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE basic_file_info 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE basic_file_info 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE basic_file_info		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE basic_file_info
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByCriteria">
+		UPDATE basic_file_info
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE basic_file_info 
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE basic_file_info
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM basic_file_info
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM basic_file_info
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM basic_file_info
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM basic_file_info
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<select id="getLastFile" resultType="FileInfo">
+		SELECT <include refid="fileInfoColumns"/>
+		from basic_file_info a WHERE user_id = #{userId} and biz_code = #{bizCode} and file_type = #{fileType} ORDER BY create_time desc LIMIT 1
+	</select>
+	
+	<select id="getAllFile" resultType="FileInfo">
+		SELECT <include refid="fileInfoColumns"/>
+		from basic_file_info a WHERE user_id = #{userId} and biz_code = #{bizCode} and file_type = #{fileType} ORDER BY create_time desc
+	</select>
+	
+	<select id="getContactFileList" resultType="FileInfo">
+		SELECT <include refid="fileInfoColumns"/>
+		from basic_file_info a WHERE user_id = #{userId} and biz_code = #{bizCode} ORDER BY create_time desc
+	</select>
+	
+	<select id="getLastFileByApplyId" resultType="FileInfo">
+		SELECT <include refid="fileInfoColumns"/>
+		from basic_file_info a WHERE apply_id = #{applyId} and biz_code = #{bizCode} and file_type = #{fileType} ORDER BY create_time desc LIMIT 1
+	</select>
+
+	<update id="updateUserIdByOrderSn">
+		UPDATE basic_file_info
+		SET user_id=#{userId}
+		WHERE apply_id=#{orderSn} and biz_code=#{bizCode}
+	</update>
+
+</mapper>

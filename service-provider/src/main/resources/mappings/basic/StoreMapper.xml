@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.basic.dao.StoreDAO">
+
+	<select id="getAllStore"
+		resultType="com.rongdu.loans.basic.entity.Store">
+		SELECT
+		a.id AS "id",
+		a.name AS "name"
+		FROM sys_office a
+		WHERE a.area_id = #{areaId}
+		and a.remarks = #{productId} and a.del_flag = '0'
+	</select>
+
+	<select id="getAllGroup"
+		resultType="com.rongdu.loans.basic.entity.Store">
+		SELECT
+		a.id AS "id",
+		a.name AS "name"
+		FROM sys_office a
+		WHERE a.parent_id = #{0} and
+		a.remarks = '3' and a.del_flag = '0'
+		order by a.sort
+	</select>
+
+	<select id="getBycompayId"
+		resultType="com.rongdu.loans.basic.entity.Store">
+		SELECT
+		a.id AS "id",
+		a.name AS "name",
+		a.code
+		FROM sys_office a
+		WHERE a.id = #{0} and
+		a.del_flag = '0'
+	</select>
+
+	<select id="getAllTopCompany"
+		resultType="com.rongdu.loans.basic.entity.Store">
+		SELECT
+		o.id AS id,
+		o.`name` AS name
+		FROM
+		sys_office o
+		WHERE
+		o.del_flag = '0'
+		AND o.type = '1'
+		AND o.grade = '1'
+		AND o.remarks IS NOT NULL
+		<![CDATA[AND o.remarks <> '']]>
+	</select>
+	
+	<select id="getStoreByAreaAndCompany"
+		resultType="com.rongdu.loans.basic.entity.Store">
+		SELECT
+		a.id AS "id",
+		a.name AS "name"
+		FROM sys_office a
+		WHERE a.area_id = #{areaId}
+		and a.parent_id = #{companyId} and a.del_flag = '0'
+	</select>
+</mapper>

@@ -1,0 +1,1446 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.RepayPlanItemDAO">
+
+    <resultMap id="getRepayDetail" type="HashMap">
+        <result property="repayDate" column="repay_date"/>
+        <result property="thisTerm" column="this_term"/>
+        <result property="principal" column="principal"/>
+        <result property="interest" column="interest"/>
+        <result property="loanStartDate" column="loan_start_date"/>
+        <result property="loanEndDate" column="loan_end_date"/>
+    </resultMap>
+
+    <sql id="updatePayResultColumns">
+        <if test="totalAmount != null">
+            total_amount = #{totalAmount},
+        </if>
+        <if test="interest!=null">
+            interest = #{interest},
+        </if>
+        <if test="prepayFee!=null">
+            prepay_fee = #{prepayFee},
+        </if>
+        <if test="payedPrincipal != null">
+            payed_principal = #{payedPrincipal},
+        </if>
+        <if test="unpayPrincipal != null">
+            unpay_principal = #{unpayPrincipal},
+        </if>
+        <if test="payedInterest != null">
+            payed_interest = #{payedInterest},
+        </if>
+        <if test="unpayInterest != null">
+            unpay_interest = #{unpayInterest},
+        </if>
+        <if test="actualRepayAmt != null">
+            actual_repay_amt = #{actualRepayAmt},
+        </if>
+        <if test="actualRepayDate != null">
+            actual_repay_date = #{actualRepayDate},
+        </if>
+        <if test="actualRepayTime != null">
+            actual_repay_time = #{actualRepayTime},
+        </if>
+        <if test="repayType != null">
+            repay_type = #{repayType},
+        </if>
+        <if test="couponId != null">
+            coupon_id = #{couponId},
+        </if>
+        <if test="status != null">
+            status = #{status},
+        </if>
+        <if test="penalty != null">
+            penalty = #{penalty},
+        </if>
+        <if test="deduction != null">
+            deduction = #{deduction},
+        </if>
+        <if test="overdueFee != null">
+            overdue_fee = #{overdueFee},
+        </if>
+        <if test="remark != null">
+            remark = #{remark},
+        </if>
+        update_by = #{updateBy},
+        update_time = #{updateTime}
+    </sql>
+
+    <update id="updatePayResult">
+        UPDATE loan_repay_plan_item SET
+        <include refid="updatePayResultColumns"/>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateUnPayResult">
+        UPDATE loan_repay_plan_item SET
+        <include refid="updatePayResultColumns"/>
+        WHERE status = 0
+        AND apply_id = #{applyId}
+    </update>
+
+    <sql id="repayPlanItemColumns">
+		a.id AS "id",
+		a.apply_id AS "applyId",
+		a.cont_no AS "contNo",
+		a.user_id AS "userId",
+		a.user_name AS "userName",
+		a.start_date AS
+		"startDate",
+		a.repay_date AS "repayDate",
+		a.total_term AS "totalTerm",
+		a.this_term AS "thisTerm",
+		a.total_amount AS "totalAmount",
+		a.principal
+		AS "principal",
+		a.interest AS "interest",
+		a.serv_fee AS "servFee",
+		a.prepay_fee AS "prepayFee",
+		a.penalty AS "penalty",
+		a.overdue_fee AS
+		"overdueFee",
+		a.deduction AS "deduction",
+		a.payed_principal AS
+		"payedPrincipal",
+		a.unpay_principal AS "unpayPrincipal",
+		a.actual_repay_amt AS "actualRepayAmt",
+		a.payed_interest AS
+		"payedInterest",
+		a.unpay_interest AS "unpayInterest",
+		a.actual_repay_date AS "actualRepayDate",
+		a.actual_repay_time AS
+		"actualRepayTime",
+		a.repay_type AS "repayType",
+		a.coupon_id AS "couponId",
+		a.status AS "status",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS
+		"createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+
+    <sql id="repayPlanItemJoins">
+    </sql>
+
+    <sql id="insertBatchValues">
+		(
+		#{entity.id},
+		#{entity.applyId},
+		#{entity.contNo},
+		#{entity.userId},
+		#{entity.userName},
+		#{entity.startDate},
+		#{entity.repayDate},
+		#{entity.totalTerm},
+		#{entity.thisTerm},
+		#{entity.totalAmount},
+		#{entity.principal},
+		#{entity.interest},
+		#{entity.servFee},
+		#{entity.prepayFee},
+		#{entity.penalty},
+		#{entity.overdueFee},
+		#{entity.deduction},
+		#{entity.payedPrincipal},
+		#{entity.unpayPrincipal},
+		#{entity.payedInterest},
+		#{entity.unpayInterest},
+		#{entity.actualRepayAmt},
+		#{entity.actualRepayDate},
+		#{entity.actualRepayTime},
+		#{entity.repayType},
+		#{entity.couponId},
+		#{entity.status},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+		)
+	</sql>
+    <sql id="insertValues">
+		(
+		#{id},
+		#{applyId},
+		#{contNo},
+		#{userId},
+		#{userName},
+		#{startDate},
+		#{repayDate},
+		#{totalTerm},
+		#{thisTerm},
+		#{totalAmount},
+		#{principal},
+		#{interest},
+		#{servFee},
+		#{prepayFee},
+		#{penalty},
+		#{overdueFee},
+		#{deduction},
+		#{payedPrincipal},
+		#{unpayPrincipal},
+		#{payedInterest},
+		#{unpayInterest},
+		#{actualRepayAmt},
+		#{actualRepayDate},
+		#{actualRepayTime},
+		#{repayType},
+		#{couponId},
+		#{status},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+		)
+	</sql>
+
+    <sql id="insertColumns">
+		(
+		id,
+		apply_id,
+		cont_no,
+		user_id,
+		user_name,
+		start_date,
+		repay_date,
+		total_term,
+		this_term,
+		total_amount,
+		principal,
+		interest,
+		serv_fee,
+		prepay_fee,
+		penalty,
+		overdue_fee,
+		deduction,
+		payed_principal,
+		unpay_principal,
+		payed_interest,
+		unpay_interest,
+		actual_repay_amt,
+		actual_repay_date,
+		actual_repay_time,
+		repay_type,
+		coupon_id,
+		status,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+		)
+	</sql>
+
+    <sql id="updateColumns">
+		apply_id = #{applyId},
+		cont_no = #{contNo},
+		user_id =
+		#{userId},
+		user_name = #{userName},
+		repay_date = #{repayDate},
+		total_term = #{totalTerm},
+		this_term = #{thisTerm},
+		total_amount =
+		#{totalAmount},
+		principal = #{principal},
+		interest = #{interest},
+		serv_fee = #{servFee},
+		prepay_fee = #{prepayFee},
+		penalty = #{penalty},
+		overdue_fee = #{overdueFee},
+		deduction = #{deduction},
+		payed_principal =
+		#{payedPrincipal},
+		unpay_principal = #{unpayPrincipal},
+		actual_repay_amt = #{actualRepayAmt},
+		payed_interest =
+		#{payedInterest},
+		unpay_interest = #{unpayInterest},
+		actual_repay_date =
+		#{actualRepayDate},
+		actual_repay_time = #{actualRepayTime},
+		repay_type =
+		#{repayType},
+		coupon_id = #{couponId},
+		status = #{status},
+		remark = #{remark},
+		update_by =
+		#{updateBy},
+		update_time = #{updateTime}
+	</sql>
+
+    <sql id="updateSelectiveColumns">
+        <set>
+            <if test="entity.applyId != null">
+                apply_id = #{entity.applyId},
+            </if>
+            <if test="entity.contNo != null">
+                cont_no = #{entity.contNo},
+            </if>
+            <if test="entity.userId != null">
+                user_id = #{entity.userId},
+            </if>
+            <if test="entity.userName != null">
+                user_name = #{entity.userName},
+            </if>
+            <if test="entity.repayDate != null">
+                repay_date = #{entity.repayDate},
+            </if>
+            <if test="entity.totalTerm != null">
+                total_term = #{entity.totalTerm},
+            </if>
+            <if test="entity.thisTerm != null">
+                this_term = #{entity.thisTerm},
+            </if>
+            <if test="entity.totalAmount != null">
+                total_amount = #{entity.totalAmount},
+            </if>
+            <if test="entity.principal != null">
+                principal = #{entity.principal},
+            </if>
+            <if test="entity.interest != null">
+                interest = #{entity.interest},
+            </if>
+            <if test="entity.servFee != null">
+                serv_fee = #{entity.servFee},
+            </if>
+            <if test="entity.prepayFee != null">
+                prepay_fee = #{entity.prepayFee},
+            </if>
+            <if test="entity.penalty != null">
+                penalty = #{entity.penalty},
+            </if>
+            <if test="entity.overdueFee != null">
+                overdue_fee = #{entity.overdueFee},
+            </if>
+            <if test="entity.deduction != null">
+                deduction = #{entity.deduction},
+            </if>
+            <if test="entity.payedPrincipal != null">
+                payed_principal = #{entity.payedPrincipal},
+            </if>
+            <if test="entity.unpayPrincipal != null">
+                unpay_principal = #{entity.unpayPrincipal},
+            </if>
+            <if test="entity.payedInterest != null">
+                payed_interest = #{entity.payedInterest},
+            </if>
+            <if test="entity.unpayInterest != null">
+                unpay_interest = #{entity.unpayInterest},
+            </if>
+            <if test="entity.actualrepayamt != null">
+                actual_repay_amt = #{entity.actualrepayamt},
+            </if>
+            <if test="entity.actualRepayDate != null">
+                actual_repay_date = #{entity.actualRepayDate},
+            </if>
+            <if test="entity.actualRepayTime != null">
+                actual_repay_time = #{entity.actualRepayTime},
+            </if>
+            <if test="entity.repayType != null">
+                repay_type = #{entity.repayType},
+            </if>
+            <if test="entity.couponId != null">
+                coupon_id = #{entity.couponId},
+            </if>
+            <if test="entity.status != null">
+                status = #{entity.status},
+            </if>
+            <if test="entity.remark != null">
+                remark = #{entity.remark},
+            </if>
+            <if test="entity.updateBy != null">
+                update_by = #{entity.updateBy},
+            </if>
+            <if test="entity.updateTime != null">
+                update_time = #{entity.updateTime},
+            </if>
+        </set>
+    </sql>
+
+    <sql id="whereByCriteriaList">
+        <where>
+            <foreach collection="criteriaList" item="criteria" separator=" AND ">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+                        <foreach collection="criteria.pairList" item="pair">
+                            <choose>
+                                <when test="pair.criterion.singleValue">
+                                    ${pair.logic} ${pair.criterion.column}
+                                    ${pair.criterion.match}
+                                    ${pair.criterion.value}
+                                </when>
+                                <when test="pair.criterion.betweenValue">
+                                    ${pair.logic} ${pair.criterion.column}
+                                    ${pair.criterion.match}
+                                    ${pair.criterion.value} and
+                                    ${pair.criterion.secondValue}
+                                </when>
+                                <when test="pair.criterion.listValue">
+                                    ${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+                                    <foreach collection="pair.criterion.value" item="item" open="("
+                                             close=")" separator=",">
+                                        #{item}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="whereByCriteria">
+        <where>
+            <if test="criteria.valid">
+                <trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+                    <foreach collection="criteria.pairList" item="pair">
+                        <choose>
+                            <when test="pair.criterion.singleValue">
+                                ${pair.logic} ${pair.criterion.column}
+                                ${pair.criterion.match}
+                                ${pair.criterion.value}
+                            </when>
+                            <when test="pair.criterion.betweenValue">
+                                ${pair.logic} ${pair.criterion.column}
+                                ${pair.criterion.match}
+                                ${pair.criterion.value} and
+                                ${pair.criterion.secondValue}
+                            </when>
+                            <when test="pair.criterion.listValue">
+                                ${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+                                <foreach collection="pair.criterion.value" item="item" open="("
+                                         close=")" separator=",">
+                                    #{item}
+                                </foreach>
+                            </when>
+                        </choose>
+                    </foreach>
+                </trim>
+            </if>
+        </where>
+    </sql>
+
+    <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+
+    <sql id="pageOrderBy">
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.create_time DESC
+            </otherwise>
+        </choose>
+    </sql>
+
+    <select id="get" resultType="RepayPlanItem">
+        SELECT
+        <include refid="repayPlanItemColumns"/>
+        FROM loan_repay_plan_item a
+        <include refid="repayPlanItemJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="countOverdueInTwoOrThreeTerm" resultType="Integer">
+		SELECT 
+			count(i.id)
+	 	FROM `loan_repay_plan_item` i
+		WHERE i.`status` = 1
+		AND i.del = 0
+		AND DATE_FORMAT(i.actual_repay_time,'%Y-%m-%d') > i.repay_date
+		AND i.this_term in (2,3)
+		AND i.user_id = #{userId}
+		AND i.apply_id = #{applyId}
+	</select>
+
+    <select id="getById" resultType="RepayPlanItem">
+        SELECT
+        <include refid="repayPlanItemColumns"/>
+        FROM loan_repay_plan_item a
+        <include refid="repayPlanItemJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="getByCriteria" resultType="RepayPlanItem">
+        SELECT
+        <include refid="repayPlanItemColumns"/>
+        FROM loan_repay_plan_item a
+        <include refid="repayPlanItemJoins"/>
+        <include refid="whereByCriteria"/>
+    </select>
+
+    <select id="findAllByCriteria" resultType="RepayPlanItem">
+        SELECT
+        <include refid="repayPlanItemColumns"/>
+        FROM loan_repay_plan_item a
+        <include refid="repayPlanItemJoins"/>
+        <include refid="whereByCriteria"/>
+        <include refid="orderBy"/>
+    </select>
+
+    <select id="findAllByCriteriaList" resultType="RepayPlanItem">
+        SELECT
+        <include refid="repayPlanItemColumns"/>
+        FROM loan_repay_plan_item a
+        <include refid="repayPlanItemJoins"/>
+        <include refid="whereByCriteriaList"/>
+        <include refid="orderBy"/>
+    </select>
+
+    <select id="getPage" resultType="RepayPlanItem">
+        SELECT
+        <include refid="repayPlanItemColumns"/>
+        FROM loan_repay_plan_item a
+        <include refid="repayPlanItemJoins"/>
+        <include refid="pageOrderBy"/>
+    </select>
+
+    <select id="getPageByCriteria" resultType="RepayPlanItem">
+        SELECT
+        <include refid="repayPlanItemColumns"/>
+        FROM loan_repay_plan_item a
+        <include refid="repayPlanItemJoins"/>
+        <include refid="whereByCriteria"/>
+        <include refid="pageOrderBy"/>
+    </select>
+
+    <select id="getPageByCriteriaList" resultType="RepayPlanItem">
+        SELECT
+        <include refid="repayPlanItemColumns"/>
+        FROM loan_repay_plan_item a
+        <include refid="repayPlanItemJoins"/>
+        <include refid="whereByCriteriaList"/>
+        <include refid="pageOrderBy"/>
+    </select>
+
+    <select id="countByCriteria" resultType="Long">
+        SELECT COUNT(1) FROM loan_repay_plan_item
+        <include refid="repayPlanItemJoins"/>
+        <include refid="whereByCriteria"/>
+    </select>
+
+    <select id="countByCriteriaList" resultType="Long">
+        SELECT COUNT(1) FROM loan_repay_plan_item
+        <include refid="repayPlanItemJoins"/>
+        <include refid="whereByCriteriaList"/>
+    </select>
+
+    <select id="getRepayDetailByContNo" resultMap="getRepayDetail">
+        SELECT
+        l.repay_date as repayDate,
+        l.this_term as thisTerm,
+        l.principal as principal,
+        l.interest as interest,
+        la.loan_start_date as loanStartDate,
+        la.loan_end_date as loanEndDate
+        FROM
+        loan_repay_plan_item l
+        LEFT JOIN
+        loan_repay_plan la ON l.cont_no = la.cont_no
+        WHERE
+        <if test="contNo != null and contNo != ''">
+            l.apply_id = #{contNo}
+        </if>
+        AND l.del = 0
+    </select>
+
+    <insert id="insert">
+        INSERT INTO loan_repay_plan_item
+        <include refid="insertColumns"/>
+        VALUES
+        <include refid="insertValues"/>
+    </insert>
+
+    <insert id="insertBatch">
+        INSERT INTO loan_repay_plan_item
+        <include refid="insertColumns"/>
+        VALUES
+        <foreach collection="list" item="entity" index="index"
+                 separator=",">
+            <include refid="insertBatchValues"/>
+        </foreach>
+    </insert>
+
+    <update id="update">
+        UPDATE loan_repay_plan_item SET
+        <include refid="updateColumns"/>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateByCriteriaSelective">
+        UPDATE loan_repay_plan_item
+        <include refid="updateSelectiveColumns"/>
+        <include refid="whereByCriteria"/>
+    </update>
+
+    <update id="updateByCriteriaListSelective">
+        UPDATE loan_repay_plan_item
+        <include refid="updateSelectiveColumns"/>
+        <include refid="whereByCriteriaList"/>
+    </update>
+
+    <update id="updateByIdSelective">
+        UPDATE loan_repay_plan_item
+        <include refid="updateSelectiveColumns"/>
+        WHERE id = #{entity.id}
+    </update>
+
+    <update id="delete">
+		UPDATE loan_repay_plan_item
+		SET del = 1
+		WHERE id =
+		#{id}
+	</update>
+
+    <update id="deleteByCriteria">
+        UPDATE loan_repay_plan_item
+        SET del = 1
+        <include refid="whereByCriteria"/>
+    </update>
+
+    <update id="deleteByCriteriaList">
+        UPDATE loan_repay_plan_item
+        SET del = 1
+        <include refid="whereByCriteriaList"/>
+    </update>
+
+    <update id="deleteTruely">
+		DELETE FROM loan_repay_plan_item
+		WHERE id = #{id}
+	</update>
+
+    <update id="deleteTruelyByCriteria">
+        DELETE FROM loan_repay_plan_item
+        <include refid="whereByCriteria"/>
+    </update>
+
+    <update id="deleteTruelyByCriteriaList">
+        DELETE FROM loan_repay_plan_item
+        <include refid="whereByCriteriaList"/>
+    </update>
+
+    <update id="deleteBatch">
+        UPDATE loan_repay_plan_item
+        SET del = 1
+        WHERE id in
+        <foreach collection="ids" index="index" item="id" open="("
+                 separator="," close=")">#{id}
+        </foreach>
+    </update>
+
+    <update id="deleteBatchTruely">
+        DELETE FROM loan_repay_plan_item
+        WHERE id in
+        <foreach collection="ids" index="index" item="id" open="("
+                 separator="," close=")">#{id}
+        </foreach>
+    </update>
+
+    <select id="repayDetailList" resultType="com.rongdu.loans.loan.vo.RepayDetailListVO">
+        SELECT
+        t.id,t.apply_id,t.cont_no,t.this_term,t.total_term,t.total_amount,t.serv_fee,t.interest,t.deduction,
+        t.actual_repay_time,t.start_date,t.repay_date,t.penalty,t.prepay_fee,t.actual_repay_amt,t.repay_type,t.principal,
+        t.overdue_fee,
+        t.status,a.serv_fee_rate,a.user_id,a.user_name,a.mobile,a.id_no,a.product_id,a.product_name,a.approve_amt,a.apply_term
+        as applyTerm,
+        a.approve_term,a.basic_rate,a.discount_rate,a.repay_method,p.loan_start_date,a.approver_name,a.company_id,
+        p.current_term,p.remark as planRemark,t.remark as
+        itemRemark,t.serv_fee as termServFee,
+        p.withdrawal_source as withdrawalSource,
+        p.loan_status as loanStatus,
+        a.create_time as applyCreateTime,
+        a.channel_id as channelId,
+        a.composite_score as compositeScore
+        <if test='op.status != null and op.status == "1"'>
+            ,r.chl_order_no
+        </if>
+        FROM
+        loan_repay_plan_item t
+        LEFT JOIN loan_apply a ON t.apply_id = a.id
+        LEFT JOIN loan_repay_plan p ON t.apply_id = p.apply_id
+        <if test='op.status != null and op.status == "1"'>
+            LEFT JOIN loan_repay_log r ON t.id = r.repay_plan_item_id
+        </if>
+        <where>
+            t.del = 0
+            <if test="op.compositeScore != null and op.compositeScore != '' ">
+                <choose>
+                    <when test="op.compositeScore == 'A'.toString()">
+                        <![CDATA[ and CONVERT(a.composite_score,SIGNED) > 550 and CONVERT(a.composite_score,SIGNED) <= 650 ]]>
+                    </when>
+                    <when test="op.compositeScore == 'B'.toString()">
+                        <![CDATA[ and CONVERT(a.composite_score,SIGNED) > 500 and CONVERT(a.composite_score,SIGNED) <= 550 ]]>
+                    </when>
+                    <when test="op.compositeScore == 'C'.toString()">
+                        <![CDATA[ and CONVERT(a.composite_score,SIGNED) > 450 and CONVERT(a.composite_score,SIGNED) <= 500 ]]>
+                    </when>
+                    <when test="op.compositeScore == 'D'.toString()">
+                        <![CDATA[ and CONVERT(a.composite_score,SIGNED) > 400 and CONVERT(a.composite_score,SIGNED) <= 450 ]]>
+                    </when>
+                    <when test="op.compositeScore == 'E'.toString()">
+                        <![CDATA[ and CONVERT(a.composite_score,SIGNED) >= 300 and CONVERT(a.composite_score,SIGNED) <= 400 ]]>
+                    </when>
+                </choose>
+            </if>
+            <if test="op.companyId != null and op.companyId != ''">
+                and a.company_id = #{op.companyId}
+            </if>
+            <if test="op.approverName != null and op.approverName != ''">
+                and a.approver_name = #{op.approverName}
+            </if>
+            <if test="op.productId != null and op.productId != ''">
+                and a.product_id in (${op.productId})
+            </if>
+            <if test="op.id != null and op.id != ''">
+                and t.id = #{op.id}
+            </if>
+            <if test="op.applyId != null and op.applyId != ''">
+                and t.apply_id = #{op.applyId}
+            </if>
+            <if test="op.contNo != null and op.contNo != ''">
+                and t.cont_no = #{op.contNo}
+            </if>
+            <if test="op.mobile != null and op.mobile != ''">
+                and a.mobile = #{op.mobile}
+            </if>
+            <if test="op.idNo != null and op.idNo != ''">
+                and a.id_no = #{op.idNo}
+            </if>
+            <if test="op.userName != null and op.userName != ''">
+                and a.user_name = #{op.userName}
+            </if>
+            <if test="op.userId != null and op.userId != ''">
+                and a.user_id = #{op.userId}
+            </if>
+            <if test="op.channelId != null and op.channelId != ''">
+                and a.channel_id in (${op.channelId})
+            </if>
+            <if test="op.status != null">
+                and t.status = #{op.status}
+                <if test='op.status == "1"'>
+                    and r.status in ('SUCCESS','S')
+                </if>
+            </if>
+            <if test="op.repayType != null and op.repayType != ''">
+                and t.repay_type = #{op.repayType}
+            </if>
+            <if test="op.sign != null and op.sign == 0">
+                -- 正常
+                and (
+                <![CDATA[  DATE(t.actual_repay_time) = DATE(t.repay_date) ]]>
+                or
+                (<![CDATA[  CURDATE() < DATE(t.repay_date) ]]>
+                and t.status = 0)
+                )
+            </if>
+            <if test="op.sign != null and op.sign == 1">
+                -- 提前
+                <![CDATA[ and DATE(t.actual_repay_time) < DATE(t.repay_date) ]]>
+            </if>
+            <if test="op.sign != null and op.sign == 2">
+                -- 逾期
+                and (
+                <![CDATA[  DATE(t.actual_repay_time) > DATE(t.repay_date) ]]>
+                or
+                (<![CDATA[  CURDATE() > DATE(t.repay_date) ]]>
+                and t.status = 0)
+                )
+            </if>
+            <if test="op.expectTimeStart != null ">
+                <![CDATA[ AND t.repay_date >= #{op.expectTimeStart} ]]>
+            </if>
+            <if test="op.expectTimeEnd != null">
+                <![CDATA[ AND t.repay_date <= #{op.expectTimeEnd} ]]>
+            </if>
+            <if test="op.actualTimeStart != null ">
+                <![CDATA[ AND t.actual_repay_time >= #{op.actualTimeStart} ]]>
+            </if>
+            <if test="op.actualTimeEnd != null">
+                <![CDATA[ AND t.actual_repay_time <= #{op.actualTimeEnd} ]]>
+            </if>
+            <if test="op.borrowTimeStart != null ">
+                <![CDATA[ AND p.loan_start_date >= #{op.borrowTimeStart} ]]>
+            </if>
+            <if test="op.borrowTimeEnd != null">
+                <![CDATA[ AND p.loan_start_date <= #{op.borrowTimeEnd} ]]>
+            </if>
+            <if test="op.overdueList != null and op.overdueList.size > 0">
+                and
+                <if test="op.status == 1">
+                    <foreach item="overdueTime" collection="op.overdueList"
+                             open="(" separator=" or " close=")">
+                        <![CDATA[
+                 datediff(DATE(t.actual_repay_time),DATE(t.repay_date)) >= #{overdueTime.min}
+                 and datediff(DATE(t.actual_repay_time),DATE(t.repay_date)) <= #{overdueTime.max}
+                 ]]>
+                    </foreach>
+                </if>
+                <if test="op.status == 0">
+                    <foreach item="overdueTime" collection="op.overdueList"
+                             open="(" separator=" or " close=")">
+                        <![CDATA[
+                 datediff(CURDATE(),DATE(t.repay_date)) >= #{overdueTime.min}
+                 and datediff(CURDATE(),DATE(t.repay_date)) <= #{overdueTime.max}
+                 ]]>
+                    </foreach>
+                </if>
+            </if>
+            <if test="op.isDelaySettlement != null and op.isDelaySettlement==1">
+                <![CDATA[ AND (t.repay_type='manualdelay' or t.repay_type='mandelay')]]>
+            </if>
+            <if test="op.isDelaySettlement != null and op.isDelaySettlement==2">
+                <![CDATA[ AND (IFNULL(t.repay_type,'')='' OR (t.repay_type!='manualdelay' AND t.repay_type!='mandelay')) ]]>
+            </if>
+            <if test="op.termType != null and op.termType != '' ">
+                <choose>
+                    <when test="op.termType == 1">
+                        and a.term = 1
+                    </when>
+                    <when test="op.termType == 2">
+                        and a.term = 3
+                    </when>
+                    <when test="op.termType == 3">
+                        and a.term = 6
+                    </when>
+                    <when test="op.termType == 4">
+                        and a.term = 4
+                    </when>
+                    <otherwise>
+                        and a.term NOT IN (1,3,6,4)
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="op.withdrawalSource != null ">
+                and p.withdrawal_source = #{op.withdrawalSource}
+            </if>
+            <if test="op.thisTerm != null and op.thisTerm != '' ">
+                and t.this_term = #{op.thisTerm}
+            </if>
+            <if test="op.applyCreateTimeStart != null ">
+                <![CDATA[ AND a.create_time >= #{op.applyCreateTimeStart} ]]>
+            </if>
+            <if test="op.applyCreateTimeEnd != null">
+                <![CDATA[ AND a.create_time <= #{op.applyCreateTimeEnd} ]]>
+            </if>
+            <if test="op.loanSucess != null and op.loanSucess != '' ">
+                <choose>
+                    <when test="op.loanSucess == 'yes'">
+                        and a.loan_succ_count > 0
+                    </when>
+                    <otherwise>
+                        and a.loan_succ_count = 0
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+        ORDER BY t.repay_date,t.apply_id,t.this_term ASC
+    </select>
+
+    <!-- code y0706 查询不包括延期的还款计划明细 -->
+    <select id="repayDetailListExecludeDelay" resultType="com.rongdu.loans.loan.vo.RepayDetailListVO">
+        SELECT
+        t.id,t.apply_id,t.cont_no,t.this_term,t.total_term,t.total_amount,t.serv_fee,t.interest,t.deduction,
+        t.actual_repay_time,t.start_date,t.repay_date,t.penalty,t.prepay_fee,t.actual_repay_amt,t.repay_type,t.principal,
+        t.overdue_fee,
+        t.status,a.serv_fee_rate,a.user_id,a.user_name,a.mobile,a.id_no,a.product_id,a.product_name,a.approve_amt,a.apply_term
+        as applyTerm,
+        a.approve_term,a.basic_rate,a.discount_rate,a.repay_method,p.loan_start_date,a.approver_name,a.company_id,o.overdue_days
+        as overdue,
+        p.current_term,p.remark as planRemark,t.remark as
+        itemRemark,t.serv_fee as termServFee,
+        a.create_time as applyCreateTime
+        FROM
+        loan_repay_plan_item t
+        LEFT
+        JOIN loan_apply a ON t.apply_id = a.id
+        LEFT JOIN loan_repay_plan p ON
+        t.apply_id = p.apply_id
+        left join loan_overdue o on t.id=o.id
+        <where>
+            t.del = 0 AND IFNULL(t.repay_type,'') NOT IN('manualdelay','mandelay')
+            <if test="op.companyId != null and op.companyId != ''">
+                and a.company_id = #{op.companyId}
+            </if>
+            <if test="op.approverName != null and op.approverName != ''">
+                and a.approver_name = #{op.approverName}
+            </if>
+            <if test="op.productId != null and op.productId != ''">
+                and a.product_id in (${op.productId})
+            </if>
+            <if test="op.id != null and op.id != ''">
+                and t.id = #{op.id}
+            </if>
+            <if test="op.contNo != null and op.contNo != ''">
+                and t.cont_no = #{op.contNo}
+            </if>
+            <if test="op.mobile != null and op.mobile != ''">
+                and a.mobile = #{op.mobile}
+            </if>
+            <if test="op.idNo != null and op.idNo != ''">
+                and a.id_no = #{op.idNo}
+            </if>
+            <if test="op.userName != null and op.userName != ''">
+                and a.user_name = #{op.userName}
+            </if>
+            <if test="op.userId != null and op.userId != ''">
+                and a.user_id = #{op.userId}
+            </if>
+            <if test="op.channelId != null and op.channelId != ''">
+                and a.channel_id = #{op.channelId}
+            </if>
+            <if test="op.status != null">
+                and t.status = #{op.status}
+            </if>
+            <if test="op.repayType != null and op.repayType != ''">
+                and t.repay_type = #{op.repayType}
+            </if>
+            <if test="op.sign != null and op.sign == 0">
+                -- 正常
+                and (
+                <![CDATA[  DATE(t.actual_repay_time) = DATE(t.repay_date) ]]>
+                or
+                (<![CDATA[  CURDATE() < DATE(t.repay_date) ]]>
+                and t.status = 0)
+                )
+            </if>
+            <if test="op.sign != null and op.sign == 1">
+                -- 提前
+                <![CDATA[ and DATE(t.actual_repay_time) < DATE(t.repay_date) ]]>
+            </if>
+            <if test="op.sign != null and op.sign == 2">
+                -- 逾期
+                and (
+                <![CDATA[  DATE(t.actual_repay_time) > DATE(t.repay_date) ]]>
+                or
+                (<![CDATA[  CURDATE() > DATE(t.repay_date) ]]>
+                and t.status = 0)
+                )
+            </if>
+            <if test="op.expectTimeStart != null ">
+                <![CDATA[ AND t.repay_date >= #{op.expectTimeStart} ]]>
+            </if>
+            <if test="op.expectTimeEnd != null">
+                <![CDATA[ AND t.repay_date <= #{op.expectTimeEnd} ]]>
+            </if>
+            <if test="op.actualTimeStart != null ">
+                <![CDATA[ AND t.actual_repay_time >= #{op.actualTimeStart} ]]>
+            </if>
+            <if test="op.actualTimeEnd != null">
+                <![CDATA[ AND t.actual_repay_time <= #{op.actualTimeEnd} ]]>
+            </if>
+            <if test="op.borrowTimeStart != null ">
+                <![CDATA[ AND p.loan_start_date >= #{op.borrowTimeStart} ]]>
+            </if>
+            <if test="op.borrowTimeEnd != null">
+                <![CDATA[ AND p.loan_start_date <= #{op.borrowTimeEnd} ]]>
+            </if>
+            <if test="op.overdueList != null and op.overdueList.size > 0">
+                and
+                <if test="op.status == 1">
+                    <foreach item="overdueTime" collection="op.overdueList"
+                             open="(" separator=" or " close=")">
+                        <![CDATA[
+                 datediff(DATE(t.actual_repay_time),DATE(t.repay_date)) >= #{overdueTime.min}
+                 and datediff(DATE(t.actual_repay_time),DATE(t.repay_date)) <= #{overdueTime.max}
+                 ]]>
+                    </foreach>
+                </if>
+                <if test="op.status == 0">
+                    <foreach item="overdueTime" collection="op.overdueList"
+                             open="(" separator=" or " close=")">
+                        <![CDATA[
+                 datediff(CURDATE(),DATE(t.repay_date)) >= #{overdueTime.min}
+                 and datediff(CURDATE(),DATE(t.repay_date)) <= #{overdueTime.max}
+                 ]]>
+                    </foreach>
+                </if>
+            </if>
+            <if test="op.isDelaySettlement != null and op.isDelaySettlement==1">
+                <![CDATA[ AND (t.repay_type='manualdelay' or t.repay_type='mandelay')]]>
+            </if>
+            <if test="op.isDelaySettlement != null and op.isDelaySettlement==2">
+                <![CDATA[ AND (IFNULL(t.repay_type,'')='' OR (t.repay_type!='manualdelay' AND t.repay_type!='mandelay')) ]]>
+            </if>
+        </where>
+        ORDER BY p.loan_start_date,t.apply_id,t.this_term ASC
+    </select>
+
+
+    <select id="repayWarnList" resultType="com.rongdu.loans.loan.vo.RepayWarnListVO">
+
+        SELECT
+        t.id,t.apply_id,t.cont_no,t.this_term,t.total_term,t.total_amount,t.serv_fee,t.interest,t.deduction,
+        t.actual_repay_time,t.start_date,t.repay_date,t.penalty,t.prepay_fee,t.actual_repay_amt,t.repay_type,t.principal,
+        t.overdue_fee,t.status,a.serv_fee_rate,a.user_id,a.user_name,a.mobile,a.id_no,a.product_id,a.product_name,a.approve_amt,
+        a.apply_term as
+        applyTerm,a.approve_term,a.basic_rate,a.discount_rate,a.repay_method,p.loan_start_date,a.approver_name,a.company_id,
+        p.current_term,p.remark as planRemark,t.remark as itemRemark,t.serv_fee as termServFee, w.id AS warnId ,
+        w.is_warn as isWarn,w.content as content,w.is_push as isPush,CASE WHEN w.id IS NULL THEN 0 ELSE 1 END sort
+        FROM
+        loan_repay_plan_item t
+        LEFT JOIN loan_apply a ON t.apply_id = a.id
+        LEFT JOIN loan_repay_plan p ON t.apply_id = p.apply_id
+        LEFT JOIN loan_repay_warn w ON t.id = w.repay_id
+        <where>
+            t.del = 0 AND t.status =0
+            <if test="op.companyId != null and op.companyId != ''">
+                and a.company_id = #{op.companyId}
+            </if>
+            <if test="op.approverName != null and op.approverName != ''">
+                and a.approver_name = #{op.approverName}
+            </if>
+            <if test="op.productId != null and op.productId != ''">
+                and a.product_id in (${op.productId})
+            </if>
+            <if test="op.id != null and op.id != ''">
+                and t.id = #{op.id}
+            </if>
+            <if test="op.contNo != null and op.contNo != ''">
+                and t.cont_no = #{op.contNo}
+            </if>
+            <if test="op.mobile != null and op.mobile != ''">
+                and a.mobile = #{op.mobile}
+            </if>
+            <if test="op.idNo != null and op.idNo != ''">
+                and a.id_no = #{op.idNo}
+            </if>
+            <if test="op.userName != null and op.userName != ''">
+                and a.user_name = #{op.userName}
+            </if>
+            <if test="op.userId != null and op.userId != ''">
+                and a.user_id = #{op.userId}
+            </if>
+            <if test="op.channelId != null and op.channelId != ''">
+                and a.channel_id = #{op.channelId}
+            </if>
+            <if test="op.status != null">
+                and t.status = #{op.status}
+            </if>
+            <if test="op.repayType != null and op.repayType != ''">
+                and t.repay_type = #{op.repayType}
+            </if>
+            <if test="op.sign != null and op.sign == 0">
+                -- 正常
+                and (
+                <![CDATA[  DATE(t.actual_repay_time) = DATE(t.repay_date) ]]>
+                or
+                (<![CDATA[  CURDATE() < DATE(t.repay_date) ]]>
+                and t.status = 0)
+                )
+            </if>
+            <if test="op.sign != null and op.sign == 1">
+                -- 提前
+                <![CDATA[ and DATE(t.actual_repay_time) < DATE(t.repay_date) ]]>
+            </if>
+            <if test="op.sign != null and op.sign == 2">
+                -- 逾期
+                and (
+                <![CDATA[  DATE(t.actual_repay_time) > DATE(t.repay_date) ]]>
+                or
+                (<![CDATA[  CURDATE() > DATE(t.repay_date) ]]>
+                and t.status = 0)
+                )
+            </if>
+            <if test="op.expectTimeStart != null ">
+                <![CDATA[ AND t.repay_date >= #{op.expectTimeStart} ]]>
+            </if>
+            <if test="op.expectTimeEnd != null">
+                <![CDATA[ AND t.repay_date <= #{op.expectTimeEnd} ]]>
+            </if>
+            <if test="op.actualTimeStart != null ">
+                <![CDATA[ AND t.actual_repay_time >= #{op.actualTimeStart} ]]>
+            </if>
+            <if test="op.actualTimeEnd != null">
+                <![CDATA[ AND t.actual_repay_time <= #{op.actualTimeEnd} ]]>
+            </if>
+            <if test="op.borrowTimeStart != null ">
+                <![CDATA[ AND p.loan_start_date >= #{op.borrowTimeStart} ]]>
+            </if>
+            <if test="op.borrowTimeEnd != null">
+                <![CDATA[ AND p.loan_start_date <= #{op.borrowTimeEnd} ]]>
+            </if>
+            <if test="op.overdueList != null and op.overdueList.size > 0">
+                and
+                <if test="op.status == 1">
+                    <foreach item="overdueTime" collection="op.overdueList"
+                             open="(" separator=" or " close=")">
+                        <![CDATA[
+                 datediff(DATE(t.actual_repay_time),DATE(t.repay_date)) >= #{overdueTime.min}
+                 and datediff(DATE(t.actual_repay_time),DATE(t.repay_date)) <= #{overdueTime.max}
+                 ]]>
+                    </foreach>
+                </if>
+                <if test="op.status == 0">
+                    <foreach item="overdueTime" collection="op.overdueList"
+                             open="(" separator=" or " close=")">
+                        <![CDATA[
+                 datediff(CURDATE(),DATE(t.repay_date)) >= #{overdueTime.min}
+                 and datediff(CURDATE(),DATE(t.repay_date)) <= #{overdueTime.max}
+                 ]]>
+                    </foreach>
+                </if>
+            </if>
+            <if test="op.isDelaySettlement != null and op.isDelaySettlement==1">
+                <![CDATA[ AND (t.repay_type='manualdelay' or t.repay_type='mandelay')]]>
+            </if>
+            <if test="op.isDelaySettlement != null and op.isDelaySettlement==2">
+                <![CDATA[ AND (IFNULL(t.repay_type,'')='' OR (t.repay_type!='manualdelay' AND t.repay_type!='mandelay')) ]]>
+            </if>
+            <if test="op.sysUserId != null and op.sysUserId != '' ">
+                and w.sys_user_id = #{op.sysUserId}
+            </if>
+            <if test="op.isConfim != null and op.isConfim == 0">
+                and w.id is null
+            </if>
+            <if test="op.isConfim != null and op.isConfim == 1">
+                and w.id is not null
+            </if>
+            <if test="op.isWarn !=null">
+                and w.is_warn=#{op.isWarn}
+            </if>
+            <if test="op.isPush !=null">
+                and w.is_push=#{op.isPush}
+            </if>
+            <if test="op.termType != null and op.termType != '' ">
+                <choose>
+                    <when test="op.termType == 1">
+                        and a.term = 1
+                    </when>
+                    <when test="op.termType == 2">
+                        and a.term = 3
+                    </when>
+                    <when test="op.termType == 3">
+                        and a.term = 6
+                    </when>
+                    <when test="op.termType == 4">
+                        and a.term = 4
+                    </when>
+                    <otherwise>
+                        and a.term NOT IN (1,3,6,4)
+                    </otherwise>
+                </choose>
+            </if>
+
+        </where>
+        <!-- ORDER BY p.loan_start_date,t.apply_id,t.this_term ASC -->
+        ORDER BY sort,t.repay_date,t.apply_id,t.this_term ASC
+    </select>
+
+
+    <select id="findOverdueItem" resultType="com.rongdu.loans.loan.dto.OverdueItemCalcDTO">
+
+		SELECT
+		a.id,a.apply_id,a.start_date,a.repay_date,a.total_term,a.this_term,a.total_amount,a.principal,a.interest,b.channel_id,
+		a.penalty,b.overdue_fee,a.deduction,a.payed_interest,a.unpay_interest,a.payed_interest,a.unpay_interest,a.`status`,
+		b.overdue_rate,b.actual_rate,b.approve_amt,b.approve_term,b.repay_method,b.repay_unit,a.serv_fee,
+		b.serv_fee as apply_serv_fee,b.pay_channel,b.product_id
+		from loan_repay_plan_item a
+		LEFT JOIN loan_apply b ON a.apply_id = b.id
+		WHERE a.`status`=0
+		/*codey 0612 product*/
+		/*and b.product_id in ('JDQXJD','JN')*/
+        <![CDATA[ and repay_date < CURRENT_DATE  ]]>
+		and a.del =0
+		order by a.repay_date desc
+	</select>
+
+    <select id="findOverdueItemForTFL" resultType="com.rongdu.loans.loan.dto.OverdueItemCalcDTO">
+
+		SELECT
+		a.id,a.apply_id,a.start_date,a.repay_date,a.total_term,a.this_term,a.total_amount,a.principal,a.interest,
+		a.penalty,b.overdue_fee,a.deduction,a.payed_interest,a.unpay_interest,a.payed_interest,a.unpay_interest,a.`status`,
+		b.overdue_rate,b.actual_rate,b.approve_amt,b.approve_term,b.repay_method,b.repay_unit,a.serv_fee,
+		b.serv_fee as apply_serv_fee,b.pay_channel
+		from loan_repay_plan_item a
+		LEFT JOIN loan_apply b ON a.apply_id = b.id
+		WHERE a.`status`=0
+		and b.product_id in ('TFL','CCD','LYFQ','ZJD','TYD')
+        <![CDATA[ and repay_date <= CURRENT_DATE  ]]>
+		and a.del =0
+		order by a.repay_date desc
+	</select>
+
+    <select id="getByApplyId" parameterType="string" resultType="RepayPlanItem">
+        SELECT
+        <include refid="repayPlanItemColumns"/>
+        FROM loan_repay_plan_item a
+        WHERE a.del = 0
+        AND a.apply_id = #{applyId}
+        ORDER BY a.repay_date,a.this_term ASC
+    </select>
+
+    <select id="getByApplyIdForApp" parameterType="string" resultType="RepayPlanItem">
+        SELECT
+        <include refid="repayPlanItemColumns"/>
+        FROM loan_repay_plan_item a
+        WHERE a.del = 0
+        AND a.apply_id = #{applyId}
+        AND IFNULL(a.repay_type,'') NOT IN('manualdelay','mandelay')
+        ORDER BY a.repay_date,a.this_term ASC
+    </select>
+
+    <select id="getByUserId" parameterType="string" resultType="RepayPlanItem">
+        SELECT
+        <include refid="repayPlanItemColumns"/>
+        FROM loan_repay_plan_item a
+        WHERE a.del = 0
+        AND a.user_id = #{userId}
+        ORDER BY a.repay_date
+    </select>
+
+    <select id="curdateRepayList" resultType="RepayPlanItem">
+        SELECT
+        <include refid="repayPlanItemColumns"/>
+        from loan_repay_plan_item a
+        inner join loan_apply b on b.id=a.apply_id
+        where <![CDATA[ a.repay_date =DATE_ADD(CURDATE(),INTERVAL 0 DAY) ]]>
+        and a.`status`=0 and a.del = 0
+        /*codey 0612 product*/
+        /*and b.product_id in('JDQXJD','JN')*/
+        <if test="termType != null and termType==1">
+            and a.total_term=1
+        </if>
+        <if test="termType != null and termType==2">
+            and a.total_term>1
+        </if>
+        and EXISTS (select 1 from loan_repay_plan c where c.`apply_id` =a.`apply_id` and c.`current_term`
+        =a.`this_term`)
+        ORDER BY a.apply_id,a.this_term ASC
+    </select>
+
+    <select id="afterCurdateRepayList" resultType="RepayPlanItem">
+        SELECT
+        <include refid="repayPlanItemColumns"/>
+        from loan_repay_plan_item a
+        inner join loan_apply b on b.id=a.apply_id
+        where a.repay_date=#{withholdDate}
+        and a.`status`=0 and a.del = 0 and b.product_id in('JDQXJD')
+        <if test="termType != null and termType==1">
+            and a.total_term=1
+        </if>
+        <if test="termType != null and termType==2">
+            and a.total_term>1
+        </if>
+        and EXISTS (select 1 from loan_repay_plan c where c.`apply_id` =a.`apply_id` and c.`current_term`
+        =a.`this_term`)
+        ORDER BY a.apply_id DESC,a.this_term ASC
+        <if test="num != null and num > 0">
+            limit #{num}
+        </if>
+    </select>
+
+    <select id="tomorrowRepayList" resultType="RepayPlanItem">
+        SELECT
+        <include refid="repayPlanItemColumns"/>
+        from loan_repay_plan_item a where a.repay_date = ADDDATE(CURDATE(),1)
+        and a.`status`=0 and a.del = 0;
+    </select>
+
+
+    <select id="noticeRepayList" resultType="RepayPlanItemDetail">
+		SELECT
+		  a.id                AS "id",
+		  a.apply_id          AS "applyId",
+		  a.cont_no           AS "contNo",
+		  a.user_id           AS "userId",
+		  a.user_name         AS "userName",
+		  a.start_date        AS "startDate",
+		  a.repay_date        AS "repayDate",
+		  a.total_term        AS "totalTerm",
+		  a.this_term         AS "thisTerm",
+		  a.total_amount      AS "totalAmount",
+		  a.principal         AS "principal",
+		  a.interest          AS "interest",
+		  a.serv_fee          AS "servFee",
+		  a.prepay_fee        AS "prepayFee",
+		  a.penalty           AS "penalty",
+		  a.overdue_fee       AS "overdueFee",
+		  a.deduction         AS "deduction",
+		  a.payed_principal   AS "payedPrincipal",
+		  a.unpay_principal   AS "unpayPrincipal",
+		  a.actual_repay_amt  AS "actualRepayAmt",
+		  a.payed_interest    AS "payedInterest",
+		  a.unpay_interest    AS "unpayInterest",
+		  a.actual_repay_date AS "actualRepayDate",
+		  a.actual_repay_time AS "actualRepayTime",
+		  a.repay_type        AS "repayType",
+		  a.status            AS "status",
+		  a.remark            AS "remark",
+		  a.create_by         AS "createBy",
+		  a.create_time       AS "createTime",
+		  a.update_by         AS "updateBy",
+		  a.update_time       AS "updateTime",
+		  a.del               AS "del",
+		  t.user_name         AS tUserName,
+		  t.product_id        AS productId,
+		  t.company_id        AS companyId,
+		  t.approve_time      AS approveTime,
+		  t.channel_id        AS channelId,
+		  t.mobile            AS mobile,
+		  t.user_id           AS tUserId
+		FROM loan_repay_plan_item a
+		  LEFT JOIN loan_apply t
+		    ON a.apply_id = t.id
+		WHERE a.repay_date = ADDDATE(CURDATE(),1)
+		    AND a.`status` = 0
+		    AND a.del = 0
+	</select>
+
+
+    <select id="somedayUnrepayList" resultType="RepayPlanItem">
+        SELECT
+        <include refid="repayPlanItemColumns"/>
+        from loan_repay_plan_item a where a.repay_date = DATE(#{date}) and
+        a.`status`= 0 and a.del = 0;
+    </select>
+
+    <update id="processing">
+		update loan_repay_plan_item set `status`=3 where id =
+		#{id} AND `status`=0
+	</update>
+    <update id="unfinish">
+		update loan_repay_plan_item set `status`=0 where id =
+		#{id} AND `status`=3
+	</update>
+    <select id="getUnoverItemByTerm" resultType="RepayPlanItem">
+        SELECT
+        <include refid="repayPlanItemColumns"/>
+        from loan_repay_plan_item a
+        where a.`status`=0 and a.del = 0
+        and a.apply_id=#{applyId} and a.this_term=#{term}
+    </select>
+
+    <select id="todayRepayList" resultType="com.rongdu.loans.loan.vo.TodayRepayListVO">
+        SELECT
+        a.user_name,
+        a.mobile,
+        a.approve_amt,
+        a.apply_term AS applyTerm,
+        t.this_term,
+        t.total_term,
+        a.apply_time AS approveTime,
+        t.total_amount,
+        a.approver_name,
+        t.repay_date,
+        t.status
+        FROM loan_repay_plan_item t
+        LEFT JOIN loan_apply a ON t.apply_id = a.id
+        <where>
+            t.del = 0 and t.repay_date = DATE(NOW())
+            <if test="op.mobile != null and op.mobile != ''">
+                and a.mobile = #{op.mobile}
+            </if>
+
+            <if test="op.userName != null and op.userName != ''">
+                and a.user_name = #{op.userName}
+            </if>
+
+            <if test="op.status != null">
+                and t.status = #{op.status}
+            </if>
+
+            <if test="op.termType != null and op.termType != '' ">
+                <choose>
+                    <when test="op.termType == 1">
+                        and a.term = 1
+                    </when>
+                    <when test="op.termType == 2">
+                        and a.term = 3
+                    </when>
+                    <when test="op.termType == 3">
+                        and a.term = 6
+                    </when>
+                    <when test="op.termType == 4">
+                        and a.term = 4
+                    </when>
+                    <otherwise>
+                        and a.term NOT IN (1,3,6,4)
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+    </select>
+
+    <select id="todayRepayListCallout" resultType="com.rongdu.loans.loan.vo.TodayRepayListCalloutVO">
+        SELECT
+        a.user_name,
+        a.mobile,
+        a.approve_amt,
+        a.apply_term AS applyTerm,
+        t.this_term,
+        t.total_term,
+        a.apply_time AS approveTime,
+        t.total_amount,
+        a.approver_name,
+        t.repay_date,
+        t.status,
+        a.id as orderNo
+        FROM loan_repay_plan_item t
+        LEFT JOIN loan_apply a ON t.apply_id = a.id
+        <where>
+            t.del = 0 and t.repay_date = DATE(NOW())
+            <if test="op.mobile != null and op.mobile != ''">
+                and a.mobile = #{op.mobile}
+            </if>
+
+            <if test="op.userName != null and op.userName != ''">
+                and a.user_name = #{op.userName}
+            </if>
+
+            <if test="op.status != null">
+                and t.status = #{op.status}
+            </if>
+
+            <if test="op.termType != null and op.termType != '' ">
+                <choose>
+                    <when test="op.termType == 1">
+                        and a.term = 1
+                    </when>
+                    <when test="op.termType == 2">
+                        and a.term = 3
+                    </when>
+                    <when test="op.termType == 3">
+                        and a.term = 6
+                    </when>
+                    <when test="op.termType == 4">
+                        and a.term = 4
+                    </when>
+                    <otherwise>
+                        and a.term NOT IN (1,3,6,4)
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+    </select>
+
+
+    <update id="updateRepayTime">
+        update loan_repay_plan_item set
+        start_date = #{startDate},
+        <if test="updateBy!=null">
+            update_by = #{updateBy},
+        </if>
+        <if test="updateTime!=null">
+            update_time = #{updateTime},
+        </if>
+        repay_date = #{repayDate}
+        where id = #{id}
+    </update>
+
+    <delete id="delByApplyId">
+		delete from loan_repay_plan_item where apply_id=#{applyId}
+	</delete>
+
+</mapper>

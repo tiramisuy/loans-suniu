@@ -1,0 +1,12 @@
+input.error { border: 1px solid red; }
+label.error {
+  background:url("images/unchecked.gif") no-repeat 0px 0px;
+  padding-left: 18px;
+  padding-bottom: 2px;
+  font-weight: normal;
+  color: red;
+  margin-left: 10px;
+}
+label.checked {
+  background:url("images/checked.gif") no-repeat 0px 0px;
+}

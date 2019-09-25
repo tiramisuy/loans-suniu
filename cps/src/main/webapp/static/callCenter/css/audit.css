@@ -1,0 +1,251 @@
+/*   base 公共样式部分  */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video, input {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font-weight: normal;
+  vertical-align: baseline;
+}
+
+li {
+    list-style: none; 
+}
+button{
+    outline:none;
+}
+/*   body部分  */
+/* 最外层包裹盒子  */
+.box{
+    padding:10px;
+    box-sizing: border-box;
+}
+/* 导航栏部分 */
+#myTabs{
+    overflow: hidden;
+}
+#myTabs > li{
+    float: left;
+    border:1px solid #666;
+    padding: 5px 20px;
+    font-size: 14px;
+}
+#myTabs > .active{
+    background-color: #ccc;
+}
+/* 客户信息部分  */ 
+.container{
+    width: 100%;
+    height: 100%;
+    border:1px solid #666;
+}
+.info{
+    width: 100%;
+    margin-bottom:20px;
+}
+.container .title {
+    width: 100%;
+    height: 40px;
+    padding:10px 10px ;
+    line-height: 40px;
+    font-size: 20px;
+    font-weight: 700;
+}
+.container ul{
+    width: 100%;
+    overflow: hidden;
+    display: block;
+}
+.container ul > li{
+    float: left;
+    margin:5px 10px;
+    width: 250px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 12px;
+    color:#666;
+}
+/* 表单部分  */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 1px solid #c0c0c0;
+    font-size: 14px;
+}
+th,td {
+    border: 1px solid #d0d0d0;
+    color: #404060;
+    padding: 10px;
+    text-align: center;
+    
+}
+tbody tr {
+    background-color: #f0f0f0;
+}
+tbody tr:hover {
+    cursor: pointer;
+    background-color: #fafafa;
+}
+/* 联系人信息列表间距  */
+.contactInfo th , .contactInfo td{          /* 7联系人信息 */
+    padding: 10px 20px;
+}
+.nowOrdRes th ,.nowOrdRes td{               /* 11 当前申请订单*/
+    padding: 10px 23px ;
+}
+.dataAppovalRes th , .dataAppovalRes td{     /* 5 大数据审核*/
+    padding: 10px 104px;    
+}
+.operatingRecord th , .operatingRecord td{  /* 4 操作记录 */
+    padding: 10px 115px;
+}
+.contactComInfo th , .contactComInfo td{    /* 5  联系人通讯录统计（按通话时长排序*/
+    padding: 10px 60px;
+}
+.callOut th , .callOut td{                  /* 7  呼出 */
+    padding: 10px 10px;
+}
+.incomingCall th , .incomingCall td{           /* 7  呼入 */
+    padding: 10px 10px;
+}
+.linkCallCity th , .linkCallCity td{         /* 9  联系人通话活动地区 */
+    padding: 10px 44px; 
+}
+.onwCallCity th , .onwCallCity td{         /* 9  本人通话活动地区  */
+    padding: 10px 20px; 
+}
+.deciTimePlan th , .deciTimePlan td{    /* 9  分时间段统计  */
+    padding: 10px 115px;
+}
+.ownInfoGeneral th , .ownInfoGeneral td{         /* 3  个人信息概述 */
+    padding: 10px 137px;
+}
+.operatorInfo th , .operatorInfo td{    /* 2 运营商信息 */
+    padding: 10px 240px;                
+}
+.emergencyContact th , .emergencyContact td{          /* 9  紧急联系人  */
+    padding: 10px 44px;  
+}
+.AntifCloudAna th , .AntifCloudAna td{        /* 3 反欺诈云分析  */
+    padding: 10px 137px;
+}
+.importInfo th , .importInfo td{     /* 9  重要信息  */
+    padding: 10px 15px;         
+}
+/* 身份证  部分 样式  */
+.identityCard{
+    margin: 10px;
+    width: 100%;
+    height: 260px;
+    overflow: hidden;
+}
+.identityCard > div{
+    float: left;
+    width: 420px;
+    margin-right: 50px;
+    height: 240px;
+    font-size: 12px;
+    color:#666;
+}
+.identityCard > div > img{
+    width: 100%;
+    height: 250px;
+}
+/* 审批 表单部分样式  */
+.accend{
+    border: 1px solid #666;
+}
+.accraditation > form{
+    margin :10px;
+    color:#555;
+    font-size: 14px;
+    padding-bottom:100px;
+}
+.accraditation form input{
+    margin-left: 30px;
+    margin-top : 10px;
+}
+.accItem{
+    border: 1px solid #666;
+    margin-right: 10px;
+}
+.accendSelect{
+    margin-left: 30px;
+    margin-top : 10px;
+    margin-right: 10px;
+    width: 170px;
+    height: 20px;
+}
+.accIdea{
+    margin-top : 10px;
+    height: 100px;
+    position: relative;
+}
+.accIdea > textarea{
+    max-width: 800px;
+    max-height: 100px;
+    width: 458px;
+    height: 54px;
+    position: absolute;
+    top:0 ;
+    left:93px;
+    z-index: 2;
+}
+.accbtn{
+    margin-left: 92px;
+    width: 142px;
+    height: 32px;
+    border-radius: 5px;
+}
+.btnPass{
+    color:#fff;
+    background-color: rgba(22, 155, 213, 1);
+    border: 0;
+    position: relative;
+}
+.btnReject{
+    background-color:red;
+    color:#fff;
+    border: 0;
+}
+.tip{
+    padding: 5px 30px;
+    width: 380px;
+    color:#fff;
+    background-color: #36A9CE;
+    position: relative;
+    margin-top:20px;
+    margin-left: 130px;
+    border-radius: 10px;
+}
+.tip::after{
+    content:"";
+    width: 0;
+    height: 0;
+    border-bottom: 20px solid #36A9CE;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    position: absolute;
+    top:-20px;
+    left:20px;
+}
+/* 拒绝审批 处理透明度兼容性问题的样式  */
+.transparent_class {   
+    filter:alpha(opacity=0);   
+    -moz-opacity:0;   
+    -khtml-opacity: 0;   
+    opacity: 0;   
+} 
+/* 操作记录部分    */

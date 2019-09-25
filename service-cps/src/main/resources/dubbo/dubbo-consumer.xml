@@ -1,0 +1,53 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+	   http://code.alibabatech.com/schema/dubbo
+	   http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+
+    <dubbo:consumer check="false" timeout="999999" loadbalance="roundrobin" retries="0" validation="true"
+                    group="${dubbo.consumer.default.group}" version="${dubbo.consumer.default.version}"/>
+    <dubbo:reference interface="com.rongdu.loans.cust.service.CustUserService" id="custUserService" validation="false"
+                     group="${dubbo.consumer.default.group}" version="${dubbo.consumer.default.version}"/>
+    <dubbo:reference interface="com.rongdu.loans.basic.service.ShortMsgService" id="shortMsgService" validation="false"
+                     group="${dubbo.consumer.default.group}" version="${dubbo.consumer.default.version}"/>
+
+    <dubbo:reference interface="com.rongdu.loans.loan.service.LoanApplyService" id="loanApplyService" validation="false"
+                     group="${dubbo.consumer.default.group}" version="${dubbo.consumer.default.version}"/>
+
+    <dubbo:reference interface="com.rongdu.loans.fileserver.service.FileserverService" id="fileserverService" validation="false"
+                     group="${dubbo.consumer.default.group}" version="${dubbo.consumer.default.version}"/>
+    <dubbo:reference interface="com.rongdu.loans.risk.service.RiskBlacklistService" id="riskBlacklistService" validation="true"
+                     group="${dubbo.consumer.default.group}" version="${dubbo.consumer.default.version}"/>
+
+    <dubbo:reference interface="com.rongdu.loans.loan.service.OverdueService" id="overdueService" validation="true"
+                     group="${dubbo.consumer.default.group}" version="${dubbo.consumer.default.version}"/>
+    <dubbo:reference interface="com.rongdu.loans.app.service.AppBankLimitService" id="appBankLimitService" validation="true"
+                     group="${dubbo.consumer.default.group}" version="${dubbo.consumer.default.version}"/>
+
+    <dubbo:reference interface="com.rongdu.loans.pay.service.BaofooAgreementPayService" id="baofooAgreementPayService" validation="true"
+                     group="${dubbo.consumer.default.group}" version="${dubbo.consumer.default.version}"/>
+    <dubbo:reference interface="com.rongdu.loans.cust.service.BindCardService" id="bindCardService" validation="true"
+                     group="${dubbo.consumer.default.group}" version="${dubbo.consumer.default.version}"/>
+
+    <dubbo:reference interface="com.rongdu.loans.loan.service.RepayLogService" id="repayLogService" validation="true"
+                     group="${dubbo.consumer.default.group}" version="${dubbo.consumer.default.version}"/>
+    <dubbo:reference interface="com.rongdu.loans.pay.service.WithholdService" id="withholdService" validation="true"
+                     group="${dubbo.consumer.default.group}" version="${dubbo.consumer.default.version}"/>
+    <dubbo:reference interface="com.rongdu.loans.loan.service.PromotionCaseService" id="promotionCaseService" validation="true"
+                     group="${dubbo.consumer.default.group}" version="${dubbo.consumer.default.version}"/>
+    <dubbo:reference interface="com.rongdu.loans.loan.service.RongPointCutService" id="rongPointCutService"
+                     validation="true"
+                     group="${dubbo.consumer.default.group}" version="${dubbo.consumer.default.version}"/>
+    <dubbo:reference interface="com.rongdu.loans.loan.service.RepayPlanItemService" id="repayPlanItemService"
+                     validation="true"
+                     group="${dubbo.consumer.default.group}" version="${dubbo.consumer.default.version}"/>
+    <dubbo:reference interface="com.rongdu.loans.basic.service.ConfigService" id="configService"/>
+    <dubbo:reference interface="com.rongdu.loans.loan.service.LoanRepayPlanService" id="loanRepayPlanService"/>
+    <dubbo:reference interface="com.rongdu.loans.loan.service.BorrowInfoService" id="borrowInfoService"/>
+
+    <!-- 调用服务接口 -->
+
+</beans>

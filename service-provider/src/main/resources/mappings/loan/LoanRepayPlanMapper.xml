@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.LoanRepayPlanDAO">
+
+    <resultMap id="LoanRepayPlanMap" type="com.rongdu.loans.loan.entity.LoanRepayPlan">
+		<id column="ID" property="id" />
+		<result column="APPLY_ID" property="applyId" />
+		<result column="CONT_NO" property="contNo" />
+		<result column="user_id" property="userId" />
+		<result column="USER_NAME" property="userName" />
+		<result column="ID_NO" property="idNo" />
+		<result column="ID_TYPE" property="idType" />
+		<result column="LOAN_START_DATE" property="loanStartDate" />
+		<result column="LOAN_END_DATE" property="loanEndDate" />
+		<result column="TOTAL_AMOUNT" property="totalAmount" />
+		<result column="PRINCIPAL" property="principal" />
+		<result column="INTEREST" property="interest" />
+		<result column="SERV_FEE" property="servFee" />
+		<result column="PREPAY_FEE" property="prepayFee" />
+		<result column="PENALTY" property="penalty" />
+		<result column="OVERDUE_FEE" property="overdueFee" />
+		<result column="DEDUCTION" property="deduction" />
+		<result column="TOTAL_TERM" property="totalTerm" />
+		<result column="PAYED_TERM" property="payedTerm" />
+		<result column="UNPAY_TERM" property="unpayTerm" />
+		<result column="PAYED_PRINCIPAL" property="payedPrincipal" />
+		<result column="UNPAY_PRINCIPAL" property="unpayPrincipal" />
+		<result column="PAYED_INTEREST" property="payedInterest" />
+		<result column="UNPAY_INTEREST" property="unpayInterest" />
+		<result column="CUR_REAL_REPAY_DATE" property="curRealRepayDate" />
+		<result column="NEXT_REPAY_DATE" property="nextRepayDate" />
+		<result column="STATUS" property="status" />
+		<result column="REMARK" property="remark" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="DEL" property="del" />
+    </resultMap>
+
+    <resultMap id="LoanRepayDetailMap" type="com.rongdu.loans.loan.vo.LoanRepayDetailVO">
+		<id column="ID" property="repayPlanItemId" />
+		<result column="APPLY_ID" property="applyId" />
+		<result column="CONT_NO" property="contNo" />
+		<result column="user_id" property="userId" />
+		<result column="USER_NAME" property="userName" />
+		<result column="ID_NO" property="idNo" />
+		<result column="ID_TYPE" property="idType" />
+		<result column="LOAN_START_DATE" property="loanStartDate" />
+		<result column="LOAN_END_DATE" property="loanEndDate" />
+		<result column="SERV_FEE" property="servFee" />
+		<result column="TOTAL_TERM" property="totalTerm" />
+		<result column="CURRENT_TERM" property="currentTerm" />
+		<result column="PAYED_TERM" property="payedTerm" />
+		<result column="UNPAY_TERM" property="unpayTerm" />
+		<result column="PAYED_PRINCIPAL" property="payedPrincipal" />
+		<result column="UNPAY_PRINCIPAL" property="unpayPrincipal" />
+		<result column="PAYED_INTEREST" property="payedInterest" />
+		<result column="UNPAY_INTEREST" property="unpayInterest" />
+		<result column="NEXT_REPAY_DATE" property="nextRepayDate" />
+		<result column="STATUS" property="status" />
+		<result column="TOTAL_AMOUNT" property="totalAmount" />
+		<result column="PRINCIPAL" property="principal" />
+		<result column="INTEREST" property="interest" />
+		<result column="ACTUAL_REPAY_TIME" property="curRealRepayDate" />
+		<result column="start_date" property="curStartDate" />
+		<result column="REPAY_DATE" property="curRepayDate" />
+		<result column="PREPAY_FEE" property="prepayFee" />
+		<result column="PENALTY" property="penalty" />
+		<result column="OVERDUE_FEE" property="overdueFee" />
+		<result column="DEDUCTION" property="deduction" />
+		<result column="this_term" property="thisTerm" />
+		<result column="actual_repay_amt" property="curActualRepayAmt" />
+    </resultMap>
+
+	<sql id="All_Column">
+		id, apply_id, cont_no, user_id, user_name, id_no, id_type,
+		loan_start_date, loan_end_date, total_amount, principal,
+		interest, serv_fee, prepay_fee, penalty, overdue_fee, deduction,
+		total_term,current_term, payed_term, unpay_term, payed_principal,
+		unpay_principal, payed_interest, unpay_interest, cur_real_repay_date, next_repay_date, status,
+		remark, create_by, create_time, update_by, update_time, del
+	</sql>
+
+	<sql id="Where_Obj">
+		<where>
+		    del = 0
+		    <if test="id!=null">
+				AND id = #{id}
+			</if>
+			<if test="applyId!=null">
+				AND apply_id = #{applyId}
+			</if>
+			<if test="contNo!=null">
+				AND cont_no = #{contNo}
+			</if>
+			<if test="userId!=null">
+				AND user_id = #{userId}
+			</if>
+			<if test="userName!=null">
+				AND user_name = #{userName}
+			</if>
+			<if test="idNo!=null">
+				AND id_no = #{idNo}
+			</if>
+			<if test="loanStartDate!=null">
+				AND loan_start_date = #{loanStartDate}
+			</if>
+			<if test="loanEndDate!=null">
+				AND loan_end_date = #{loanEndDate}
+			</if>
+			<if test="totalAmount!=null">
+				AND total_amount = #{totalAmount}
+			</if>
+			<if test="principal!=null">
+				AND principal = #{principal}
+			</if>
+			<if test="interest!=null">
+				AND interest = #{interest}
+			</if>
+			<if test="servFee!=null">
+				AND serv_fee = #{servFee}
+			</if>
+			<if test="prepayFee!=null">
+				AND prepay_fee = #{prepayFee}
+			</if>
+			<if test="penalty!=null">
+				AND penalty = #{penalty}
+			</if>
+			<if test="overdueFee!=null">
+				AND overdue_fee = #{overdueFee}
+			</if>
+			<if test="deduction!=null">
+				AND deduction = #{deduction}
+			</if>
+			<if test="totalTerm!=null">
+				AND total_term = #{totalTerm}
+			</if>
+			<if test="payedTerm!=null">
+				AND payed_term = #{payedTerm}
+			</if>
+			<if test="unpayTerm!=null">
+				AND unpay_term = #{unpayTerm}
+			</if>
+			<if test="payedPrincipal!=null">
+				AND payed_principal = #{payedPrincipal}
+			</if>
+			<if test="unpayPrincipal!=null">
+				AND unpay_principal = #{unpayPrincipal}
+			</if>
+			<if test="payedInterest!=null">
+				AND payed_interest = #{payedInterest}
+			</if>
+			<if test="unpayInterest!=null">
+				AND unpay_interest = #{unpayInterest}
+			</if>
+			<if test="curRealRepayDate!=null">
+				AND cur_real_repay_date = #{curRealRepayDate}
+			</if>
+			<if test="nextRepayDate!=null">
+				AND next_repay_date = #{nextRepayDate}
+			</if>
+			<if test="status!=null">
+				AND status = #{status}
+			</if>
+	   </where>
+	</sql>
+
+    <select id="getLoanRepayDetail" resultMap="LoanRepayDetailMap">
+		SELECT 
+		       lrp.apply_id, lrp.cont_no, lrp.user_id, lrp.user_name, lrp.id_no, lrp.id_type,
+		       lrp.loan_start_date, lrp.loan_end_date, lrp.serv_fee, lrp.total_term,
+		       lrp.payed_term, lrp.unpay_term, lrp.payed_principal, lrp.unpay_principal,
+		       lrp.payed_interest, lrp.unpay_interest, lrp.next_repay_date, lrp.status,
+		       lrpi.id id, lrpi.actual_repay_time, lrpi.total_amount, lrpi.this_term, lrpi.principal, lrpi.interest,
+		       lrpi.start_date,lrpi.repay_date, lrpi.prepay_fee, lrpi.penalty, lrpi.overdue_fee, lrpi.deduction,lrpi.actual_repay_amt
+	      FROM loan_repay_plan lrp 
+	      JOIN loan_repay_plan_item lrpi 
+	        ON lrpi.apply_id = lrp.apply_id 
+	     WHERE lrp.del = 0 
+	       AND lrpi.del = 0 
+	       AND lrp.apply_id = #{applyId}
+	 	   AND lrpi.status = #{status}
+	       AND IFNULL(lrpi.repay_type,'') NOT IN('manualdelay','mandelay')
+	     ORDER BY repay_date
+	     LIMIT 1
+	</select>
+	
+	<select id="getStatementByItemId" parameterType="string" resultType="com.rongdu.loans.loan.vo.StatementVO">
+		SELECT 
+			  lrp.apply_id applyId,
+			  lrp.cont_no contNo,
+			  lrp.user_id userId,
+			  lrp.id_no idNo,
+			  lrp.loan_start_date loanStartDate,
+			  lrp.loan_end_date loanEndDate,
+			  lrp.total_amount loanTotalAmount,
+			  lrp.principal loanPrincipal,
+			  lrp.interest loanInterest,
+			  lrp.serv_fee loanServFee,
+			  lrp.prepay_fee loanPrepayFee,
+			  lrp.penalty loanPenalty,
+			  lrp.overdue_fee loanOverdueFee,
+			  lrp.deduction loanDeduction,
+			  lrp.total_term loanTotalTerm,
+			  lrp.payed_term loanPayedTerm,
+			  lrp.unpay_term loanUnpayTerm,
+			  lrp.payed_principal loanPayedPrincipal,
+			  lrp.unpay_principal loanUnpayPrincipal,
+			  lrp.payed_interest loanPayedInterest,
+			  lrp.unpay_interest loanUnpayInterest,
+			  lrpi.id curRepayItemId,
+			  lrpi.total_amount curTotalAmount,
+			  lrpi.principal curPrincipal,
+			  lrpi.interest curInterest,
+			  lrpi.serv_fee curServFee,
+			  lrpi.prepay_fee curPrepayFee,
+			  lrpi.penalty curPenalty,
+			  lrpi.overdue_fee curOverdueFee,
+			  lrpi.deduction curDeduction,
+			  lrpi.repay_date curRepayDate,
+			  lrpi.status curRepayStatus,
+			  lrpi.this_term curTerm,
+			  lrpi.actual_repay_amt curActualRepayAmt
+		FROM
+		      loan_repay_plan lrp 
+		 JOIN loan_repay_plan_item lrpi 
+		   ON lrpi.apply_id = lrp.apply_id 
+		WHERE lrp.del = 0 
+		  AND lrpi.del = 0 
+		  AND lrpi.status = 0 
+		  AND lrpi.id = #{repayPlanItemId}
+		ORDER BY repay_date 
+		LIMIT 1 
+	</select>
+
+	<select id="getByApplyId" parameterType="string" resultMap="LoanRepayPlanMap">
+	  SELECT
+		 <include refid="All_Column"/>
+		FROM loan_repay_plan
+	   WHERE del = 0
+	     AND apply_id = #{applyId}
+	</select>
+
+	<select id="getByApplyIdList" parameterType="string" resultMap="LoanRepayPlanMap">
+	  SELECT
+		 <include refid="All_Column"/>
+		FROM loan_repay_plan
+	   WHERE del = 0
+	     AND apply_id in
+		<foreach item="applyId" collection="applyIdList" open="(" separator="," close=")">
+			#{applyId}
+		</foreach>
+	</select>
+
+	<select id="findAllByUserId" parameterType="string" resultMap="LoanRepayPlanMap">
+	  SELECT
+		 <include refid="All_Column"/>
+		FROM loan_repay_plan
+	   WHERE del = 0
+	     AND user_id = #{userId}
+	</select>
+
+	<select id="getById" resultMap="LoanRepayPlanMap">
+	  SELECT
+		 <include refid="All_Column"/>
+		FROM loan_repay_plan
+	   WHERE del = 0
+	     AND id = #{id}
+	</select>
+
+	<select id="get" resultMap="LoanRepayPlanMap">
+	  SELECT
+		 <include refid="All_Column"/>
+		FROM loan_repay_plan
+	     <include refid="Where_Obj"/>
+	   ORDER BY id
+	   LIMIT 1
+	</select>
+
+	<select id="findList" resultType="list">
+		SELECT
+			<include refid="All_Column"/>
+		FROM loan_repay_plan
+		<include refid="Where_Obj"/>
+	</select>
+
+	<select id="findAllList" resultType="list">
+		SELECT
+			<include refid="All_Column"/>
+		FROM loan_repay_plan
+	</select>
+	
+	<select id="repayTotalList" resultType="com.rongdu.loans.loan.vo.RepayTotalListVO">
+        SELECT
+        a.company_id as companyId,t.cont_no as contNo,t.loan_start_date as loanStartDate,t.principal as principal,
+        t.total_term as thisTerm,t.loan_end_date as loanEndDate,a.repay_method as repayMethod,t.user_name as userName,a.product_id as productId,
+        a.serv_fee_rate as servFeeRate,a.serv_fee as servFee,a.basic_rate as basicRate,p.total_amount as totalAmount,a.approve_amt as approveAmt
+        FROM
+        loan_repay_plan t
+        LEFT JOIN loan_apply a ON t.apply_id = a.id
+        LEFT JOIN loan_repay_plan_item p ON t.apply_id = p.apply_id 
+        <where>
+            t.del = 0
+            <if test="op.contNo != null and op.contNo != ''">
+                and t.cont_no = #{op.contNo}
+            </if>
+            <if test="op.userName != null and op.userName != ''">
+                and t.user_name = #{op.userName}
+            </if>
+            <if test="op.productId != null and op.productId != ''">
+                and a.product_id in (${op.productId})
+            </if>
+            <if test="op.companyId != null and op.companyId != ''">
+                and a.company_id = #{op.companyId}
+	        </if>
+	        <if test="op.borrowTimeStart != null ">
+                <![CDATA[ AND t.loan_start_date >= #{op.borrowTimeStart} ]]>
+            </if>
+            <if test="op.borrowTimeEnd != null">
+                <![CDATA[ AND t.loan_start_date <= #{op.borrowTimeEnd} ]]>
+            </if>
+             <if test="op.termType != null and op.termType != '' ">
+            	<choose>
+		            <when test="op.termType == 1">
+		               and a.term = 1
+		            </when>
+		             <when test="op.termType == 2">
+		               and a.term = 3
+		            </when>
+		             <when test="op.termType == 3">
+		               and a.term = 6
+		            </when>
+		             <when test="op.termType == 4">
+		               and a.term = 4
+		            </when>
+		            <otherwise>
+		                and a.term NOT IN (1,3,6,4)
+		            </otherwise>
+            	</choose>
+            </if>
+        </where>
+        GROUP BY t.apply_id
+        ORDER BY t.apply_id ASC
+    </select>
+    
+    <insert id="insert">
+		INSERT INTO loan_repay_plan(
+			id,
+			apply_id,
+			cont_no,
+			user_id,
+			user_name,
+			id_no,
+			id_type,
+			loan_start_date,
+			loan_end_date,
+			total_amount,
+			principal,
+			interest,
+			serv_fee,
+			prepay_fee,
+			penalty,
+			overdue_fee,
+			deduction,
+			total_term,
+			current_term,
+			payed_term,
+			unpay_term,
+			payed_principal,
+			unpay_principal,
+			payed_interest,
+			unpay_interest,
+			next_repay_date,
+			status,
+			withdrawal_source,
+			remark,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			del
+		) VALUES (
+			#{id},
+			#{applyId},
+			#{contNo},
+			#{userId},
+			#{userName},
+			#{idNo},
+			#{idType},
+			#{loanStartDate},
+			#{loanEndDate},
+			#{totalAmount},
+			#{principal},
+			#{interest},
+			#{servFee},
+			#{prepayFee},
+			#{penalty},
+			#{overdueFee},
+			#{deduction},
+			#{totalTerm},
+			#{currentTerm},
+			#{payedTerm},
+			#{unpayTerm},
+			#{payedPrincipal},
+			#{unpayPrincipal},
+			#{payedInterest},
+			#{unpayInterest},
+			#{nextRepayDate},
+			#{status},
+			#{withdrawalSource},
+			#{remark},
+			#{createBy},
+			#{createTime},
+			#{updateBy},
+			#{updateTime},
+			#{del}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE loan_repay_plan SET
+			<if test="applyId!=null">
+			apply_id = #{applyId},
+			</if>
+			<if test="contNo!=null">
+			cont_no = #{contNo},
+			</if>
+			<if test="userId!=null">
+			user_id = #{userId},
+			</if>
+			<if test="userName!=null">
+			user_name = #{userName},
+			</if>
+			<if test="idNo!=null">
+			id_no = #{idNo},
+			</if>
+			<if test="idType!=null">
+			id_type = #{idType},
+			</if>
+			<if test="loanStartDate!=null">
+			loan_start_date = #{loanStartDate},
+			</if>
+			<if test="loanEndDate!=null">
+			loan_end_date = #{loanEndDate},
+			</if>
+			<if test="totalAmount!=null">
+			total_amount = #{totalAmount},
+			</if>
+			<if test="principal!=null">
+			principal = #{principal},
+			</if>
+			<if test="interest!=null">
+			interest = #{interest},
+			</if>
+			<if test="servFee!=null">
+			serv_fee = #{servFee},
+			</if>
+			<if test="prepayFee!=null">
+			prepay_fee = #{prepayFee},
+			</if>
+			<if test="overdueFee!=null">
+			overdue_fee = #{overdueFee},
+			</if>
+			<if test="penalty!=null">
+			penalty = #{penalty},
+			</if>
+			<if test="deduction!=null">
+			deduction = #{deduction},
+			</if>
+			<if test="totalTerm!=null">
+			total_term = #{totalTerm},
+			</if>
+			<if test="payedTerm!=null">
+			payed_term = #{payedTerm},
+			</if>
+			<if test="unpayTerm!=null">
+			unpay_term = #{unpayTerm},
+			</if>
+			<if test="payedPrincipal!=null">
+			payed_principal = #{payedPrincipal},
+			</if>
+			<if test="unpayPrincipal!=null">
+			unpay_principal = #{unpayPrincipal},
+			</if>
+			<if test="payedInterest!=null">
+			payed_interest = #{payedInterest},
+			</if>
+			<if test="unpayInterest!=null">
+			unpay_interest = #{unpayInterest},
+			</if>
+			<if test="nextRepayDate!=null">
+			next_repay_date = #{nextRepayDate},
+			</if>
+			<if test="status!=null">
+			status = #{status},
+			</if>
+			<if test="remark!=null">
+			remark = #{remark},
+			</if>
+			<if test="loanStatus!=null">
+				loan_status = #{loanStatus},
+			</if>
+            <if test="curRealRepayDate!=null">
+            cur_real_repay_date = #{curRealRepayDate},
+            </if>
+            <if test="currentTerm!=null">
+			current_term = #{currentTerm},
+			</if>
+			update_by = #{updateBy},
+			update_time = #{updateTime}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePayResult">
+		UPDATE loan_repay_plan SET
+			<if test="totalAmount!=null">
+			total_amount = #{totalAmount},
+			</if>
+			<if test="interest!=null">
+			interest = #{interest},
+			</if>
+			<if test="deduction!=null">
+		    deduction = #{deduction},
+			</if>
+			<if test="prepayFee!=null">
+			prepay_fee = #{prepayFee},
+			</if>
+			<if test="payedTerm!=null">
+			payed_term = #{payedTerm},
+			</if>
+			<if test="unpayTerm!=null">
+			unpay_term = #{unpayTerm},
+			</if>
+			<if test="payedPrincipal!=null">
+			payed_principal = #{payedPrincipal},
+			</if>
+			<if test="unpayPrincipal!=null">
+			unpay_principal = #{unpayPrincipal},
+			</if>
+			<if test="payedInterest!=null">
+			payed_interest = #{payedInterest},
+			</if>
+			<if test="unpayInterest!=null">
+			unpay_interest = #{unpayInterest},
+			</if>
+			<if test="curRealRepayDate!=null">
+			cur_real_repay_date = #{curRealRepayDate},
+			</if>
+			<if test="nextRepayDate!=null">
+			next_repay_date = #{nextRepayDate},
+			</if>
+			<if test="currentTerm!=null">
+			current_term = #{currentTerm},
+			</if>
+			<if test="status!=null">
+			status = #{status},
+			</if>
+			<if test="remark!=null">
+			remark = #{remark},
+			</if>
+			update_by = #{updateBy},
+			update_time = #{updateTime}
+		WHERE status = 0
+		  AND apply_id = #{applyId}
+	</update>
+
+	<update id="deleteById">
+	    UPDATE loan_repay_plan SET
+	        <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		    </if>
+		    <if test="updateTime!=null">
+			  update_time = #{updateTime},
+		    </if>
+	          del = 1
+		 WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+	    UPDATE loan_repay_plan SET
+	       <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		   </if>
+		   <if test="updateTime!=null">
+			   update_time = #{updateTime},
+		   </if>
+	           del = 1
+		<include refid="Where_Obj"/>
+	</update>
+	
+	<update id="updateRepayTime">
+		  UPDATE loan_repay_plan SET
+		  	loan_start_date = #{loanStartDate},
+		  	loan_end_date = #{loanEndDate},
+		  	<if test="updateBy!=null">
+			   update_by = #{updateBy},
+		   </if>
+		   <if test="updateTime!=null">
+			   update_time = #{updateTime},
+		   </if>
+		  	next_repay_date =#{nextRepayDate}
+		   WHERE apply_id = #{applyId}
+	
+	</update>
+	
+	<delete id="delByApplyId">
+	    delete from loan_repay_plan where apply_id=#{applyId}	       
+	</delete>
+	
+</mapper>

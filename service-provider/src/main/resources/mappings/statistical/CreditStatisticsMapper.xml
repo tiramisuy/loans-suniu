@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.statistical.dao.ZhimaCreditStatisticsDao">
+    
+	<sql id="creditStatisticsColumns">
+		a.order_no AS "order_no",
+		a.biz_date AS "biz_date",
+		a.apply_id AS "apply_id",
+		a.user_id AS "user_id",
+		a.user_name AS "user_name",
+		a.user_credentials_type AS "user_credentials_type",
+		a.user_credentials_no AS "user_credentials_no",
+		a.scene_type AS "scene_type",
+		a.scene_desc AS "scene_desc",
+		a.create_amt AS "create_amt",
+		a.scene_status AS "scene_status",
+		a.installment_due_date AS "installment_due_date",
+		a.gmt_ovd_date AS "gmt_ovd_date",
+		a.overdue_amt AS "overdue_amt",
+		a.rectify_flag AS "rectify_flag",
+		a.memo AS "memo",
+		a.push_status AS "push_status",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+
+	<resultMap id="BaseResultMap" type="com.rongdu.loans.statistical.entity.ZhimaCreditStatistics">
+		<id column="ID" property="id" />
+		<result column="order_no" property="order_no" />
+		<result column="biz_date" property="biz_date" />
+		<result column="apply_id" property="apply_id" />
+		<result column="user_id" property="user_id" />
+		<result column="user_name" property="user_name" />
+		<result column="user_credentials_type" property="user_credentials_type" />
+		<result column="user_credentials_no" property="user_credentials_no" />
+		<result column="scene_type" property="scene_type" />
+		<result column="scene_desc" property="scene_desc" />
+		<result column="create_amt" property="create_amt" />
+		<result column="scene_status" property="scene_status" />
+		<result column="installment_due_date" property="installment_due_date" />
+		<result column="gmt_ovd_date" property="gmt_ovd_date" />
+		<result column="overdue_amt" property="overdue_amt" />
+		<result column="rectify_flag" property="rectify_flag" />
+		<result column="memo" property="memo" />
+		<result column="push_status" property="push_status" />
+		<result column="remark" property="remark" />
+		<result column="create_by" property="createBy" />
+		<result column="create_time" property="createTime" />
+		<result column="update_by" property="updateBy" />
+		<result column="update_time" property="updateTime" />
+		<result column="del" property="del" />
+	</resultMap>
+	
+	<sql id="creditStatisticsJoins">
+		LEFT JOIN sys_user u4 ON u4.id = a.user_id
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{order_no},
+		#{biz_date},
+		#{apply_id},
+		#{user_id},
+		#{user_name},
+		#{user_credentials_type},
+		#{user_credentials_no},
+		#{scene_type},
+		#{scene_desc},
+		#{create_amt},
+		#{scene_status},
+		#{installment_due_date},
+		#{gmt_ovd_date},
+		#{overdue_amt},
+		#{rectify_flag},
+		#{memo},
+		#{push_status},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.order_no},
+		#{entity.biz_date},
+		#{entity.apply_id},
+		#{entity.user_id},
+		#{entity.user_name},
+		#{entity.user_credentials_type},
+		#{entity.user_credentials_no},
+		#{entity.scene_type},
+		#{entity.scene_desc},
+		#{entity.create_amt},
+		#{entity.scene_status},
+		#{entity.installment_due_date},
+		#{entity.gmt_ovd_date},
+		#{entity.overdue_amt},
+		#{entity.rectify_flag},
+		#{entity.memo},
+		#{entity.push_status},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		order_no,
+		biz_date,
+		apply_id,
+		user_id,
+		user_name,
+		user_credentials_type,
+		user_credentials_no,
+		scene_type,
+		scene_desc,
+		create_amt,
+		scene_status,
+		installment_due_date,
+		gmt_ovd_date,
+		overdue_amt,
+		rectify_flag,
+		memo,
+		push_status,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		order_no = #{order_no},
+		biz_date = #{biz_date},
+		apply_id = #{apply_id},
+		user_id = #{user_id},
+		user_name = #{user_name},
+		user_credentials_type = #{user_credentials_type},
+		user_credentials_no = #{user_credentials_no},
+		scene_type = #{scene_type},
+		scene_desc = #{scene_desc},
+		create_amt = #{create_amt},
+		scene_status = #{scene_status},
+		installment_due_date = #{installment_due_date},
+		gmt_ovd_date = #{gmt_ovd_date},
+		overdue_amt = #{overdue_amt},
+		rectify_flag = #{rectify_flag},
+		memo = #{memo},
+		push_status = #{push_status},
+		remark = #{remark},
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.order_no != null">
+				order_no = #{entity.order_no},
+			</if>
+			<if test="entity.biz_date != null">
+				biz_date = #{entity.biz_date},
+			</if>
+			<if test="entity.apply_id != null">
+				apply_id = #{entity.apply_id},
+			</if>
+			<if test="entity.user_id != null">
+				user_id = #{entity.user_id},
+			</if>
+			<if test="entity.user_name != null">
+				user_name = #{entity.user_name},
+			</if>
+			<if test="entity.user_credentials_type != null">
+				user_credentials_type = #{entity.user_credentials_type},
+			</if>
+			<if test="entity.user_credentials_no != null">
+				user_credentials_no = #{entity.user_credentials_no},
+			</if>
+			<if test="entity.scene_type != null">
+				scene_type = #{entity.scene_type},
+			</if>
+			<if test="entity.scene_desc != null">
+				scene_desc = #{entity.scene_desc},
+			</if>
+			<if test="entity.create_amt != null">
+				create_amt = #{entity.create_amt},
+			</if>
+			<if test="entity.scene_status != null">
+				scene_status = #{entity.scene_status},
+			</if>
+			<if test="entity.installment_due_date != null">
+				installment_due_date = #{entity.installment_due_date},
+			</if>
+			<if test="entity.gmt_ovd_date != null">
+				gmt_ovd_date = #{entity.gmt_ovd_date},
+			</if>
+			<if test="entity.overdue_amt != null">
+				overdue_amt = #{entity.overdue_amt},
+			</if>
+			<if test="entity.rectify_flag != null">
+				rectify_flag = #{entity.rectify_flag},
+			</if>
+			<if test="entity.memo != null">
+				memo = #{entity.memo},
+			</if>
+			<if test="entity.push_status != null">
+				push_status = #{entity.push_status},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+
+		
+    <select id="getByCriteria" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="creditStatisticsColumns"/>
+		FROM zhima_credit_statistics a
+		<include refid="creditStatisticsJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="creditStatisticsColumns"/>
+		FROM zhima_credit_statistics a
+		<include refid="creditStatisticsJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="creditStatisticsColumns"/>
+		FROM zhima_credit_statistics a
+		<include refid="creditStatisticsJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="creditStatisticsColumns"/>
+		FROM zhima_credit_statistics a
+		<include refid="creditStatisticsJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="creditStatisticsColumns"/>
+		FROM zhima_credit_statistics a
+		<include refid="creditStatisticsJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="creditStatisticsColumns"/>
+		FROM zhima_credit_statistics a
+		<include refid="creditStatisticsJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM zhima_credit_statistics
+		<include refid="creditStatisticsJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM zhima_credit_statistics
+		<include refid="creditStatisticsJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO zhima_credit_statistics
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+	
+	<insert id="insertBatch">
+		INSERT INTO zhima_credit_statistics
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+
+	<update id="updateByCriteriaSelective">
+		UPDATE zhima_credit_statistics 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE zhima_credit_statistics 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+	<update id="deleteByCriteria">
+		UPDATE zhima_credit_statistics
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE zhima_credit_statistics
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM zhima_credit_statistics
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM zhima_credit_statistics
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM zhima_credit_statistics
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+
+	<select id="getStatisticsData" resultMap="BaseResultMap">
+		SELECT <include refid="creditStatisticsColumns"/> FROM zhima_credit_statistics a
+		WHERE a.create_time BETWEEN #{beginTime} AND #{endTime} AND a.push_status = #{pushStatus}
+	</select>
+
+	<update id="updatePushStatusBatch">
+		UPDATE zhima_credit_statistics
+		SET push_status = #{pushStatus}
+		WHERE order_no in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>
+	</update>
+	
+	
+	 
+</mapper>

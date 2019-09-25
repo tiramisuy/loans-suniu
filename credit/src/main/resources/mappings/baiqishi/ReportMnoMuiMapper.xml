@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.baiqishi.dao.ReportMnoMuiDao">
+    
+	<sql id="reportMnoMuiColumns">
+		a.id AS "id",
+		a.user_id AS "userId",
+		a.report_id AS "reportId",
+		a.mobile AS "mobile",
+		a.month AS "month",
+		a.mno_type AS "mnoType",
+		a.belong_to AS "belongTo",
+		a.originating_call_count AS "originatingCallCount",
+		a.originating_call_time AS "originatingCallTime",
+		a.terminating_call_count AS "terminatingCallCount",
+		a.terminating_call_time AS "terminatingCallTime",
+		a.msg_count AS "msgCount",
+		a.cost_money AS "costMoney",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+	
+	<sql id="reportMnoMuiJoins">
+
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{id},
+		#{userId},
+		#{reportId},
+		#{mobile},
+		#{month},
+		#{mnoType},
+		#{belongTo},
+		#{originatingCallCount},
+		#{originatingCallTime},
+		#{terminatingCallCount},
+		#{terminatingCallTime},
+		#{msgCount},
+		#{costMoney},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.userId},
+		#{entity.reportId},
+		#{entity.mobile},
+		#{entity.month},
+		#{entity.mnoType},
+		#{entity.belongTo},
+		#{entity.originatingCallCount},
+		#{entity.originatingCallTime},
+		#{entity.terminatingCallCount},
+		#{entity.terminatingCallTime},
+		#{entity.msgCount},
+		#{entity.costMoney},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		id,
+		user_id,
+		report_id,
+		mobile,
+		month,
+		mno_type,
+		belong_to,
+		originating_call_count,
+		originating_call_time,
+		terminating_call_count,
+		terminating_call_time,
+		msg_count,
+		cost_money,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		user_id = #{userId},
+		report_id = #{reportId},
+		mobile = #{mobile},
+		month = #{month},
+		mno_type = #{mnoType},
+		belong_to = #{belongTo},
+		originating_call_count = #{originatingCallCount},
+		originating_call_time = #{originatingCallTime},
+		terminating_call_count = #{terminatingCallCount},
+		terminating_call_time = #{terminatingCallTime},
+		msg_count = #{msgCount},
+		cost_money = #{costMoney},
+		remark = #{remark},
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.userId != null">
+				user_id = #{entity.userId},
+			</if>
+			<if test="entity.reportId != null">
+				report_id = #{entity.reportId},
+			</if>
+			<if test="entity.mobile != null">
+				mobile = #{entity.mobile},
+			</if>
+			<if test="entity.month != null">
+				month = #{entity.month},
+			</if>
+			<if test="entity.mnoType != null">
+				mno_type = #{entity.mnoType},
+			</if>
+			<if test="entity.belongTo != null">
+				belong_to = #{entity.belongTo},
+			</if>
+			<if test="entity.originatingCallCount != null">
+				originating_call_count = #{entity.originatingCallCount},
+			</if>
+			<if test="entity.originatingCallTime != null">
+				originating_call_time = #{entity.originatingCallTime},
+			</if>
+			<if test="entity.terminatingCallCount != null">
+				terminating_call_count = #{entity.terminatingCallCount},
+			</if>
+			<if test="entity.terminatingCallTime != null">
+				terminating_call_time = #{entity.terminatingCallTime},
+			</if>
+			<if test="entity.msgCount != null">
+				msg_count = #{entity.msgCount},
+			</if>
+			<if test="entity.costMoney != null">
+				cost_money = #{entity.costMoney},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+  	<select id="get" resultType="ReportMnoMui">
+		SELECT 
+		<include refid="reportMnoMuiColumns"/>
+		FROM baiqishi_report_mno_mui a
+		<include refid="reportMnoMuiJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+  	<select id="getById" resultType="ReportMnoMui">
+		SELECT 
+		<include refid="reportMnoMuiColumns"/>
+		FROM baiqishi_report_mno_mui a
+		<include refid="reportMnoMuiJoins"/>
+		WHERE a.id = #{id}
+	</select>
+		
+    <select id="getByCriteria" resultType="ReportMnoMui">
+		SELECT 
+		<include refid="reportMnoMuiColumns"/>
+		FROM baiqishi_report_mno_mui a
+		<include refid="reportMnoMuiJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultType="ReportMnoMui">
+		SELECT 
+		<include refid="reportMnoMuiColumns"/>
+		FROM baiqishi_report_mno_mui a
+		<include refid="reportMnoMuiJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultType="ReportMnoMui">
+		SELECT 
+		<include refid="reportMnoMuiColumns"/>
+		FROM baiqishi_report_mno_mui a
+		<include refid="reportMnoMuiJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultType="ReportMnoMui">
+		SELECT 
+		<include refid="reportMnoMuiColumns"/>
+		FROM baiqishi_report_mno_mui a
+		<include refid="reportMnoMuiJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="ReportMnoMui">
+		SELECT 
+		<include refid="reportMnoMuiColumns"/>
+		FROM baiqishi_report_mno_mui a
+		<include refid="reportMnoMuiJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="ReportMnoMui">
+		SELECT 
+		<include refid="reportMnoMuiColumns"/>
+		FROM baiqishi_report_mno_mui a
+		<include refid="reportMnoMuiJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM baiqishi_report_mno_mui
+		<include refid="reportMnoMuiJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM baiqishi_report_mno_mui
+		<include refid="reportMnoMuiJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO baiqishi_report_mno_mui
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+	
+	<insert id="insertBatch">
+		INSERT INTO baiqishi_report_mno_mui
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	<update id="update">
+		UPDATE baiqishi_report_mno_mui SET 
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE baiqishi_report_mno_mui 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE baiqishi_report_mno_mui 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE baiqishi_report_mno_mui		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE baiqishi_report_mno_mui
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByCriteria">
+		UPDATE baiqishi_report_mno_mui
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE baiqishi_report_mno_mui 
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE baiqishi_report_mno_mui
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM baiqishi_report_mno_mui
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM baiqishi_report_mno_mui
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM baiqishi_report_mno_mui
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM baiqishi_report_mno_mui
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	
+	 
+</mapper>

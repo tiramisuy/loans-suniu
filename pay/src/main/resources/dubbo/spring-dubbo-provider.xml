@@ -1,0 +1,37 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	   http://code.alibabatech.com/schema/dubbo
+	   http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+   
+   	<!-- 提供方应用信息，用于计算依赖关系 -->
+	<dubbo:application name="loans-pay" owner="loans"/>
+
+	<!-- 使用zookeeper注册中心暴露服务地址 -->
+	<dubbo:registry protocol="zookeeper" address="${dubbo.registry.address}" file="${dubbo.default.cache.path}"/>
+	
+	<!-- 用dubbo协议在20880端口暴露服务 -->
+	<dubbo:protocol name="dubbo" server="netty" serialization="java" port="${dubbo.default.protocol.port}" />
+
+	<!-- 当ProtocolConfig和ServiceConfig某属性没有配置时,采用此缺省值 -->
+	<dubbo:provider timeout="999999" retries="0" threadpool="fixed" threads="100" accepts="1000" group="${dubbo.provider.default.group}" version="${dubbo.provider.default.version}"/>
+
+
+	<dubbo:service interface="com.rongdu.loans.pay.service.BaofooAgreementPayService" ref="baofooAgreementPayService" />
+	<dubbo:service interface="com.rongdu.loans.pay.service.BaofooAuthPayService" ref="baofooAuthPayService" />
+	<dubbo:service interface="com.rongdu.loans.pay.service.BaofooWithholdService" ref="baofooWithholdService" />
+	<dubbo:service interface="com.rongdu.loans.pay.service.BaofooWithdrawService" ref="baofooWithdrawService" />
+	<dubbo:service interface="com.rongdu.loans.pay.service.TltAgreementPayService" ref="tltAgreementPayService" />
+	<dubbo:service interface="com.rongdu.loans.pay.service.TonglianWithdrawService" ref="tonglianWithdrawService" />
+	<dubbo:service interface="com.rongdu.loans.pay.service.TRBaofooWithdrawService" ref="trBaofooWithdrawService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.RepayLogService" ref="repayLogService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.PayLogService" ref="payLogService" />
+	<!-- code y0602 先锋-->
+	<dubbo:service interface="com.rongdu.loans.pay.service.XianFengWithholdService" ref="xianFengWithholdService" />
+	<dubbo:service interface="com.rongdu.loans.pay.service.XianFengAgreementPayService" ref="xianFengAgreementPayService" />
+	<dubbo:service interface="com.rongdu.loans.pay.service.XianFengWithdrawService" ref="xianFengWithdrawService" />
+	<!-- 海尔支付-->
+	<dubbo:service interface="com.rongdu.loans.pay.service.KjtpayApiService" ref="kjtpayApiService" />
+</beans>

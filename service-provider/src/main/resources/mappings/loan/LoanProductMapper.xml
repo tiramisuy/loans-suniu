@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.LoanProductDAO">
+    
+	<resultMap id="BaseResultMap" type="com.rongdu.loans.loan.entity.LoanProduct">
+		<id column="ID" property="id" />
+		<result column="NAME" property="name" />
+		<result column="TYPE" property="type" />
+		<result column="DESCRIPTION" property="description" />
+		<result column="MIN_INCR_AMT" property="minIncrAmt" />
+		<result column="MIN_AMT" property="minAmt" />
+		<result column="MAX_AMT" property="maxAmt" />
+		<result column="repay_method" property="repayMethod" />
+		<result column="prepay" property="prepay" />
+		<result column="MIN_LOAN_DAY" property="minLoanDay" />
+		<result column="START_INTEREST" property="startInterest" />
+		<result column="GRACE_DAY" property="graceDay" />
+		<result column="LOAN_PERIOD" property="loanPeriod" />
+		<result column="STATUS" property="status" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="REMARK" property="remark" />
+		<result column="IMG_URL" property="imgUrl" />
+		<result column="DEL" property="del" />
+	</resultMap>
+	
+	<sql id="All_Column">
+		id, name, type, description, min_incr_amt, min_amt, max_amt,repay_freq,repay_unit ,repay_method, prepay, min_loan_day, start_interest, grace_day, loan_period,status, create_by, create_time, update_by, update_time, remark, img_url, del
+	</sql>
+	
+	<sql id="Where_Obj">
+		<where>
+		    del = 0
+		    <if test="id!=null">
+				AND id = #{id}
+			</if>
+			<if test="name!=null">
+				AND name = #{name}
+			</if>
+			<if test="type!=null">
+				AND type = #{type}
+			</if>
+			<if test="description!=null">
+				AND description = #{description}
+			</if> 
+			<if test="minIncrAmt!=null">
+			    AND min_incr_amt = #{minIncrAmt}
+			</if>
+			<if test="minAmt!=null">
+			    AND min_amt = #{minAmt}
+			</if>
+			<if test="maxAmt!=null">
+			    AND max_amt = #{maxAmt}
+			</if>
+			<if test="repayMethod!=null">
+			    AND repay_method = #{repayMethod}
+			</if>
+			<if test="prepay!=null">
+			    AND prepay = #{prepay}
+			</if>
+			<if test="minLoanDay!=null">
+			    AND min_loan_day = #{minLoanDay}
+			</if>
+			<if test="startInterest!=null">
+			    AND repay_method = #{startInterest}
+			</if>
+			<if test="graceDay!=null">
+			    AND grace_day = #{graceDay}
+			</if>
+			<if test="status!=null">
+			    AND status = #{status}
+			</if>
+	   </where>
+	</sql>
+    	
+	<select id="getById" parameterType="string" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM loan_product
+	   WHERE del = 0
+	     AND id = #{id}
+	</select>
+	
+	<select id="get" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM loan_product
+	     <include refid="Where_Obj"/>
+	   ORDER BY id
+	   LIMIT 1
+	</select>
+	
+	<select id="findList" resultType="list">
+		SELECT 
+		 <include refid="All_Column"/>
+		FROM loan_product
+	     <include refid="Where_Obj"/>
+	</select>
+	
+	<select id="findAllList" resultType="list">
+		SELECT 
+			<include refid="All_Column"/>
+		FROM loan_product	
+	</select>
+	
+	<select id="getLoanProductLikeById" parameterType="string" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM loan_product
+	   WHERE del = 0
+	     AND status = 1 ORDER BY update_time DESC 
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO loan_product(
+			id,
+			NAME,
+			TYPE,
+			description,
+			min_incr_amt,
+			min_amt,
+			max_amt,
+			repay_method,
+			prepay,
+			min_loan_day,
+			start_interest,
+			grace_day,
+			STATUS,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			remark,
+			del
+		) VALUES (
+			#{id},
+			#{name},
+			#{type},
+			#{description},
+			#{minIncrAmt},
+			#{minAmt},
+			#{maxAmt},
+			#{repayMethod},
+			#{prepay},
+			#{minLoanDay},
+			#{startInterest},
+			#{graceDay},
+			#{status},
+			#{createBy},
+			#{createTime},
+			#{updateBy},
+			#{updateTime},
+			#{remark},
+			#{del}
+		)
+	</insert>
+		
+	<update id="update">
+		UPDATE loan_product SET 
+		   	<if test="name!=null">
+				name = #{name},
+			</if>
+			<if test="type!=null">
+				type = #{type},
+			</if>
+			<if test="description!=null">
+				description = #{description},
+			</if> 
+			<if test="minIncrAmt!=null">
+			    min_incr_amt = #{minIncrAmt},
+			</if>
+			<if test="minAmt!=null">
+			    min_amt = #{minAmt},
+			</if>
+			<if test="maxAmt!=null">
+			    max_amt = #{maxAmt},
+			</if>
+			<if test="repayMethod!=null">
+			    repay_method = #{repayMethod},
+			</if>
+			<if test="prepay!=null">
+			    prepay = #{prepay},
+			</if>
+			<if test="minLoanDay!=null">
+			    min_loan_day = #{minLoanDay},
+			</if>
+			<if test="startInterest!=null">
+			    repay_method = #{startInterest},
+			</if>
+			<if test="graceDay!=null">
+			    grace_day = #{graceDay},
+			</if>
+			<if test="status!=null">
+			    status = #{status},
+			</if>
+			<if test="updateBy!=null">
+			    update_by = #{updateBy},
+			</if>
+			<if test="updateTime!=null">
+			    update_time = #{updateTime},
+			</if>
+			<if test="remark!=null">
+			    remark = #{remark},
+			</if>
+			update_by = #{updateBy},
+			update_time = #{updateTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteById">
+	    UPDATE loan_product SET
+	        <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		    </if>
+		    <if test="updateTime!=null">
+			  update_time = #{updateTime},
+		    </if> 
+	          del = 1
+		 WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+	    UPDATE loan_product SET
+	       <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		   </if>
+		   <if test="updateTime!=null">
+			   update_time = #{updateTime},
+		   </if> 
+	           del = 1
+		<include refid="Where_Obj"/>
+	</update>
+</mapper>

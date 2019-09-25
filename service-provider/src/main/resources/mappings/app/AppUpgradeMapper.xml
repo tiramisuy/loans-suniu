@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.app.dao.AppUpgradeDAO">
+    
+	<resultMap id="BaseResultMap" type="com.rongdu.loans.app.entity.AppUpgrade">
+		<id column="ID" property="id" />
+		<result column="NAME" property="name" />
+		<result column="TYPE" property="type" />
+		<result column="VERSION" property="version" />
+		<result column="FORCED" property="forced" />
+		<result column="FILE_ID" property="fileId" />
+		<result column="PKG_URL" property="pkgUrl" />
+		<result column="STATUS" property="status" />
+		<result column="REMARK" property="remark" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="DEL" property="del" />
+	</resultMap>
+	
+	<sql id="All_Column">
+		id, name, type, version, forced, file_id, pkg_url, status, remark, create_by, create_time, update_by, update_time, del
+	</sql>
+	
+	<sql id="Where_Obj">
+		<where>
+		    del = 0
+			<if test="id!=null">
+				AND id = #{id}
+			</if>
+			<if test="name!=null">
+				AND name = #{name}
+			</if>
+			<if test="type!=null">
+				AND type = #{type}
+			</if> 
+			<if test="version!=null">
+			    AND version = #{version}
+			</if>
+			<if test="forced!=null">
+			    AND forced = #{forced}
+			</if>
+			<if test="fileId!=null">
+			    AND file_id = #{fileId}
+			</if>
+			<if test="status!=null">
+			    AND status = #{status}
+			</if>
+			<if test="pkgUrl!=null">
+			    AND pkg_url = #{pkgUrl}
+			</if>
+	   </where>
+	</sql>
+    
+    <select id="getNewVersion" parameterType="string" resultMap="BaseResultMap">
+	  SELECT 
+      <include refid="All_Column" /> 
+	    FROM app_upgrade 
+	   WHERE del = 0
+	     AND type = #{type}
+	     AND status = '1'
+	</select>
+	
+	<select id="isNewVersion" parameterType="com.rongdu.loans.app.option.UpgradeOP" resultType="int">
+	  SELECT COUNT(1)
+	    FROM app_upgrade 
+	   WHERE del = 0
+	     AND type = #{type}
+	     AND version = #{appVerson}
+	     AND status = '1'
+	</select>
+	
+	<select id="getById" parameterType="string" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM app_upgrade
+	   WHERE del = 0
+	     AND id = #{id}
+	</select>
+	
+	<select id="get" parameterType="AppUpgrade" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM app_upgrade
+	     <include refid="Where_Obj"/>
+	   ORDER BY id
+	   LIMIT 1
+	</select>
+	
+	<select id="findList" parameterType="AppUpgrade" resultType="list">
+		SELECT 
+		 <include refid="All_Column"/>
+		FROM app_upgrade
+	     <include refid="Where_Obj"/>
+	</select>
+	
+	<select id="findAllList" resultType="list">
+		SELECT 
+			<include refid="All_Column"/>
+		FROM app_upgrade a	
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO app_upgrade(
+			id,
+			name,
+			type,
+			version,
+			forced,
+			file_id,
+			pkg_url,
+			status,
+			remark,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			del
+		) VALUES (
+			#{id},
+			#{name},
+			#{type},
+			#{version},
+			#{forced},
+			#{fileId},
+			#{pkgUrl},
+			#{status},
+			#{remark},
+			#{createBy},
+			#{createTime},
+			#{updateBy},
+			#{updateTime},
+			#{del}
+		)
+	</insert>
+	
+	<insert id="batchSaveOrUpdate" parameterType="java.util.List">
+		INSERT INTO app_upgrade(
+			id,
+			name,
+			type,
+			version,
+			forced,
+			file_id,
+			pkg_url,
+			status,
+			remark,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			del
+		) 
+	   <foreach collection="list" item="item" index="index" separator=",">
+	       VALUES (
+				#{item.id},
+				#{item.name},
+				#{item.type},
+				#{item.version},
+				#{item.forced},
+				#{item.fileId},
+				#{item.pkgUrl},
+				#{item.status},
+				#{item.remark},
+				#{item.createBy},
+				#{item.createTime},
+				#{item.updateBy},
+				#{item.updateTime},
+				#{item.del}
+			)
+       </foreach>
+		on duplicate key update
+		    id = VALUES (id),
+			name = VALUES (name),
+			type = VALUES (type),
+			version = VALUES (version),
+			forced = VALUES (forced),
+			file_id = VALUES (file_id),
+			pkg_url = VALUES (pkg_url),
+			status = VALUES (status),
+			remark = VALUES (remark),
+			update_by = VALUES (update_by),
+			update_time = VALUES (update_time),
+			del = VALUES (del)
+	</insert>
+	
+	<update id="update">
+		UPDATE app_upgrade SET 
+		    <if test="name!=null">	
+			   name = #{name},
+			</if>
+			<if test="type!=null">
+			   type = #{type},
+			</if>
+			<if test="version!=null">
+			   version = #{version},
+			</if>
+			<if test="forced!=null">
+			   forced = #{forced},
+			</if>
+			<if test="fileId!=null">
+			   file_id = #{fileId},
+			</if>
+			<if test="pkgUrl!=null">
+			   pkg_url = #{pkgUrl},
+			</if>
+			<if test="status!=null">
+			   status = #{status},
+			</if>
+			<if test="remark!=null">
+			   remark = #{remark},
+			</if>
+			<if test="updateBy!=null">
+			   update_by = #{updateBy},
+			</if>
+			<if test="updateTime!=null">
+			   update_time = #{updateTime},
+			</if>
+			update_by = #{updateBy},
+			update_time = #{updateTime}
+		    WHERE id = #{id}
+	</update>
+	
+	<update id="deleteById">
+	    UPDATE app_upgrade SET
+	        <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		    </if>
+		    <if test="updateTime!=null">
+			  update_time = #{updateTime},
+		    </if> 
+	          del = 1
+		 WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+	    UPDATE app_upgrade SET
+	       <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		   </if>
+		   <if test="updateTime!=null">
+			   update_time = #{updateTime},
+		   </if> 
+	           del = 1
+		<include refid="Where_Obj"/>
+	</update>
+</mapper>

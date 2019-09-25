@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rongdu.loans.statistical.dao.StatisticalDAO">
+
+
+    <select id="userDataForWorkbench" resultType="com.rongdu.loans.statistical.vo.WorkbenchVO">
+		<![CDATA[
+        SELECT
+			(SELECT count(1) from cust_user where del=0 ) as registerTotal,
+			(SELECT count(1) from cust_user where del=0 and register_time >= CURDATE())  as registerCurrent ,
+			(SELECT count(DISTINCT user_id) from loan_apply where status >= 171 and del = 0)  as applyTotal,
+			(SELECT count(DISTINCT user_id) from loan_apply where status >= 171 and apply_time >= CURDATE() and del = 0 )  as applyCurrent,
+			(SELECT sum( CASE WHEN u.source = 1 THEN 1 else 0 end ) as ios FROM `cust_user` u) as iosTotal,
+			(SELECT sum( CASE WHEN u.source = 2 THEN 1 else 0 end ) as android FROM `cust_user` u) as androidTotal,
+			(SELECT sum( CASE WHEN u.source = 3 THEN 1 else 0 end ) as h5 FROM `cust_user` u) as h5Total
+			]]>
+    </select>
+
+	<select id="contractDataForWorkbench" resultType="com.rongdu.loans.statistical.vo.WorkbenchVO">
+		<![CDATA[
+        SELECT
+			(SELECT count(DISTINCT user_id) from loan_contract where del = 0 AND pay_time is not null) as borrowerTotal,
+			(SELECT sum(IFNULL(principal,0)) from loan_contract where del = 0 AND pay_time is not null) as loanTotal,
+			(SELECT count(DISTINCT user_id) from loan_contract where pay_time >= CURDATE() AND del = 0 )  as borrowerCurrent,
+			(SELECT IFNULL(sum(IFNULL(principal,0)),0)from loan_contract where pay_time >= CURDATE() AND del = 0 ) as loanCurrent
+			]]>
+    </select>
+
+	<select id="applyDataForWorkbench" resultType="java.lang.Integer">
+        SELECT count(1) as taskNumber from loan_apply WHERE `status` in (213,220) and del = 0
+    </select>
+
+	<select id="applyDataForRepayPlanItem" resultType="com.rongdu.loans.statistical.vo.WorkbenchVO">
+		<![CDATA[
+		SELECT
+		(SELECT count(1) from loan_repay_plan_item where actual_repay_time BETWEEN #{begin} AND #{end} and del = 0) as succesNumber,
+		(SELECT count(1) from loan_repay_plan_item where status = 0 and repay_date BETWEEN #{begin} AND #{end} and del = 0) as failNumber,
+		(SELECT count(1) from loan_repay_plan_item where status = 0 and repay_date <= CURDATE() and del = 0) as failTotalNumber
+		]]>
+    </select>
+
+
+
+
+</mapper>

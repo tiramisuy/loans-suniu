@@ -1,0 +1,109 @@
+@charset "utf-8";
+* {
+	padding: 0;
+	margin: 0;
+}
+* {
+	scrollbar-3dlight-color: #D4D0C8; /*- 最外左 -*/
+	scrollbar-highlight-color: #fff; /*- 左二 -*/
+	scrollbar-face-color: #E4E4E4; /*- 面子 -*/
+	scrollbar-arrow-color: #666; /*- 箭头 -*/
+	scrollbar-shadow-color: #808080; /*- 右二 -*/
+	scrollbar-darkshadow-color: #D7DCE0; /*- 右一 -*/
+	scrollbar-base-color: #D7DCE0; /*- 基色 -*/
+ 	scrollbar-track-color:#;/*- 滑道 -*/
+}
+html {
+	height: 100%;
+	max-height: 100%;
+	font-size: 12px;
+	overflow: hidden;
+}
+body {
+	height: 100%;
+	line-height: 20px;
+	max-height: 100%;
+	overflow: hidden;
+	font-family: Verdana;
+	background-repeat: repeat-x;
+	background-color: #ECEFF4;
+}
+#header {
+	width: 100%;
+	height: 95px;
+	padding: 0px 0px 0px 0px;
+	overflow:hidden;
+}
+
+#headerFrame {
+	height: 99.9%;
+	visibility: inherit;
+	width: 99.95%;
+	border: 2;
+}
+#leftFrame {
+	height: 99.9%;
+	visibility: inherit;
+	width: 99.95%;
+	border: 2;
+}
+#rightFrame {
+	height: 99.9%;
+	visibility: inherit;
+	width: 99.95%;
+	border: 2;
+}
+#center {
+	overflow:hidden;
+	position:relative;
+	padding:0px 0px 0px 0px;	
+	width: 100%;
+	height:100%;
+	background-color:#ffffff;
+}
+#center-left {	
+	width: 230px;
+	height: 100%;
+	float:left;
+	overflow:hidden;
+	padding:0px 0px 0px 0px;
+}
+#center-middle {
+	position: absolute;
+	height: 100%;
+	width: 10px;
+	z-index:1;
+	float:left;
+	position:relative;
+	top:0;
+	left:2px;
+}
+#center-right {
+	margin-left:240px;	
+	overflow:hidden;
+	height:100%;
+	padding:0px 0px 0px 2px;
+}
+#center-middle table {
+	width: 100%;
+	height: 100%;
+}
+#center-middle img {
+	margin-left: -2px;
+	cursor: pointer;
+}
+#footer {
+	background-image: url("./res/sys/img/admin/footer_bg.jpg");
+	background-position: left top;
+	background-repeat: repeat-x;
+	color: #0F76C5;
+	height: 28px;
+	line-height: 28px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	display: block;
+	width: 100%;
+	padding-left: 5px;
+	text-align: center;
+}

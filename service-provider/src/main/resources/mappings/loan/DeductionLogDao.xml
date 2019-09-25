@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.DeductionLogDAO">
+
+	<sql id="deductionLogColumns">
+		a.id AS "id",
+		a.user_id AS "userId",
+		a.apply_id AS "applyId",
+		a.repay_plan_item_id AS "repayPlanItemId",
+		a.deduction AS "deduction",
+		a.remark AS "remark",
+		a.source AS "source",
+		a.approver_id AS "approverId",
+		a.approver_name AS "approverName",
+		a.approve_time AS "approveTime",
+		a.status AS "status",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+
+	<sql id="deductionLogJoins">
+	</sql>
+
+	<sql id="insertValues">
+		(
+		#{userId},
+		#{applyId},
+		#{repayPlanItemId},
+		#{deduction},
+		#{remark},
+		#{source},
+		#{approverId},
+		#{approverName},
+		#{approveTime},
+		#{status},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+		)
+	</sql>
+
+	<sql id="insertBatchValues">
+		(
+		#{entity.userId},
+		#{entity.applyId},
+		#{entity.repayPlanItemId},
+		#{entity.deduction},
+		#{entity.remark},
+		#{entity.source},
+		#{entity.approverId},
+		#{entity.approverName},
+		#{entity.approveTime},
+		#{entity.status},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+		)
+	</sql>
+
+	<sql id="insertColumns">
+		(
+		user_id,
+		apply_id,
+		repay_plan_item_id,
+		deduction,
+		remark,
+		source,
+		approver_id,
+		approver_name,
+		approve_time,
+		status,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+		)
+	</sql>
+
+	<sql id="updateColumns">
+		<if test="userId != null">
+			user_id = #{userId},
+		</if>
+		<if test="applyId != null">
+			apply_id = #{applyId},
+		</if>
+		<if test="repayPlanItemId != null">
+			repay_plan_item_id = #{repayPlanItemId},
+		</if>
+		<if test="deduction != null">
+			deduction = #{deduction},
+		</if>
+		<if test="remark != null">
+			remark = #{remark},
+		</if>
+		<if test="source != null">
+			source = #{source},
+		</if>
+		<if test="approverId != null">
+			approver_id = #{approverId},
+		</if>
+		<if test="approverName != null">
+			approver_name = #{approverName},
+		</if>
+		<if test="approveTime != null">
+			approve_time = #{approveTime},
+		</if>
+		<if test="status != null">
+			status = #{status},
+		</if>
+		<if test="updateBy != null">
+			update_by = #{updateBy},
+		</if>
+		<if test="updateTime != null">
+			update_time = #{updateTime}
+		</if>
+	</sql>
+
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.userId != null">
+				user_id = #{entity.userId},
+			</if>
+			<if test="entity.applyId != null">
+				apply_id = #{entity.applyId},
+			</if>
+			<if test="entity.repayPlanItemId != null">
+				repay_plan_item_id = #{entity.repayPlanItemId},
+			</if>
+			<if test="entity.deduction != null">
+				deduction = #{entity.deduction},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.source != null">
+				source = #{entity.source},
+			</if>
+			<if test="entity.approverId != null">
+				approver_id = #{entity.approverId},
+			</if>
+			<if test="entity.approverName != null">
+				approver_name = #{entity.approverName},
+			</if>
+			<if test="entity.approveTime != null">
+				approve_time = #{entity.approveTime},
+			</if>
+			<if test="entity.status != null">
+				status = #{entity.status},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+	<sql id="whereByCriteria">
+		<where>
+			<if test="criteria.valid">
+				<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+					<foreach collection="criteria.pairList" item="pair">
+						<choose>
+							<when test="pair.criterion.singleValue">
+								${pair.logic} ${pair.criterion.column}
+								${pair.criterion.match}
+								${pair.criterion.value}
+							</when>
+							<when test="pair.criterion.betweenValue">
+								${pair.logic} ${pair.criterion.column}
+								${pair.criterion.match}
+								${pair.criterion.value} and
+								${pair.criterion.secondValue}
+							</when>
+							<when test="pair.criterion.listValue">
+								${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+								<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+									#{item}
+								</foreach>
+							</when>
+						</choose>
+					</foreach>
+				</trim>
+			</if>
+		</where>
+	</sql>
+
+	<sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+
+	<sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+
+	<insert id="insert">
+		INSERT INTO loan_deduction_log
+		<include refid="insertColumns"/>
+		VALUES
+		<include refid="insertValues"/>
+	</insert>
+
+	<select id="getById" resultType="DeductionLog">
+		SELECT
+		<include refid="deductionLogColumns"/>
+		FROM loan_deduction_log a
+		<include refid="deductionLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<update id="update">
+		UPDATE loan_deduction_log SET
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="findByItemId" resultType="DeductionLog">
+		SELECT <include refid="deductionLogColumns"/>
+		from loan_deduction_log a where a.repay_plan_item_id = #{repayPlanItemId} and a.del = 0
+	</select>
+
+	<select id="findLastOneByItemId" resultType="DeductionLog">
+		SELECT <include refid="deductionLogColumns"/>
+		from loan_deduction_log a where a.repay_plan_item_id = #{repayPlanItemId} and a.del = 0
+		ORDER BY create_time desc limit 1
+	</select>
+
+
+
+
+</mapper>

@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.cust.dao.ContactDAO">
+    
+	<resultMap id="BaseResultMap" type="com.rongdu.loans.cust.entity.Contact">
+		<id column="ID" property="id" />
+		<result column="user_id" property="userId" />
+		<result column="RELATIONSHIP" property="relationship" />
+		<result column="NAME" property="name" />
+		<result column="MOBILE" property="mobile" />
+		<result column="REMARK" property="remark" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="DEL" property="del" />
+	</resultMap>
+	
+	<resultMap id="simpleMap" type="com.rongdu.loans.cust.vo.CustContactVO">
+		<id column="ID" property="id" />
+		<result column="RELATIONSHIP" property="relationship" />
+		<result column="NAME" property="name" />
+		<result column="MOBILE" property="mobile" />
+	</resultMap>
+	
+	<sql id="All_Column">
+		id, user_id, relationship, name, mobile, create_by, create_time, update_by, update_time, remark, del
+	</sql>
+	
+	<sql id="Where_Obj">
+		<where>
+			del = 0
+			<if test="id!=null">
+				AND id = #{id}
+			</if>
+			<if test="userId!=null">
+				AND user_id = #{userId}
+			</if>
+			<if test="relationship!=null">
+				AND relationship = #{relationship}
+			</if>
+			<if test="name!=null">
+				AND name = #{name}
+			</if>
+			<if test="mobile!=null">
+				AND mobile = #{mobile}
+			</if>
+		</where>
+	</sql>
+
+
+	<sql id="contactColumns">
+		a.id AS "id",
+		a.user_id AS "userId",
+		a.relationship AS "relationship",
+		a.name AS "name",
+		a.mobile AS "mobile",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+
+	<sql id="contactJoins">
+	</sql>
+
+	<sql id="insertValues">
+		(
+		#{id},
+		#{userId},
+		#{relationship},
+		#{name},
+		#{mobile},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+		)
+	</sql>
+
+	<sql id="insertColumns">
+		(
+		id,
+		user_id,
+		relationship,
+		name,
+		mobile,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+		)
+	</sql>
+
+	<sql id="updateColumns">
+		user_id = #{userId},
+		relationship = #{relationship},
+		name = #{name},
+		mobile = #{mobile},
+		remark = #{remark},
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+	</sql>
+
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.userId != null">
+				user_id = #{entity.userId},
+			</if>
+			<if test="entity.relationship != null">
+				relationship = #{entity.relationship},
+			</if>
+			<if test="entity.name != null">
+				name = #{entity.name},
+			</if>
+			<if test="entity.mobile != null">
+				mobile = #{entity.mobile},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+	<sql id="whereByCriteria">
+		<where>
+			<if test="criteria.valid">
+				<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+					<foreach collection="criteria.pairList" item="pair">
+						<choose>
+							<when test="pair.criterion.singleValue">
+								${pair.logic} ${pair.criterion.column}
+								${pair.criterion.match}
+								${pair.criterion.value}
+							</when>
+							<when test="pair.criterion.betweenValue">
+								${pair.logic} ${pair.criterion.column}
+								${pair.criterion.match}
+								${pair.criterion.value} and
+								${pair.criterion.secondValue}
+							</when>
+							<when test="pair.criterion.listValue">
+								${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+								<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+									#{item}
+								</foreach>
+							</when>
+						</choose>
+					</foreach>
+				</trim>
+			</if>
+		</where>
+	</sql>
+
+	<sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+
+	<sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+
+	<select id="get" resultType="Contact">
+		SELECT
+		<include refid="contactColumns"/>
+		FROM cust_contact a
+		<include refid="contactJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getById" resultType="Contact">
+		SELECT
+		<include refid="contactColumns"/>
+		FROM cust_contact a
+		<include refid="contactJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByCriteria" resultType="Contact">
+		SELECT
+		<include refid="contactColumns"/>
+		FROM cust_contact a
+		<include refid="contactJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+
+	<select id="findAllByCriteria" resultType="Contact">
+		SELECT
+		<include refid="contactColumns"/>
+		FROM cust_contact a
+		<include refid="contactJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+
+	<select id="findAllByCriteriaList" resultType="Contact">
+		SELECT
+		<include refid="contactColumns"/>
+		FROM cust_contact a
+		<include refid="contactJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+
+	<select id="getPage" resultType="Contact">
+		SELECT
+		<include refid="contactColumns"/>
+		FROM cust_contact a
+		<include refid="contactJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+
+	<select id="getPageByCriteria" resultType="Contact">
+		SELECT
+		<include refid="contactColumns"/>
+		FROM cust_contact a
+		<include refid="contactJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+
+	<select id="getPageByCriteriaList" resultType="Contact">
+		SELECT
+		<include refid="contactColumns"/>
+		FROM cust_contact a
+		<include refid="contactJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM cust_contact
+		<include refid="contactJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM cust_contact
+		<include refid="contactJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+
+	<insert id="insert">
+		INSERT INTO cust_contact
+		<include refid="insertColumns"/>
+		VALUES
+		<include refid="insertValues"/>
+	</insert>
+
+	<insert id="insertBatch">
+		INSERT INTO cust_contact
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+			<include refid="insertValues"/>
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE cust_contact SET
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateByCriteriaSelective">
+		UPDATE cust_contact
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+
+	<update id="updateByCriteriaListSelective">
+		UPDATE cust_contact
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE cust_contact
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE cust_contact
+		SET del = 1
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteByCriteria">
+		UPDATE cust_contact
+		SET del = 1
+		<include refid="whereByCriteria"/>
+	</update>
+
+	<update id="deleteByCriteriaList">
+		UPDATE cust_contact
+		SET del = 1
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="deleteTruely">
+		DELETE FROM cust_contact
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM cust_contact
+		<include refid="whereByCriteria"/>
+	</update>
+
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM cust_contact
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="deleteBatch">
+		UPDATE cust_contact
+		SET del = 1
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>
+	</update>
+
+	<update id="deleteBatchTruely">
+		DELETE FROM cust_contact
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>
+	</update>
+	
+	<update id="delContact">
+		DELETE FROM cust_contact
+		WHERE  user_id = #{userId}
+	</update>
+	
+	<select id="getByUserId" parameterType="string" resultMap="simpleMap">
+		SELECT 
+		      relationship, name, mobile
+		 FROM cust_contact
+		WHERE del = 0
+		  AND user_id = #{userId}
+	</select>
+
+	<select id="countNum" resultType="java.lang.Integer" parameterType="java.util.Map">
+		SELECT
+		count(0)
+		FROM cust_contact
+		WHERE del = 0
+		AND user_id != #{userId} and create_time &gt; #{createTime} and mobile IN
+		<foreach item="item" index="index" collection="list" open="("  close=")" separator=",">
+			#{item}
+		</foreach>
+
+	</select>
+</mapper>

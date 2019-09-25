@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.rongdu.loans</groupId>
+	<artifactId>service-provider</artifactId>
+	<version>1.0.0</version>
+	<packaging>war</packaging>
+
+	<name>loans-service-provider</name>
+	<url>http://www.jubaoqiandai.com</url>
+	<inceptionYear>2014-2017</inceptionYear>
+	<description>RPC服务提供者</description>
+
+	<!-- Maven私服 -->
+	<distributionManagement>
+	     <repository>
+	         <id>nexus</id>
+	         <name>Packaging Release Repository</name>
+			 <url>http://nexus.hx.bk/repository/maven-releases/</url>
+	     </repository>
+	     <snapshotRepository>
+	         <id>nexus</id>
+	         <name>Packaging Snapshot Repository</name>
+	         <url>http://nexus.hx.bk/repository/maven-snapshots/</url>
+	     </snapshotRepository>
+	</distributionManagement>
+		
+	<!-- 项目属性 -->
+	<properties>
+		<!-- environment setting -->
+		<jdk.version>1.8</jdk.version>
+		<project.encoding>UTF-8</project.encoding>
+		<downloadSources>true</downloadSources>
+
+		<loans-service-consumer.version>1.0.0</loans-service-consumer.version>
+		<amqp-client.version>3.5.4</amqp-client.version>
+		<spring-rabbit.version>1.5.0.RELEASE</spring-rabbit.version>
+	</properties>
+
+	<!-- 依赖项定义 -->
+	<dependencies>
+
+		<!-- pdf -->
+		<dependency>
+			<groupId>org.xhtmlrenderer</groupId>
+			<artifactId>flying-saucer-pdf</artifactId>
+			<version>9.1.15</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ancun</groupId>
+			<artifactId>ancun-51cunzheng-java-sdk</artifactId>
+			<version>1.0.2</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/ancun-51cunzheng-java-sdk-1.0.2.jar</systemPath>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<version>4.5.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.rongdu.loans</groupId>
+			<artifactId>service-consumer</artifactId>
+			<version>${loans-service-consumer.version}</version>
+		</dependency>
+
+		<!-- 
+		<dependency>
+			<groupId>com.rongdu.financial</groupId>
+			<artifactId>iweb-api</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		 -->
+
+		<dependency>
+			<groupId>com.rabbitmq</groupId>
+			<artifactId>amqp-client</artifactId>
+			<version>${amqp-client.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.amqp</groupId>
+			<artifactId>spring-rabbit</artifactId>
+			<version>${spring-rabbit.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>spring</artifactId>
+					<groupId>org.springframework</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>javax.el-api</artifactId>
+			<version>2.2.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.web</groupId>
+			<artifactId>javax.el</artifactId>
+			<version>2.2.4</version>
+		</dependency>
+		
+		<!-- 阿里云OSS -->
+		<dependency>
+			<groupId>com.aliyun.oss</groupId>
+			<artifactId>aliyun-sdk-oss</artifactId>
+			<version>2.5.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mybatis.generator</groupId>
+			<artifactId>mybatis-generator-core</artifactId>
+			<version>1.3.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-all</artifactId>
+			<version>4.1.39.Final</version>
+		</dependency>
+
+
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<profiles.active>dev</profiles.active>
+			</properties>
+		</profile>
+		<profile>
+			<id>test</id>
+			<properties>
+				<profiles.active>test</profiles.active>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>pro</id>
+			<properties>
+				<profiles.active>pro</profiles.active>
+			</properties>
+		</profile>
+	</profiles>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>config/test/*</exclude>
+					<exclude>config/pro/*</exclude>
+				</excludes>
+
+			</resource>
+			<resource>
+				<directory>src/main/resources/config/${profiles.active}</directory>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>8.1.16.v20140903</version>
+				<configuration>
+					<stopKey>foo</stopKey>
+					<stopPort>9992</stopPort>
+					<!--&lt;!&ndash; 本地装载contextXml，来解决未配置事务或数据库造成启动时等待时间过长 start &ndash;&gt;-->
+					<!--<contextXml>src/test/resources/jetty-deploy.xml</contextXml>-->
+					<!--&lt;!&ndash; 本地装载contextXml，来解决未配置事务或数据库造成启动时等待时间过长 end &ndash;&gt;-->
+					<connectors>
+						<connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+							<!--jetty启动端口号-->
+							<port>8090</port>
+						</connector>
+					</connectors>
+				</configuration>
+			</plugin>
+
+			<!-- Compiler 插件, 设定JDK版本 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+					<encoding>${project.encoding}</encoding>
+					<showWarnings>true</showWarnings>
+				</configuration>
+			</plugin>
+
+			<!-- 打包jar文件时，配置manifest文件，加入lib包的jar依赖 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<!--<encoding>${project.encoding}</encoding>-->
+				</configuration>
+			</plugin>
+
+			<!-- war 打包插件, 设定war包名称不带版本号 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<packagingExcludes>
+						WEB-INF/classes/org/apache/ibatis/**,
+						WEB-INF/classes/org/mybatis/spring/**
+					</packagingExcludes>
+					<warSourceExcludes>
+						test/**
+					</warSourceExcludes>
+					<webappDirectory>${project.build.directory}/${project.artifactId}</webappDirectory>
+					<warName>ROOT</warName>
+				</configuration>
+			</plugin>
+
+			<!-- Eclipse 插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<downloadSources>${downloadSources}</downloadSources>
+					<downloadJavadocs>false</downloadJavadocs>
+					<wtpversion>2.0</wtpversion>
+					<jeeversion>6.0</jeeversion>
+					<additionalConfig>
+						<file>
+							<name>.settings/org.eclipse.core.resources.prefs</name>
+							<content>
+								<![CDATA[eclipse.preferences.version=1${line.separator}encoding/<project>=${project.encoding}${line.separator}]]>
+							</content>
+						</file>
+					</additionalConfig>
+					<additionalProjectnatures>
+						<projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
+					</additionalProjectnatures>
+				</configuration>
+			</plugin>
+
+			<!-- resource插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.7</version>
+			</plugin>
+
+			<!-- install插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>2.5.2</version>
+			</plugin>
+
+			<!-- clean插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.6.1</version>
+			</plugin>
+
+			<!-- dependency插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+			</plugin>
+
+			<!-- 运行mvn test时执行测试的插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.11</version>
+				<configuration>
+					<argLine>-Dfile.encoding=${project.encoding}</argLine>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+
+		</plugins>
+
+	</build>
+
+
+
+</project>

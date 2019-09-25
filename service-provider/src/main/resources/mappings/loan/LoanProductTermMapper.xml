@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.LoanProductTermDAO">
+    
+	<resultMap id="BaseResultMap" type="com.rongdu.loans.loan.entity.LoanProductTerm">
+		<id column="ID" property="id" />
+		<result column="PRODUCT_ID" property="productId" />
+		<result column="TERM_UNIT" property="termUnit" />
+		<result column="TERM" property="term" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="REMARK" property="remark" />
+		<result column="DEL" property="del" />
+	</resultMap>
+	
+	<resultMap id="SummaryMap" type="com.rongdu.loans.loan.vo.LoanProductTermVO">
+		<id column="ID" property="id" />
+		<result column="PRODUCT_ID" property="productId" />
+		<result column="TERM_UNIT" property="termUnit" />
+		<result column="TERM" property="term" />
+	</resultMap>
+	
+	<sql id="All_Column">
+		id, product_id, term_unit, term, create_by, create_time, update_by, update_time, remark, del
+	</sql>
+	
+	<sql id="Where_Obj">
+		<where>
+		    del = 0
+		    <if test="id!=null">
+				AND id = #{id}
+			</if>
+			<if test="productId!=null">
+				AND product_id = #{productId}
+			</if>
+			<if test="termUnit!=null">
+				AND term_unit = #{termUnit}
+			</if>
+			<if test="term!=null">
+				AND term = #{term}
+			</if>
+	   </where>
+	</sql>
+    	
+	<select id="getById" parameterType="string" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM loan_product_term
+	   WHERE del = 0
+	     AND id = #{id}
+	</select>
+	
+	<select id="getByProductId" parameterType="string" resultMap="SummaryMap">
+	  SELECT 
+		id, product_id, term_unit, term
+		FROM loan_product_term
+	   WHERE del = 0
+	     AND product_id = #{productId} ORDER BY term
+	</select>
+	
+	<select id="get" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM loan_product_term
+	     <include refid="Where_Obj"/>
+	   ORDER BY id
+	   LIMIT 1
+	</select>
+	
+	<select id="findList" resultType="list">
+		SELECT 
+		 <include refid="All_Column"/>
+		FROM loan_product_term
+	     <include refid="Where_Obj"/>
+	</select>
+	
+	<select id="findAllList" resultType="list">
+		SELECT 
+			<include refid="All_Column"/>
+		FROM loan_product_term	
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO loan_product_term(
+			id,
+			product_id,
+			term_unit,
+			term,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			remark,
+			del
+		) VALUES (
+			#{id},
+			#{productId},
+			#{termUnit},
+			#{term},
+			#{createBy},
+			#{createTime},
+			#{updateBy},
+			#{updateTime},
+			#{remark},
+			#{del}
+		)
+	</insert>
+	
+	<insert id="batchSaveOrUpdate" parameterType="java.util.List">
+		INSERT INTO loan_product_term(
+			id,
+			product_id,
+			term_unit,
+			term,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			remark,
+			del
+		) 
+	   <foreach collection="list" item="item" index="index" separator=",">
+	       VALUES (
+			#{item.id},
+			#{item.productId},
+			#{item.termUnit},
+			#{item.term},
+			#{item.createBy},
+			#{item.createTime},
+			#{item.updateBy},
+			#{item.updateTime},
+			#{item.remark},
+			#{item.del}
+			)
+       </foreach>
+		on duplicate key update
+		    id = VALUES (id),
+			category_id = VALUES (product_id),
+			title = VALUES (term_unit),
+			image_id = VALUES (term),
+			update_by = VALUES (update_by),
+			update_time = VALUES (update_time),
+			remark = VALUES (remark),
+			del = VALUES (del)
+	</insert>
+	
+	<update id="update">
+		UPDATE loan_product_term SET 
+		    <if test="productId!=null">	
+			   product_id = #{productId},
+			</if>
+			<if test="termUnit!=null">
+			   term_unit = #{termUnit},
+			</if>
+			<if test="term!=null">
+			   term = #{term},
+			</if>
+			<if test="updateBy!=null">
+			   update_by = #{updateBy},
+			</if>
+			<if test="updateTime!=null">
+			   update_time = #{updateTime},
+			</if>
+			<if test="remark!=null">
+			   remark = #{remark},
+			</if>
+			update_by = #{updateBy},
+			update_time = #{updateTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteById">
+	    UPDATE loan_product_term SET
+	        <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		    </if>
+		    <if test="updateTime!=null">
+			  update_time = #{updateTime},
+		    </if> 
+	          del = 1
+		 WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+	    UPDATE loan_product_term SET
+	       <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		   </if>
+		   <if test="updateTime!=null">
+			   update_time = #{updateTime},
+		   </if> 
+	           del = 1
+		<include refid="Where_Obj"/>
+	</update>
+</mapper>

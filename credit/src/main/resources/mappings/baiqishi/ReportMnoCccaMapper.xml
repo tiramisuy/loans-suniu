@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.baiqishi.dao.ReportMnoCccaDao">
+    
+	<sql id="reportMnoCccaColumns">
+		a.id AS "id",
+		a.user_id AS "userId",
+		a.report_id AS "reportId",
+		a.area AS "area",
+		a.number_count AS "numberCount",
+		a.originating_call_count AS "originatingCallCount",
+		a.originating_call_time AS "originatingCallTime",
+		a.terminating_call_count AS "terminatingCallCount",
+		a.terminating_call_time AS "terminatingCallTime",
+		a.call_in_count_percentage AS "callInCountPercentage",
+		a.call_in_time_percentage AS "callInTimePercentage",
+		a.call_out_count_percentage AS "callOutCountPercentage",
+		a.call_out_time_percentage AS "callOutTimePercentage",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+	
+	<sql id="reportMnoCccaJoins">
+
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{id},
+		#{userId},
+		#{reportId},
+		#{area},
+		#{numberCount},
+		#{originatingCallCount},
+		#{originatingCallTime},
+		#{terminatingCallCount},
+		#{terminatingCallTime},
+		#{callInCountPercentage},
+		#{callInTimePercentage},
+		#{callOutCountPercentage},
+		#{callOutTimePercentage},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.userId},
+		#{entity.reportId},
+		#{entity.area},
+		#{entity.numberCount},
+		#{entity.originatingCallCount},
+		#{entity.originatingCallTime},
+		#{entity.terminatingCallCount},
+		#{entity.terminatingCallTime},
+		#{entity.callInCountPercentage},
+		#{entity.callInTimePercentage},
+		#{entity.callOutCountPercentage},
+		#{entity.callOutTimePercentage},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		id,
+		user_id,
+		report_id,
+		area,
+		number_count,
+		originating_call_count,
+		originating_call_time,
+		terminating_call_count,
+		terminating_call_time,
+		call_in_count_percentage,
+		call_in_time_percentage,
+		call_out_count_percentage,
+		call_out_time_percentage,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		user_id = #{userId},
+		report_id = #{reportId},
+		area = #{area},
+		number_count = #{numberCount},
+		originating_call_count = #{originatingCallCount},
+		originating_call_time = #{originatingCallTime},
+		terminating_call_count = #{terminatingCallCount},
+		terminating_call_time = #{terminatingCallTime},
+		call_in_count_percentage = #{callInCountPercentage},
+		call_in_time_percentage = #{callInTimePercentage},
+		call_out_count_percentage = #{callOutCountPercentage},
+		call_out_time_percentage = #{callOutTimePercentage},
+		remark = #{remark},
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.userId != null">
+				user_id = #{entity.userId},
+			</if>
+			<if test="entity.reportId != null">
+				report_id = #{entity.reportId},
+			</if>
+			<if test="entity.area != null">
+				area = #{entity.area},
+			</if>
+			<if test="entity.numberCount != null">
+				number_count = #{entity.numberCount},
+			</if>
+			<if test="entity.originatingCallCount != null">
+				originating_call_count = #{entity.originatingCallCount},
+			</if>
+			<if test="entity.originatingCallTime != null">
+				originating_call_time = #{entity.originatingCallTime},
+			</if>
+			<if test="entity.terminatingCallCount != null">
+				terminating_call_count = #{entity.terminatingCallCount},
+			</if>
+			<if test="entity.terminatingCallTime != null">
+				terminating_call_time = #{entity.terminatingCallTime},
+			</if>
+			<if test="entity.callInCountPercentage != null">
+				call_in_count_percentage = #{entity.callInCountPercentage},
+			</if>
+			<if test="entity.callInTimePercentage != null">
+				call_in_time_percentage = #{entity.callInTimePercentage},
+			</if>
+			<if test="entity.callOutCountPercentage != null">
+				call_out_count_percentage = #{entity.callOutCountPercentage},
+			</if>
+			<if test="entity.callOutTimePercentage != null">
+				call_out_time_percentage = #{entity.callOutTimePercentage},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+  	<select id="get" resultType="ReportMnoCcca">
+		SELECT 
+		<include refid="reportMnoCccaColumns"/>
+		FROM baiqishi_report_mno_ccca a
+		<include refid="reportMnoCccaJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+  	<select id="getById" resultType="ReportMnoCcca">
+		SELECT 
+		<include refid="reportMnoCccaColumns"/>
+		FROM baiqishi_report_mno_ccca a
+		<include refid="reportMnoCccaJoins"/>
+		WHERE a.id = #{id}
+	</select>
+		
+    <select id="getByCriteria" resultType="ReportMnoCcca">
+		SELECT 
+		<include refid="reportMnoCccaColumns"/>
+		FROM baiqishi_report_mno_ccca a
+		<include refid="reportMnoCccaJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultType="ReportMnoCcca">
+		SELECT 
+		<include refid="reportMnoCccaColumns"/>
+		FROM baiqishi_report_mno_ccca a
+		<include refid="reportMnoCccaJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultType="ReportMnoCcca">
+		SELECT 
+		<include refid="reportMnoCccaColumns"/>
+		FROM baiqishi_report_mno_ccca a
+		<include refid="reportMnoCccaJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultType="ReportMnoCcca">
+		SELECT 
+		<include refid="reportMnoCccaColumns"/>
+		FROM baiqishi_report_mno_ccca a
+		<include refid="reportMnoCccaJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="ReportMnoCcca">
+		SELECT 
+		<include refid="reportMnoCccaColumns"/>
+		FROM baiqishi_report_mno_ccca a
+		<include refid="reportMnoCccaJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="ReportMnoCcca">
+		SELECT 
+		<include refid="reportMnoCccaColumns"/>
+		FROM baiqishi_report_mno_ccca a
+		<include refid="reportMnoCccaJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM baiqishi_report_mno_ccca
+		<include refid="reportMnoCccaJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM baiqishi_report_mno_ccca
+		<include refid="reportMnoCccaJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO baiqishi_report_mno_ccca
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+	
+	<insert id="insertBatch">
+		INSERT INTO baiqishi_report_mno_ccca
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	<update id="update">
+		UPDATE baiqishi_report_mno_ccca SET 
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE baiqishi_report_mno_ccca 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE baiqishi_report_mno_ccca 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE baiqishi_report_mno_ccca		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE baiqishi_report_mno_ccca
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByCriteria">
+		UPDATE baiqishi_report_mno_ccca
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE baiqishi_report_mno_ccca 
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE baiqishi_report_mno_ccca
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM baiqishi_report_mno_ccca
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM baiqishi_report_mno_ccca
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM baiqishi_report_mno_ccca
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM baiqishi_report_mno_ccca
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	
+	 
+</mapper>

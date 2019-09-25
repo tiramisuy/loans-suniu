@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.basic.dao.ProvinceDAO">
+
+	<sql id="provenceColumns">
+		a.id AS "id",
+		a.name AS "name"
+	</sql>
+	
+   	<sql id="orderBy">
+		ORDER BY a.id asc
+	</sql>
+	
+  	<select id="getAll" resultType="com.rongdu.loans.basic.entity.Province">
+		SELECT 
+		<include refid="provenceColumns"/>
+		FROM basic_province a
+	</select>
+
+  	<select id="getById" resultType="com.rongdu.loans.basic.entity.Province">
+		SELECT 
+		<include refid="provenceColumns"/>
+		FROM basic_province a
+		WHERE a.id = #{0}
+	</select>
+		
+	
+	 
+</mapper>

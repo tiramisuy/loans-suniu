@@ -1,0 +1,589 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.borrow.dao.HelpApplyDao">
+    
+	<sql id="helpApplyColumns">
+		a.id AS "id",
+		a.user_id AS "userId",
+		a.mobile AS "mobile",
+		a.user_name AS "userName",
+		a.id_no AS "idNo",
+		a.card_no AS "cardNo",
+		a.apply_time AS "applyTime",
+		a.service_amt AS "serviceAmt",
+		a.status AS "status",
+		a.pay_date AS "payDate",
+		a.pay_time AS "payTime",
+		a.source AS "source",
+		a.ret_code AS "retCode",
+		a.ret_msg AS "retMsg",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del",
+		a.allot_user_id AS "allotUserId",
+		a.allot_user_name AS "allotUserName"
+	</sql>
+	
+	<sql id="helpApplyJoins">
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{id},
+		#{userId},
+		#{mobile},
+		#{userName},
+		#{idNo},
+		#{cardNo},
+		#{applyTime},
+		#{serviceAmt},
+		#{status},
+		#{payDate},
+		#{payTime},
+		#{source},
+		#{retCode},
+		#{retMsg},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del},
+		#{allotUserId},
+		#{allotUserName}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.userId},
+		#{entity.mobile},
+		#{entity.userName},
+		#{entity.idNo},
+		#{entity.cardNo},
+		#{entity.applyTime},
+		#{entity.serviceAmt},
+		#{entity.status},
+		#{entity.payDate},
+		#{entity.payTime},
+		#{entity.source},
+		#{entity.retCode},
+		#{entity.retMsg},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del},
+		#{entity.allotUserId},
+		#{entity.allotUserName}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		id,
+		user_id,
+		mobile,
+		user_name,
+		id_no,
+		card_no,
+		apply_time,
+		service_amt,
+		status,
+		pay_date,
+		pay_time,
+		source,
+		ret_code,
+		ret_msg,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del,
+		allot_user_id,
+		allot_user_name
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		user_id = #{userId},
+		mobile = #{mobile},
+		user_name = #{userName},
+		id_no = #{idNo},
+		card_no = #{cardNo},
+		apply_time = #{applyTime},
+		service_amt = #{serviceAmt},
+		status = #{status},
+		pay_date = #{payDate},
+		pay_time = #{payTime},
+		source = #{source},
+		ret_code = #{retCode},
+		ret_msg = #{retMsg},
+		remark = #{remark},
+		update_by = #{updateBy},
+		update_time = #{updateTime},
+		allot_user_id = #{allotUserId},
+		allot_user_name = #{allotUserName}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.userId != null">
+				user_id = #{entity.userId},
+			</if>
+			<if test="entity.mobile != null">
+				mobile = #{entity.mobile},
+			</if>
+			<if test="entity.userName != null">
+				user_name = #{entity.userName},
+			</if>
+			<if test="entity.idNo != null">
+				id_no = #{entity.idNo},
+			</if>
+			<if test="entity.cardNo != null">
+				card_no = #{entity.cardNo},
+			</if>
+			<if test="entity.applyTime != null">
+				apply_time = #{entity.applyTime},
+			</if>
+			<if test="entity.serviceAmt != null">
+				service_amt = #{entity.serviceAmt},
+			</if>
+			<if test="entity.status != null">
+				status = #{entity.status},
+			</if>
+			<if test="entity.payDate != null">
+				pay_date = #{entity.payDate},
+			</if>
+			<if test="entity.payTime != null">
+				pay_time = #{entity.payTime},
+			</if>
+			<if test="entity.source != null">
+				source = #{entity.source},
+			</if>
+			<if test="entity.retCode != null">
+				ret_code = #{entity.retCode},
+			</if>
+			<if test="entity.retMsg != null">
+				ret_msg = #{entity.retMsg},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+			<if test="entity.allotUserId != null">
+				allot_user_id = #{entity.allotUserId},
+			</if>
+			<if test="entity.allotUserName != null">
+				allot_user_name = #{entity.allotUserName},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+  	<select id="get" resultType="HelpApply">
+		SELECT 
+		<include refid="helpApplyColumns"/>
+		FROM borrow_help_apply a
+		<include refid="helpApplyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+  	<select id="getById" resultType="HelpApply">
+		SELECT 
+		<include refid="helpApplyColumns"/>
+		FROM borrow_help_apply a
+		<include refid="helpApplyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+		
+    <select id="getByCriteria" resultType="HelpApply">
+		SELECT 
+		<include refid="helpApplyColumns"/>
+		FROM borrow_help_apply a
+		<include refid="helpApplyJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultType="HelpApply">
+		SELECT 
+		<include refid="helpApplyColumns"/>
+		FROM borrow_help_apply a
+		<include refid="helpApplyJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultType="HelpApply">
+		SELECT 
+		<include refid="helpApplyColumns"/>
+		FROM borrow_help_apply a
+		<include refid="helpApplyJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultType="HelpApply">
+		SELECT 
+		<include refid="helpApplyColumns"/>
+		FROM borrow_help_apply a
+		<include refid="helpApplyJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="HelpApply">
+		SELECT 
+		<include refid="helpApplyColumns"/>
+		FROM borrow_help_apply a
+		<include refid="helpApplyJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="HelpApply">
+		SELECT 
+		<include refid="helpApplyColumns"/>
+		FROM borrow_help_apply a
+		<include refid="helpApplyJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM borrow_help_apply
+		<include refid="helpApplyJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM borrow_help_apply
+		<include refid="helpApplyJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO borrow_help_apply
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+	
+	<insert id="insertBatch">
+		INSERT INTO borrow_help_apply
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	<update id="update">
+		UPDATE borrow_help_apply SET 
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE borrow_help_apply 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE borrow_help_apply 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE borrow_help_apply		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE borrow_help_apply
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByCriteria">
+		UPDATE borrow_help_apply
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE borrow_help_apply 
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE borrow_help_apply
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM borrow_help_apply
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM borrow_help_apply
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM borrow_help_apply
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM borrow_help_apply
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<select id="getHelpApplyList" resultType="com.rongdu.loans.borrow.vo.HelpApplyVO">
+		SELECT 
+		<include refid="helpApplyColumns"/>
+		FROM borrow_help_apply a
+		WHERE a.id NOT IN (SELECT b.borrow_id FROM borrow_help_allot b)
+	</select>
+	
+	
+	
+	
+	<select id="getBorrowHelpList" resultType="com.rongdu.loans.borrow.vo.HelpApplyVO">
+		SELECT 
+		<include refid="helpApplyColumns"/>
+		FROM borrow_help_apply a 
+		  <where>
+            a.del = 0
+            <if test="op.userName != null and op.userName != ''">
+                and a.user_name = #{op.userName}
+            </if>
+             <if test="op.userId != null and op.userId != ''">
+                and a.allot_user_id = #{op.userId}
+            </if>
+            <if test="op.mobile != null and op.mobile != ''">
+                and a.mobile = #{op.mobile}
+            </if>
+             <if test="op.applyTimeStart != null and op.applyTimeStart != '' ">
+                <![CDATA[ AND a.apply_time >= #{op.applyTimeStart} ]]>
+            </if>
+            <if test="op.applyTimeEnd != null and op.applyTimeEnd != '' ">
+                <![CDATA[ AND a.apply_time <= #{op.applyTimeEnd} ]]>
+            </if>
+            <if test="op.retCode != null and op.retCode != ''">
+                and a.ret_code = #{op.retCode}
+            </if>
+            <if test="op.source != null and op.source != ''">
+                and a.source = #{op.source}
+            </if>
+            <if test="op.status != null">
+                	  and a.status = #{op.status}
+            </if>
+            <if test="op.idNo != null and op.idNo != '' ">
+            			and a.id_no = #{op.idNo}
+            </if>
+        </where>
+        ORDER BY a.apply_time  desc
+		 
+	</select>
+	
+	
+	
+	
+	
+	<update id="updateAllotApply">
+		UPDATE borrow_help_apply
+		SET allot_user_id = #{userId}
+			,allot_user_name = #{userName},
+			update_by = #{updateBy},
+			update_time = now()
+		WHERE id = #{borrowId}
+	</update>
+	
+	<!-- <insert id="insertPrimaryKey" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO borrow_help_apply
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert> -->
+	
+	 <select id="getHelpApplyByIdNo" resultType="HelpApply">
+		SELECT 
+		<include refid="helpApplyColumns"/>
+		FROM borrow_help_apply a
+		where a.id_no = #{idNo}
+		and a.allot_user_id is not null
+		limit 1
+	</select>
+	
+	<update id="updateConcurent">
+		UPDATE borrow_help_apply
+		<set>
+			<if test="entity.userId != null">
+				user_id = #{entity.userId},
+			</if>
+			<if test="entity.mobile != null">
+				mobile = #{entity.mobile},
+			</if>
+			<if test="entity.userName != null">
+				user_name = #{entity.userName},
+			</if>
+			<if test="entity.idNo != null">
+				id_no = #{entity.idNo},
+			</if>
+			<if test="entity.cardNo != null">
+				card_no = #{entity.cardNo},
+			</if>
+			<if test="entity.applyTime != null">
+				apply_time = #{entity.applyTime},
+			</if>
+			<if test="entity.serviceAmt != null">
+				service_amt = #{entity.serviceAmt},
+			</if>
+			<if test="entity.payDate != null">
+				pay_date = #{entity.payDate},
+			</if>
+			<if test="entity.payTime != null">
+				pay_time = #{entity.payTime},
+			</if>
+			<if test="entity.source != null">
+				source = #{entity.source},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+			<if test="entity.allotUserId != null">
+				allot_user_id = #{entity.allotUserId},
+			</if>
+			<if test="entity.allotUserName != null">
+				allot_user_name = #{entity.allotUserName},
+			</if>
+			<if test="entity.status != null">
+				status = #{entity.status},
+			</if>
+			<if test="entity.retCode != null">
+				ret_code = #{entity.retCode},
+			</if>
+			<if test="entity.retMsg != null">
+				ret_msg = #{entity.retMsg},
+			</if>
+		</set>
+		WHERE id = #{entity.id}
+		and status = '0'
+	</update>
+	 <select id="getBorrowHelpByIdNo" resultType="HelpApply">
+	 	SELECT 
+	 	<include refid="helpApplyColumns"/>
+		FROM borrow_help_apply a
+		WHERE a.id_no = #{idNo}
+		AND a.status = '1'
+		AND a.pay_time > #{date}
+		order by a.pay_time desc
+		limit 1
+	 </select>
+</mapper>

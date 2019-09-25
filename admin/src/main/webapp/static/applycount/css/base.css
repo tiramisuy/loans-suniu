@@ -1,0 +1,54 @@
+@charset "utf-8";
+
+/*======================去浏览器常规默认样式=======================*/
+body, ul, ol, li, p, h1, h2, h3, h4, h5, h6, dl, dt, dd, form, fieldset, img, textarea, div, a, dl, dt, dd { border:0 none; margin:0; padding:0; font-family:"微软雅黑"; font-size:12px;}
+h1, h2, h3, h4, h5, h6, p, em, i{ font-size:12px; font-weight:normal; font-style:normal;}
+select { font-size:12px; font-family:simsun; }
+ul, ol, li { list-style-type:none }
+a { text-decoration:none; outline:none;/*FF标准去虚线框*/ }
+a { star:expression(this.onFocus=this.blur()); /* for Ie*去虚线框*/}
+.clear{ clear:both; height:0px; overflow:hidden; font-size: 0px; line-height: 0px; }
+.clearfix:after {visibility:hidden; display:block; font-size:0; content: " "; clear: both; height:0;}
+.l{float: left;}
+.r{float: right;}
+/*===================a标签==========================*/
+a { color:#333333; font-size:12px;}
+a:hover img{ filter:alpha(opacity=90);opacity:0.9; }
+a.ahul:hover{ text-decoration:underline;}
+/*====================自定义================================*/
+body{ font-size:12px; font-family:"微软雅黑"; color:#ffffff; margin:0px auto; overflow-x:hidden;}
+
+.border-radius3{ -moz-border-radius:3px; -webkit-border-radius:3px; -ms-border-radius:3px; border-radius:3px;}
+/*------------------------------------------------ 运营统计 star------------------------------------------------*/
+.operation-search{ padding:15px 5px 50px 25px; color:#333333; background:#fcfcfc;}
+.operation-search-time{ margin-bottom:30px;}
+.operSearch-tit{ display:inline-block; width:70px; height:24px; line-height:24px; font-size:14px;}
+.operSearch-date{ display:inline-block; height:30px;}
+.operSearch-date label{ height:30px; line-height:30px;}
+.operSearch-date label, .operSearch-date input{ display:inline-block; float:left;}
+.operDate_picker, .operDate_picker1{ padding:0 10px; width:110px; height:28px; line-height:28px; border:1px solid #d7d7d7; cursor:pointer;}
+.operSearch-time{ display:inline-block; margin-left:50px; height:30px; line-height:30px;}
+.operSearch-time a{ margin-right:16px; font-size:14px; color:#333333;}
+.operSearch-time a.operTime-cur{ color:#2fa4e7;}
+.operSearch-btn{ display:inline-block;}
+.operSearch-btn a, .daochu-btn{ display:inline-block; padding:0 15px; height:30px; line-height:30px; font-size:14px; color:#ffffff; background:#2fa4e7;}
+/*渠道*/
+.operSearch-channel{ width:90%;}
+.operSearch-channel a{ display:inline-block; margin:0 10px 10px 0; padding:0 10px; height:22px; line-height:22px; color:#333333; font-size:14px; border:1px solid #bbbbbb; -moz-border-radius:3px; -webkit-border-radius:3px; -ms-border-radius:3px; border-radius:3px;}
+.operSearch-channel a.operChannel-cur{ color:#2fa4e7; border:1px solid #2fa4e7;}
+.daochu{ padding:10px 0; height:30px; text-align:right;}
+.daochu-btn{ background:#f93500;}
+/*搜索内容*/
+.operation-con{ padding:35px 0;}
+.operation-con ul li{ display:inline-block; float:left; width:19.9%; text-align:center; border-right:1px solid #e0e0e0;}
+.operation-con ul li.operCon-li2{ padding:20px 0;}
+.operation-con ul li:last-child{ border-right:0 none;}
+.operation-con ul li p{ height:40px; line-height:40px; font-size:14px; color:#333333;}
+.operation-con ul li p i{ font-size:18px; color:#4e4e4e;}
+
+
+
+
+
+
+/*  边框/#d7d7d7(灰色), 字体/#333333(灰色/14), 字体/#2fa4e7(蓝色/14),  */

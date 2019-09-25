@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.cust.dao.MessageDAO">
+    
+    <resultMap id="BaseResultMap" type="com.rongdu.loans.cust.entity.Message">
+		<id column="ID" property="id" />
+		<result column="TITLE" property="title" />
+		<result column="CONTENT" property="content" />
+		<result column="TYPE" property="type" />
+		<result column="USER_ID" property="userId" />
+		<result column="NOTIFY_TIME" property="notifyTime" />
+		<result column="NOTIFY_TYPE" property="notifyType" />
+		<result column="VIEW_TIME" property="viewTime" />
+		<result column="VIEW_SOURCE" property="viewSource" />
+		<result column="VIEW_STATUS" property="viewStatus" />
+		<result column="IP" property="ip" />
+		<result column="STATUS" property="status" />
+		<result column="REMARK" property="remark" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="DEL" property="del" />
+	</resultMap>
+	
+	<resultMap id="simpleMap" type="com.rongdu.loans.cust.vo.MessageVO">
+		<id column="ID" property="msgId" />
+		<result column="TITLE" property="title" />
+		<result column="CONTENT" property="content" />
+		<result column="TYPE" property="type" />
+		<result column="USER_ID" property="userId" />
+		<result column="NOTIFY_TIME" property="notifyTime" />
+		<result column="NOTIFY_TYPE" property="notifyType" />
+		<result column="VIEW_TIME" property="viewTime" />
+		<result column="VIEW_STATUS" property="viewStatus" />
+		<result column="STATUS" property="status" />
+	</resultMap>
+	
+	<sql id="All_Column">
+		id, title, content, type, user_id, notify_time, notify_type, view_time, view_source, view_status, ip, status, remark, create_by, create_time, update_by, update_time, del
+	</sql>
+	
+	<sql id="where_obj">
+		<where>
+		    del = 0
+			<if test="id!=null">
+				AND id = #{id}
+			</if>
+	        <if test="title!=null">	
+			    AND title = #{title}
+			</if>
+		    <if test="content!=null">
+			    AND content = #{content}
+			</if>
+		    <if test="type!=null">
+				AND type = #{type}
+			</if>
+		    <if test="userId!=null">
+				AND user_id = #{userId}
+			</if>
+		    <if test="notifyTime!=null">
+				AND notify_time = #{notifyTime}
+			</if>
+		    <if test="notifyType!=null">
+				AND notify_type = #{notifyType}
+			</if>
+		    <if test="viewTime!=null">
+				AND view_time = #{viewTime}
+			</if>
+		    <if test="viewSource!=null">
+				AND view_source = #{viewSource}
+			</if>
+		    <if test="ip!=null">
+				AND ip = #{ip}
+			</if>
+		    <if test="status!=null">
+			   AND status = #{status}
+			</if>
+	   </where>
+	</sql>
+
+	<select id="getById" parameterType="string" resultMap="BaseResultMap">
+	  select 
+      <include refid="All_Column" /> 
+	    from cust_message 
+	   where id = #{id} 
+	     and del = 0
+	</select>
+	
+	<select id="getByUserId" resultMap="simpleMap">
+	  select 
+        id, title, content, type, user_id, date_format(notify_time, '%Y-%m-%d %H:%i') notify_time, notify_type, date_format(view_time, '%Y-%m-%d %h:%i:%s') view_time, view_status, status 
+	    from cust_message 
+	   where del = 0 
+	     and status = 1
+	     and user_id = #{userId}
+	     ORDER BY notify_time DESC
+	</select>
+	
+	<select id="countUnReadMsg" resultType="int">
+	  select COUNT(1)
+	    from cust_message 
+	   where del = 0 
+	     and view_status = 0
+	     and status = 1
+	     and user_id = #{userId}
+	</select>
+	
+	<select id="get" parameterType="map" resultMap="BaseResultMap">
+	  select 
+      <include refid="All_Column" /> 
+	  from cust_message 
+	  <include refid="where_obj" /> 
+	</select>
+	
+	<select id="findList" parameterType="map" resultMap="BaseResultMap">
+	  select 
+      <include refid="All_Column" /> 
+	  from cust_message 
+	  <include refid="where_obj" /> 
+	  LIMIT #{startIndex}, #{pageSize}
+	</select>
+	
+	<select id="countFindList" parameterType="map" resultType="int">
+	  select COUNT(1)
+	  from cust_message 
+	  <include refid="where_obj" /> 
+	</select>
+	
+	<select id="findAllList" parameterType="map" resultMap="BaseResultMap">
+	  select 
+      <include refid="All_Column" /> 
+	  from cust_message
+	  LIMIT #{startIndex}, #{pageSize}
+	</select>
+	
+	<select id="countFindAllList" resultType="int">
+	  select COUNT(1)
+	  from cust_message
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cust_message(
+			id,
+			title,
+			content,
+			type,
+			user_id,
+			notify_time,
+			notify_type,
+			view_time,
+			view_source,
+			view_status,
+			ip,
+			status,
+			remark,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			del
+		) VALUES (
+			#{id},
+			#{title},
+			#{content},
+			#{type},
+			#{userId},
+			#{notifyTime},
+			#{notifyType},
+			#{viewTime},
+			#{viewSource},
+			#{viewStatus},
+			#{ip},
+			#{status},
+			#{remark},
+			#{createBy},
+			#{createTime},
+			#{updateBy},
+			#{updateTime},
+			#{del}
+		)
+	</insert>
+
+	<insert id="insertBatch">
+		INSERT INTO
+		cust_message(
+		id,
+		title,
+		content,
+		type,
+		user_id,
+		notify_time,
+		notify_type,
+		view_time,
+		view_source,
+		view_status,
+		ip,
+		status,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+		) VALUES
+		<foreach collection="list" item="item" separator=",">
+			(
+			#{item.id},
+			#{item.title},
+			#{item.content},
+			#{item.type},
+			#{item.userId},
+			#{item.notifyTime},
+			#{item.notifyType},
+			#{item.viewTime},
+			#{item.viewSource},
+			#{item.viewStatus},
+			#{item.ip},
+			#{item.status},
+			#{item.remark},
+			#{item.createBy},
+			#{item.createTime},
+			#{item.updateBy},
+			#{item.updateTime},
+			#{item.del}
+			)
+		</foreach>
+	</insert>
+	
+	<update id="updateStatus">
+		UPDATE cust_message SET 
+		   <if test="viewTime!=null">
+			view_time = #{viewTime},
+			</if>
+		   <if test="viewSource!=null">
+			view_source = #{viewSource},
+			</if>
+			<if test="viewStatus!=null">
+			view_status = #{viewStatus},
+			</if>
+		    <if test="ip!=null">
+			ip = #{ip},
+			</if>
+			update_by = #{updateBy},
+			update_time = #{updateTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="update">
+		UPDATE cust_message SET 
+		    <if test="title!=null">	
+			title = #{title},
+			</if>
+		    <if test="content!=null">
+			content = #{content},
+			</if>
+		    <if test="type!=null">
+			type = #{type},
+			</if>
+		    <if test="userId!=null">
+			user_id = #{userId},
+			</if>
+		    <if test="notifyTime!=null">
+			notify_time = #{notifyTime},
+			</if>
+		    <if test="notifyType!=null">
+			notify_type = #{notifyType},
+			</if>
+		    <if test="viewTime!=null">
+			view_time = #{viewTime},
+			</if>
+		    <if test="viewSource!=null">
+			view_source = #{viewSource},
+			</if>
+		    <if test="ip!=null">
+			ip = #{ip},
+			</if>
+		    <if test="status!=null">
+			status = #{status},
+			</if>
+			update_by = #{updateBy},
+			update_time = #{updateTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByid">
+		UPDATE cust_message SET 	
+		   <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		   </if>
+		   <if test="updateTime!=null">
+			   update_time = #{updateTime},
+		   </if> 
+	           del = 1
+		WHERE id = #{id}
+	</update>
+	<update id="delete">
+		UPDATE cust_message SET 	
+		   <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		   </if>
+		   <if test="updateTime!=null">
+			   update_time = #{updateTime},
+		   </if> 
+	           del = 1
+		<include refid="where_obj" />
+	</update>
+	
+</mapper>

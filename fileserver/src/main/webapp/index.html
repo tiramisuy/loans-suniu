@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>index.html</title>
+
+<meta name="keywords" content="keyword1,keyword2,keyword3">
+<meta name="description" content="this is my page">
+<meta name="content-type" content="text/html; charset=UTF-8">
+
+<!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="http://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.min.js"></script>
+
+<script type="text/javascript">
+	var str = "123456";
+	var hash = md5(str);
+	var tokenId = "9b72fc158ea44a2ab0315bc288ec3771";
+	var userId = "fdf35d9bb37d4102bdcae7c09121602a";
+	var sign = "23038ACCE95DE2A176FBE7B0D859D79A";
+
+	$(function() {
+	
+		var data = {};
+	
+		$("#submit").click(function() {			
+			$.ajax({
+				type : "get",
+				url : "http://loans-api.rongdu.com/api/anon/basic/getNotifications.jsonp",
+				dataType : "jsonp",
+				data : data,
+				success : function(result) {
+					if ("SUCCESS" == result.code) {
+						alert(result.msg);
+					} else {
+						alert("错误代码：" + result.code + "，错误信息：" + result.msg);
+					}
+				}
+			});
+
+		});
+	});
+</script>
+
+</head>
+
+<body>
+	<h1>API请求示例（匿名接口）</h1>
+	<form id="form" name="form" action="#">
+		<label for="msgId">消息ID：</label><input type="text" name="msgId" id="msgId" value="5"><br> 
+		<label for="viewSource">来&nbsp;&nbsp;&nbsp;源：</label><input type="text" id="viewSource" name="viewSource" value="1">在哪个终端查看（1-ios，2-android，3-H5，4-网站）<br>
+		<button id="submit" value="提交">提交</button>
+	</form>
+</body>
+</html>

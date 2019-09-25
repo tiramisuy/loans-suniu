@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.LoanTripProductDetailDAO">
+    
+	<resultMap id="BaseResultMap" type="com.rongdu.loans.loan.entity.LoanTripProductDetail">
+		<id column="ID" property="id" />
+		<result column="product_id" property="productId" />		
+		<result column="cust_id" property="custId" />	
+		<result column="apply_id" property="applyId" />	
+		<result column="card_No" property="cardNo" />					
+		<result column="overdue_time" property="overdueTime" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="REMARK" property="remark" />
+		<result column="DEL" property="del" />
+	</resultMap>
+	
+	<sql id="All_Column">
+		id, product_id, cust_id, apply_id,card_No, overdue_time, create_by, create_time, update_by, update_time, remark, del
+	</sql>
+	
+	<sql id="Where_Obj">
+		<where>
+		    del = 0
+		    <if test="id!=null">
+				AND id = #{id}
+			</if>
+			<if test="productId!=null">
+				AND product_id = #{productId}
+			</if>
+			<if test="custId!=null">
+				AND cust_id = #{custId}
+			</if>
+			<if test="applyId!=null">
+				AND apply_id = #{applyId}
+			</if>
+			<if test="cardNo!=null">
+				AND card_No = #{cardNo}
+			</if>
+			<if test="overdueTime!=null">
+				AND overdue_time = #{overdueTime}
+			</if> 
+						
+	   </where>
+	</sql>
+    	
+	<select id="getById" parameterType="string" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM loan_trip_product_detail
+	   WHERE del = 0
+	     AND id = #{id}
+	</select>
+	
+	<select id="get" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM loan_trip_product_detail
+	     <include refid="Where_Obj"/>
+	   ORDER BY id
+	   LIMIT 1
+	</select>
+	
+	<select id="findList" resultType="list">
+		SELECT 
+		 <include refid="All_Column"/>
+		FROM loan_trip_product_detail
+	     <include refid="Where_Obj"/>
+	</select>
+	
+	<select id="findAllList" resultType="list">
+		SELECT 
+			<include refid="All_Column"/>
+		FROM loan_trip_product_detail	
+	</select>
+			
+	<insert id="insert">
+		INSERT INTO loan_trip_product_detail(
+			id,
+			product_id,
+			cust_id,
+			apply_id,
+			card_No,
+			overdue_time,			
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			remark,
+			del
+		) VALUES (
+			#{id},
+			#{productId},
+			#{custId},
+			#{applyId},
+			#{cardNo},
+			
+			#{overdueTime},			
+			#{createBy},
+			#{createTime},
+			#{updateBy},
+			#{updateTime},
+			#{remark},
+			#{del}
+		)
+	</insert>
+		
+	<update id="update">
+		UPDATE loan_trip_product_detail SET 
+		   	<if test="productId!=null">
+				product_id = #{productId},
+			</if>
+			<if test="custId!=null">
+				cust_id = #{custId},
+			</if>
+			<if test="applyId!=null">
+				apply_id = #{applyId},
+			</if>
+			
+			<if test="cardNo!=null">
+				card_No = #{cardNo},
+			</if>
+			<if test="overdueTime!=null">
+				overdue_time = #{overdueTime},
+			</if> 
+						
+			<if test="updateBy!=null">
+			    update_by = #{updateBy},
+			</if>
+			<if test="updateTime!=null">
+			    update_time = #{updateTime},
+			</if>
+			<if test="remark!=null">
+			    remark = #{remark},
+			</if>
+			update_by = #{updateBy},
+			update_time = #{updateTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteById">
+	    UPDATE loan_trip_product_detail SET
+	        <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		    </if>
+		    <if test="updateTime!=null">
+			  update_time = #{updateTime},
+		    </if> 
+	          del = 1
+		 WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+	    UPDATE loan_trip_product_detail SET
+	       <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		   </if>
+		   <if test="updateTime!=null">
+			   update_time = #{updateTime},
+		   </if> 
+	           del = 1
+		<include refid="Where_Obj"/>
+	</update>
+	
+	
+	<select id="findCustProduct" resultType="com.rongdu.loans.loan.vo.LoanTripProductDetailVO">		 
+		 select detail.product_Id productId,detail.cust_Id userId,detail.apply_Id applyId,detail.card_No cardNo,detail.overdue_Time overdueTime,pro.name name,pro.description description,pro.img_Url imgUrl,pro.remark remark 
+		 from loan_trip_product_detail detail join loan_trip_product pro on pro.id=detail.product_id
+	    WHERE detail.del = 0
+	    
+			<if test="productId!=null">
+				AND detail.product_id = #{productId}
+			</if>
+			<if test="custId!=null">
+				AND detail.cust_id = #{custId}
+			</if>
+			<if test="applyId!=null">
+				AND detail.apply_id = #{applyId}
+			</if>
+			<if test="overdueTime!=null">
+				AND detail.overdue_time = #{overdueTime}
+			</if> 
+			<!-- and (detail.overdue_Time is null or (detail.overdue_Time > CURRENT_TIMESTAMP)) -->
+			  and detail.card_no is not null
+			 
+			 order by detail.create_time desc
+			
+	</select>
+	
+	
+	<select id="getLoanTripList" resultType="com.rongdu.loans.loan.vo.LoanTripProductListVO">
+		<!-- SELECT
+		  t.apply_id AS applyId,
+		  t.create_time AS createTime,
+		  t.update_time AS updateTime,
+		  a.user_name AS userName,
+		  a.id_no AS idNo,
+		  a.mobile,
+		  a.cont_no AS contNo,
+		  a.approve_amt AS approveAmt,
+		  a.approve_time AS approveTime,
+		  a.interest,
+		  a.serv_fee AS servFee,
+		  a.overdue_fee AS overdueFee
+		FROM loan_trip_product_detail t
+		  LEFT JOIN loan_apply a
+		    ON t.apply_id = a.id
+		WHERE t.card_no IS null -->
+		
+		
+		SELECT
+		  a.id AS applyId,
+		  t.create_time AS createTime,
+		  t.update_time AS updateTime,
+		  a.user_name AS userName,
+		  a.id_no AS idNo,
+		  a.mobile,
+		  a.cont_no AS contNo,
+		  a.approve_amt AS approveAmt,
+		  a.approve_time AS approveTime,
+		  a.interest,
+		  a.serv_fee AS servFee,
+		  a.overdue_fee AS overdueFee
+		FROM loan_apply a
+		  LEFT JOIN loan_trip_product_detail t
+		    ON t.apply_id = a.id
+		WHERE
+		  <![CDATA[ a.status >= 514 ]]>
+			 AND a.product_id ='XJD'
+		 <![CDATA[ AND a.term >1 ]]>
+		  	AND t.card_no IS NULL
+		<if test="op.userName != null and op.userName != '' ">
+			AND a.user_name = #{op.userName}
+		</if>
+		<if test="op.mobile != null and op.mobile != '' ">
+			AND a.mobile = #{op.mobile}
+		</if>
+		
+			<if test="op.approveStart != null and op.approveStart != '' ">
+                <![CDATA[ AND a.approve_time >= #{op.approveStart} ]]>
+			</if>
+			<if test="op.approveEnd != null and op.approveEnd != '' ">
+                <![CDATA[ AND a.approve_time <= #{op.approveEnd} ]]>
+			</if>
+			
+			<if test="op.payStart != null and op.payStart != '' ">
+                <![CDATA[ AND t.create_time >= #{op.payStart} ]]>
+			</if>
+			<if test="op.payEnd != null and op.payEnd != '' ">
+                <![CDATA[ AND t.create_time <= #{op.payEnd} ]]>
+			</if>
+			
+			<if test="op.issueStart != null and op.issueStart != '' ">
+                <![CDATA[ AND t.update_time >= #{op.issueStart} ]]>
+			</if>
+			<if test="op.issueEnd != null and op.issueEnd != '' ">
+                <![CDATA[ AND t.update_time <= #{op.issueEnd} ]]>
+			</if>
+	
+	order by a.apply_time asc
+	</select>
+	
+	<select id="findByApplyId" parameterType="string" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM loan_trip_product_detail
+	   WHERE del = 0
+	     AND apply_id = #{applyId}
+	</select>
+	
+	
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM loan_trip_product_detail 
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	
+</mapper>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.test.dao.SysEmpDao">
+    
+	<sql id="sysEmpColumns">
+		a.id AS "id",
+		a.emp_no AS "empNo",
+		a.emp_name AS "empName",
+		a.sex AS "sex",
+		a.birthday AS "birthday",
+		a.remark AS "remark",
+		a.create_by AS "createBy.id",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy.id",
+		a.update_time AS "updateTime"
+	</sql>
+	
+	<sql id="sysEmpJoins">
+	</sql>
+    
+	<select id="get" resultType="SysEmp">
+		SELECT 
+			<include refid="sysEmpColumns"/>
+		FROM sys_emp a
+		<include refid="sysEmpJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysEmp">
+		SELECT 
+			<include refid="sysEmpColumns"/>
+		FROM sys_emp a
+		<include refid="sysEmpJoins"/>
+		<where>
+			
+			<if test="empNo != null and empNo != ''">
+				AND a.emp_no = #{empNo}
+			</if>
+			<if test="empName != null and empName != ''">
+				AND a.emp_name = #{empName}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysEmp">
+		SELECT 
+			<include refid="sysEmpColumns"/>
+		FROM sys_emp a
+		<include refid="sysEmpJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_emp(
+			id,
+			emp_no,
+			emp_name,
+			sex,
+			birthday,
+			remark,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		) VALUES (
+			#{id},
+			#{empNo},
+			#{empName},
+			#{sex},
+			#{birthday},
+			#{remark},
+			#{createBy.id},
+			#{createTime},
+			#{updateBy.id},
+			#{updateTime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_emp SET 	
+			emp_no = #{empNo},
+			emp_name = #{empName},
+			sex = #{sex},
+			birthday = #{birthday},
+			remark = #{remark},
+			create_time = #{createTime},
+			update_by = #{updateBy.id},
+			update_time = #{updateTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sys_emp
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

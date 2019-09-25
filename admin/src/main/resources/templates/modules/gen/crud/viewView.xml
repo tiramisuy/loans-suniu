@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>viewView</name>
+	<filePath>src/main/webapp/WEB-INF/views/${lastPackageName}/${moduleName}/${subModuleName}</filePath>
+	<fileName>${className}View.jsp</fileName>
+	<content><![CDATA[
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+<html>
+<head>
+	<title>${functionNameSimple}-详情</title>
+	<meta name="decorator" content="default"/>
+	<script type="text/javascript">
+	</script>
+</head>
+<body>
+	<form:form id="inputForm" method="post" class="form-horizontal">
+		<sys:message content="${r"${message}"}"/>		
+		<#list table.columnList as c>
+		<div class="control-group">
+			<label class="control-label"><#if c.isNull != "1"><span class="required">*</span></#if>${c.comments}：</label>
+			<div class="controls">
+				${"$"}{${className}.${c.javaFieldId}}
+			</div>
+		</div>
+		</#list>
+	</form:form>
+</body>
+</html>]]>
+	</content>
+</template>

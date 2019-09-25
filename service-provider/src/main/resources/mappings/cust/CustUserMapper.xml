@@ -1,0 +1,1426 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rongdu.loans.cust.dao.CustUserDAO">
+
+	<resultMap id="BaseResultMap" type="com.rongdu.loans.cust.entity.CustUser">
+		<id column="ID" property="id" />
+		<result column="NAME" property="name" />
+		<result column="REAL_NAME" property="realName" />
+		<result column="ID_TYPE" property="idType" />
+		<result column="ID_NO" property="idNo" />
+		<result column="BANK_CODE" property="bankCode" />
+		<result column="BANK_MOBILE" property="bankMobile" />
+		<result column="CARD_NO" property="cardNo" />
+		<result column="BANK_CITY_ID" property="bankCityId" />
+		<result column="MOBILE" property="mobile" />
+		<result column="EMAIL" property="email" />
+		<result column="EMAIL_BIND" property="emailBind" />
+		<result column="AVATAR" property="avatar" />
+		<result column="SEX" property="sex" />
+		<result column="BIRTHDAY" property="birthday" />
+		<result column="PASSWORD" property="password" />
+		<result column="PAYPWD" property="paypwd" />
+		<result column="QQ" property="qq" />
+		<result column="ALIPAY_ID" property="alipayId" />
+		<result column="xuexin_id" property="xuexinId" />
+		<result column="WEIXIN_OPENID" property="weixinOpenid" />
+		<result column="LOGIN_NUM" property="loginNum" />
+		<result column="REGISTER_TIME" property="registerTime" />
+		<result column="LOGIN_TIME" property="loginTime" />
+		<result column="LAST_LOGIN_TIME" property="lastLoginTime" />
+		<result column="LOGIN_IP" property="loginIp" />
+		<result column="LAST_LOGIN_IP" property="lastLoginIp" />
+		<result column="TYPE" property="type" />
+		<result column="LEVEL" property="level" />
+		<result column="POINTS" property="points" />
+		<result column="BIND_ID" property="bindId" />
+		<result column="protocol_no" property="protocolNo" />
+		<result column="ACCOUNT_ID" property="accountId" />
+		<result column="hjs_account_id" property="hjsAccountId" />
+		<result column="kd_account_id" property="kdAccountId" />
+		<result column="TERMS_AUTH_ID" property="termsAuthId" />
+		<result column="IDENTITY_STATUS" property="identityStatus" />
+		<result column="AVAILABLE_BALANCE" property="availableBalance" />
+		<result column="FROZEN_BALANCE" property="frozenBalance" />
+		<result column="CREDIT_LINE" property="creditLine" />
+		<result column="AVAIL_CREDIT_LINE" property="availCreditLine" />
+		<result column="USED_CREDIT_LINE" property="usedCreditLine" />
+		<result column="STATUS" property="status" />
+		<result column="EXPPOINTS" property="exppoints" />
+		<result column="SOURCE" property="source" />
+		<result column="CHANNEL" property="channel" />
+		<result column="INVITER_ID" property="inviterId" />
+		<result column="REMARK" property="remark" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="DEL" property="del" />
+	</resultMap>
+
+    <resultMap id="BindInfoMap" type="com.rongdu.loans.cust.vo.BindInfoVO">
+		<id column="ID" property="userId" />
+		<result column="BANK_NAME" property="bankName" />
+		<result column="BANK_CODE" property="bankCode" />
+		<result column="CARD_NO" property="cardNo" />
+		<result column="NAME" property="name" />
+		<result column="REAL_NAME" property="realName" />
+		<result column="ID_TYPE" property="idType" />
+		<result column="ID_NO" property="idNo" />
+		<result column="MOBILE" property="mobile" />
+		<result column="ACCOUNT_ID" property="accountId" />
+		<result column="BIND_ID" property="bindId" />
+		<result column="TERMS_AUTH_ID" property="termsAuthId" />
+		<result column="IDENTITY_STATUS" property="identityStatus" />
+		<result column="EMAIL" property="email" />
+		<result column="EMAIL_BIND" property="emailBind" />
+		<result column="AVATAR" property="avatar" />
+		<result column="SEX" property="sex" />
+		<result column="BIRTHDAY" property="birthday" />
+		<result column="QQ" property="qq" />
+		<result column="ALIPAY_ID" property="alipayId" />
+		<result column="WEIXIN_OPENID" property="weixinOpenid" />
+	</resultMap>
+		
+	<sql id="All_Column">
+		id, name, real_name, id_type, id_no, bank_code,bank_mobile, card_no,bank_city_id, mobile, email, email_bind, avatar, sex,
+		 birthday, password, paypwd, qq, alipay_id, xuexin_id, weixin_openid, login_num, register_time, login_time,
+		  last_login_time, login_ip, last_login_ip, type, level, points, bind_id, protocol_no, account_id, hjs_account_id, terms_auth_id, identity_status,
+		   available_balance, frozen_balance, credit_line, avail_credit_line, used_credit_line, status,
+		    exppoints, source, channel, inviter_id, remark, create_by, create_time, update_by, update_time, del
+	</sql>
+
+	<sql id="where_obj">
+		<where>
+		    del = 0
+			<if test="id!=null">
+				AND id = #{id}
+			</if>
+			<if test="name!=null">
+				AND name = #{name}
+			</if>
+			<if test="realName!=null">
+				AND real_name = #{realName}
+			</if>
+			<if test="id_no!=null and id_type!=null">
+			    AND id_type = #{idType}
+				AND id_no = #{idNo}
+			</if>
+			<if test="mobile!=null">
+			    AND mobile = #{mobile}
+			</if>
+			<if test="sex!=null">
+			    AND sex = #{sex}
+			</if>
+			<if test="type!=null">
+			    AND type = #{type}
+			</if>
+			<if test="level!=null">
+			    AND level = #{level}
+			</if>
+			<if test="identityStatus!=null">
+			    AND identity_status = #{identityStatus}
+			</if>
+	   </where>
+	</sql>
+	
+	<sql id="userColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.real_name AS "realName",
+		a.id_type AS "idType",
+		a.id_no AS "idNo",
+		a.mobile AS "mobile",
+		a.bank_mobile AS "bankMobile",
+		a.bank_code AS "bankCode",
+		a.card_no AS "cardNo",
+		a.bank_city_id AS "bankCityId",
+		a.email AS "email",
+		a.email_bind AS "emailBind",
+		a.avatar AS "avatar",
+		a.sex AS "sex",
+		a.birthday AS "birthday",
+		a.password AS "password",
+		a.paypwd AS "paypwd",
+		a.qq AS "qq",
+		a.alipay_id AS "alipayId",
+		a.xuexin_id AS "xuexinId",
+		a.weixin_openid AS "weixinOpenid",
+		a.login_num AS "loginNum",
+		a.register_time AS "registerTime",
+		a.login_time AS "loginTime",
+		a.last_login_time AS "lastLoginTime",
+		a.login_ip AS "loginIp",
+		a.last_login_ip AS "lastLoginIp",
+		a.type AS "type",
+		a.level AS "level",
+		a.points AS "points",
+		a.bind_id AS "bindId",
+		a.protocol_no AS "protocolNo",
+		a.account_id AS "accountId",
+		a.kd_account_id AS "kdAccountId",
+		a.terms_auth_id AS "termsAuthId",
+		a.identity_status AS "identityStatus",
+		a.available_balance AS "availableBalance",
+		a.frozen_balance AS "frozenBalance",
+		a.credit_line AS "creditLine",
+		a.avail_credit_line AS "availCreditLine",
+		a.used_credit_line AS "usedCreditLine",
+		a.exppoints AS "exppoints",
+		a.source AS "source",
+		a.channel AS "channel",
+		a.invite_code AS "inviteCode",
+		a.inviter_id AS "inviterId",
+		a.inviter_code AS "inviterCode",
+		a.status AS "status",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+	
+	<sql id="userJoins">
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{id},
+		#{name},
+		#{realName},
+		#{idType},
+		#{idNo},
+		#{mobile},
+		#{bankMobile},
+		#{bankCode},
+		#{cardNo},
+		#{bankCityId},
+		#{email},
+		#{emailBind},
+		#{avatar},
+		#{sex},
+		#{birthday},
+		#{password},
+		#{paypwd},
+		#{qq},
+		#{alipayId},
+		#{xuexinId},
+		#{weixinOpenid},
+		#{loginNum},
+		#{registerTime},
+		#{loginTime},
+		#{lastLoginTime},
+		#{loginIp},
+		#{lastLoginIp},
+		#{type},
+		#{level},
+		#{points},
+		#{bindId},
+		#{protocolNo},
+		#{accountId},
+		#{kdAccountId},
+		#{termsAuthId},
+		#{identityStatus},
+		#{availableBalance},
+		#{frozenBalance},
+		#{creditLine},
+		#{availCreditLine},
+		#{usedCreditLine},
+		#{exppoints},
+		#{source},
+		#{channel},
+		#{inviteCode},
+		#{inviterId},
+		#{inviterCode},
+		#{status},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.name},
+		#{entity.realName},
+		#{entity.idType},
+		#{entity.idNo},
+		#{entity.mobile},
+		#{entity.bankMobile},
+		#{entity.bankCode},
+		#{entity.cardNo},
+		#{entity.bankCityId},
+		#{entity.email},
+		#{entity.emailBind},
+		#{entity.avatar},
+		#{entity.sex},
+		#{entity.birthday},
+		#{entity.password},
+		#{entity.paypwd},
+		#{entity.qq},
+		#{entity.alipayId},
+		#{entity.xuexinId},
+		#{entity.weixinOpenid},
+		#{entity.loginNum},
+		#{entity.registerTime},
+		#{entity.loginTime},
+		#{entity.lastLoginTime},
+		#{entity.loginIp},
+		#{entity.lastLoginIp},
+		#{entity.type},
+		#{entity.level},
+		#{entity.points},
+		#{entity.bindId},
+		#{entity.protocolNo},
+		#{entity.accountId},
+		#{entity.kdAccountId},
+		#{entity.termsAuthId},
+		#{entity.identityStatus},
+		#{entity.availableBalance},
+		#{entity.frozenBalance},
+		#{entity.creditLine},
+		#{entity.availCreditLine},
+		#{entity.usedCreditLine},
+		#{entity.exppoints},
+		#{entity.source},
+		#{entity.channel},
+		#{entity.inviteCode},
+		#{entity.inviterId},
+		#{entity.inviterCode},
+		#{entity.status},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		id,
+		name,
+		real_name,
+		id_type,
+		id_no,
+		mobile,
+		bank_mobile,
+		bank_code,
+		card_no,
+		bank_city_id,
+		email,
+		email_bind,
+		avatar,
+		sex,
+		birthday,
+		password,
+		paypwd,
+		qq,
+		alipay_id,
+		xuexin_id,
+		weixin_openid,
+		login_num,
+		register_time,
+		login_time,
+		last_login_time,
+		login_ip,
+		last_login_ip,
+		type,
+		level,
+		points,
+		bind_id,
+		protocol_no,
+		account_id,
+		terms_auth_id,
+		identity_status,
+		available_balance,
+		frozen_balance,
+		credit_line,
+		avail_credit_line,
+		used_credit_line,
+		exppoints,
+		source,
+		channel,
+		invite_code,
+		inviter_id,
+		inviter_code,
+		status,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		name = #{name},
+		real_name = #{realName},
+		id_type = #{idType},
+		id_no = #{idNo},
+		mobile = #{mobile},
+		bank_mobile = #{bankMobile},
+		bank_code = #{bankCode},
+		card_no = #{cardNo},
+		bank_city_id = #{bankCityId},
+		email = #{email},
+		email_bind = #{emailBind},
+		avatar = #{avatar},
+		sex = #{sex},
+		birthday = #{birthday},
+		password = #{password},
+		paypwd = #{paypwd},
+		qq = #{qq},
+		alipay_id = #{alipayId},
+		xuexin_id = #{xuexinId},
+		weixin_openid = #{weixinOpenid},
+		login_num = #{loginNum},
+		register_time = #{registerTime},
+		login_time = #{loginTime},
+		last_login_time = #{lastLoginTime},
+		login_ip = #{loginIp},
+		last_login_ip = #{lastLoginIp},
+		type = #{type},
+		level = #{level},
+		points = #{points},
+		bind_id = #{bindId},
+		protocol_no = #{protocolNo},
+		account_id = #{accountId},
+		kd_account_id = #{kdAccountId},
+		terms_auth_id = #{termsAuthId},
+		identity_status = #{identityStatus},
+		available_balance = #{availableBalance},
+		frozen_balance = #{frozenBalance},
+		credit_line = #{creditLine},
+		avail_credit_line = #{availCreditLine},
+		used_credit_line = #{usedCreditLine},
+		exppoints = #{exppoints},
+		source = #{source},
+		channel = #{channel},
+		invite_code = #{inviteCode},
+		inviter_id = #{inviterId},
+		inviter_code = #{inviterCode},
+		status = #{status},
+		remark = #{remark},
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.name != null">
+				name = #{entity.name},
+			</if>
+			<if test="entity.realName != null">
+				real_name = #{entity.realName},
+			</if>
+			<if test="entity.idType != null">
+				id_type = #{entity.idType},
+			</if>
+			<if test="entity.idNo != null">
+				id_no = #{entity.idNo},
+			</if>
+			<if test="entity.mobile != null">
+				mobile = #{entity.mobile},
+			</if>
+			<if test="entity.bankMobile != null">
+				bank_mobile = #{entity.bankMobile},
+			</if>
+			<if test="entity.bankCode != null">
+				bank_code = #{entity.bankCode},
+			</if>
+			<if test="entity.cardNo != null">
+				card_no = #{entity.cardNo},
+			</if>
+			<if test="entity.bankCityId != null">
+				bank_city_id = #{entity.bankCityId},
+			</if>
+			<if test="entity.email != null">
+				email = #{entity.email},
+			</if>
+			<if test="entity.emailBind != null">
+				email_bind = #{entity.emailBind},
+			</if>
+			<if test="entity.avatar != null">
+				avatar = #{entity.avatar},
+			</if>
+			<if test="entity.sex != null">
+				sex = #{entity.sex},
+			</if>
+			<if test="entity.birthday != null">
+				birthday = #{entity.birthday},
+			</if>
+			<if test="entity.password != null">
+				password = #{entity.password},
+			</if>
+			<if test="entity.paypwd != null">
+				paypwd = #{entity.paypwd},
+			</if>
+			<if test="entity.qq != null">
+				qq = #{entity.qq},
+			</if>
+			<if test="entity.alipayId != null">
+				alipay_id = #{entity.alipayId},
+			</if>
+			<if test="entity.xuexinId != null">
+				xuexin_id = #{entity.xuexinId},
+			</if>
+			<if test="entity.weixinOpenid != null">
+				weixin_openid = #{entity.weixinOpenid},
+			</if>
+			<if test="entity.loginNum != null">
+				login_num = #{entity.loginNum},
+			</if>
+			<if test="entity.registerTime != null">
+				register_time = #{entity.registerTime},
+			</if>
+			<if test="entity.loginTime != null">
+				login_time = #{entity.loginTime},
+			</if>
+			<if test="entity.lastLoginTime != null">
+				last_login_time = #{entity.lastLoginTime},
+			</if>
+			<if test="entity.loginIp != null">
+				login_ip = #{entity.loginIp},
+			</if>
+			<if test="entity.lastLoginIp != null">
+				last_login_ip = #{entity.lastLoginIp},
+			</if>
+			<if test="entity.type != null">
+				type = #{entity.type},
+			</if>
+			<if test="entity.level != null">
+				level = #{entity.level},
+			</if>
+			<if test="entity.points != null">
+				points = #{entity.points},
+			</if>
+			<if test="entity.bindId != null">
+				bind_id = #{entity.bindId},
+			</if>
+			<if test="entity.protocolNo != null">
+				protocol_no = #{entity.protocolNo},
+			</if>
+			<if test="entity.accountId != null">
+				account_id = #{entity.accountId},
+			</if>
+			<if test="entity.kdAccountId != null">
+				kd_account_id = #{entity.kdAccountId},
+			</if>
+			<if test="entity.termsAuthId != null">
+				terms_auth_id = #{entity.termsAuthId},
+			</if>
+			<if test="entity.identityStatus != null">
+				identity_status = #{entity.identityStatus},
+			</if>
+			<if test="entity.availableBalance != null">
+				available_balance = #{entity.availableBalance},
+			</if>
+			<if test="entity.frozenBalance != null">
+				frozen_balance = #{entity.frozenBalance},
+			</if>
+			<if test="entity.creditLine != null">
+				credit_line = #{entity.creditLine},
+			</if>
+			<if test="entity.availCreditLine != null">
+				avail_credit_line = #{entity.availCreditLine},
+			</if>
+			<if test="entity.usedCreditLine != null">
+				used_credit_line = #{entity.usedCreditLine},
+			</if>
+			<if test="entity.exppoints != null">
+				exppoints = #{entity.exppoints},
+			</if>
+			<if test="entity.source != null">
+				source = #{entity.source},
+			</if>
+			<if test="entity.channel != null">
+				channel = #{entity.channel},
+			</if>
+			<if test="entity.inviteCode != null">
+				invite_code = #{entity.inviteCode},
+			</if>
+			<if test="entity.inviterId != null">
+				inviter_id = #{entity.inviterId},
+			</if>
+			<if test="entity.inviterCode != null">
+				inviter_code = #{entity.inviterCode},
+			</if>
+			<if test="entity.status != null">
+				status = #{entity.status},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+    <select id="getByCriteria" resultType="CustUser">
+		SELECT 
+		<include refid="userColumns"/>
+		FROM cust_user a
+		<include refid="userJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultType="CustUser">
+		SELECT 
+		<include refid="userColumns"/>
+		FROM cust_user a
+		<include refid="userJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultType="CustUser">
+		SELECT 
+		<include refid="userColumns"/>
+		FROM cust_user a
+		<include refid="userJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultType="CustUser">
+		SELECT 
+		<include refid="userColumns"/>
+		FROM cust_user a
+		<include refid="userJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="CustUser">
+		SELECT 
+		<include refid="userColumns"/>
+		FROM cust_user a
+		<include refid="userJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="CustUser">
+		SELECT 
+		<include refid="userColumns"/>
+		FROM cust_user a
+		<include refid="userJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM cust_user
+		<include refid="userJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM cust_user
+		<include refid="userJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	
+	
+	<insert id="insertBatch">
+		INSERT INTO cust_user
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE cust_user 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE cust_user 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE cust_user		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	
+	
+	<update id="deleteByCriteria">
+		UPDATE cust_user
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE cust_user 
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE cust_user
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM cust_user
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM cust_user
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM cust_user
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM cust_user
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+
+	<select id="getById" parameterType="string" resultMap="BaseResultMap">
+	  select
+      <include refid="All_Column" />
+	    from cust_user
+	   where id = #{userId}
+	     and del = 0
+	</select>
+
+	<select id="getBindInfoById" parameterType="string" resultMap="BindInfoMap">
+		SELECT 
+		      abl.bank_name, cu.bank_code, cu.card_no, cu.id, cu.name,
+		       cu.real_name, cu.id_type, cu.id_no, cu.mobile, cu.bind_id, cu.account_id, cu.terms_auth_id,
+		        cu.identity_status, cu.email, cu.email_bind, cu.avatar, cu.sex,
+		         cu.birthday, cu.qq, cu.alipay_id, cu.weixin_openid
+		 FROM cust_user cu 
+		 JOIN app_bank_limit abl 
+		   ON abl.bank_code = cu.bank_code 
+		WHERE cu.del = 0 
+		  AND abl.del = 0
+		  AND abl.is_open = 'Y'
+		  AND cu.id = #{userId}
+		   
+	</select>
+
+	<select id="getByMobile" resultMap="BaseResultMap">
+	  select
+      <include refid="All_Column" />
+	    from cust_user
+	   where mobile = #{mobile}
+	     and del = 0
+	</select>
+
+	<select id="coutByMobile" resultType="int">
+	  select COUNT(1)
+	    from cust_user 
+	   where mobile = #{mobile} 
+	     and del = 0
+	</select>
+	
+	<select id="coutByMobileMD5" resultType="int">
+	  select COUNT(1)
+	    from cust_phone_md5 
+	   where phone_md5 = #{mobile}
+	</select>
+
+	<select id="getIdentityStatus" parameterType="string" resultType="int">
+	  select identity_status
+	    from cust_user
+	   where id = #{userId} 
+	     and del = 0
+	</select>
+
+	<select id="getQq" parameterType="string" resultType="string">
+	  select qq
+	    from cust_user
+	   where id = #{userId} 
+	     and del = 0
+	</select>
+
+	<select id="get" parameterType="map" resultMap="BaseResultMap">
+	  select
+      <include refid="All_Column" />
+	  from cust_user
+	  <include refid="where_obj" />
+	</select>
+
+	<select id="findList" parameterType="map" resultMap="BaseResultMap">
+	  select
+      <include refid="All_Column" />
+	  from cust_user
+	  <include refid="where_obj" />
+	  LIMIT #{startIndex}, #{pageSize}
+	</select>
+
+	<select id="countFindList" parameterType="map" resultType="int">
+	  select COUNT(1)
+	  from cust_user
+	  <include refid="where_obj" />
+	</select>
+
+	<select id="findAllList" parameterType="map" resultMap="BaseResultMap">
+	  select
+      <include refid="All_Column" />
+	  from cust_user
+	  LIMIT #{startIndex}, #{pageSize}
+	</select>
+	<select id="countFindAllList" resultType="int">
+	  select COUNT(1)
+	  from cust_user
+	</select>
+
+	<insert id="insert">
+		INSERT INTO cust_user(
+			id,
+			name,
+			real_name,
+			id_type,
+			id_no,
+			bank_code,
+			card_no,
+			mobile,
+			email,
+			email_bind,
+			avatar,
+			sex,
+			birthday,
+			password,
+			paypwd,
+			qq,
+			alipay_id,
+			xuexin_id,
+			weixin_openid,
+			login_num,
+			register_time,
+			login_time,
+			last_login_time,
+			login_ip,
+			last_login_ip,
+			type,
+			level,
+			points,
+			bind_id,
+			protocol_no,
+			account_id,
+			kd_account_id,
+			terms_auth_id,
+			identity_status,
+			available_balance,
+			frozen_balance,
+			credit_line,
+			avail_credit_line,
+			used_credit_line,
+			status,
+			exppoints,
+			source,
+			channel,
+			inviter_id,
+			invite_code,
+			remark,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			del
+		) VALUES (
+			#{id},
+			#{name},
+			#{realName},
+			#{idType},
+			#{idNo},
+			#{bankCode},
+			#{cardNo},
+			#{mobile},
+			#{email},
+			#{emailBind},
+			#{avatar},
+			#{sex},
+			#{birthday},
+			#{password},
+			#{paypwd},
+			#{qq},
+			#{alipayId},
+			#{xuexinId},
+			#{weixinOpenid},
+			#{loginNum},
+			#{registerTime},
+			#{loginTime},
+			#{lastLoginTime},
+			#{loginIp},
+			#{lastLoginIp},
+			#{type},
+			#{level},
+			#{points},
+			#{bindId},
+			#{protocolNo},
+			#{accountId},
+			#{kdAccountId},
+			#{termsAuthId},
+			#{identityStatus},
+			#{availableBalance},
+			#{frozenBalance},
+			#{creditLine},
+			#{availCreditLine},
+			#{usedCreditLine},
+			#{status},
+			#{exppoints},
+			#{source},
+			#{channel},
+			#{inviterId},
+			#{inviteCode},
+			#{remark},
+			#{createBy},
+			#{createTime},
+			#{updateBy},
+			#{updateTime},
+			#{del}
+		)
+    </insert>
+
+    <update id="updatePwd" parameterType="com.rongdu.loans.cust.option.UpdatePwdOP">
+        UPDATE cust_user
+           SET password = #{password},
+               update_by = 'system',
+			   update_time = #{updateTime}
+         WHERE del = 0
+           AND mobile = #{account}
+         <if test="oldPwd!=null">
+           AND password = #{oldPwd}
+         </if>
+    </update>
+
+    <update id="updateloginRecord">
+        UPDATE cust_user
+           SET <if test="loginNum!=null">
+			   login_num = #{loginNum},
+			   </if>
+               login_ip = #{loginIp},
+               last_login_ip = #{lastLoginIp},
+               login_time = #{loginTime},
+               last_login_time = #{lastLoginTime},
+               update_by = #{updateBy},
+			   update_time = #{updateTime}
+         WHERE del = 0
+           AND mobile = #{mobile}
+    </update>
+
+    <update id="updateIdentityStatus">
+        UPDATE cust_user 
+           SET identity_status = #{identityStatus},
+               update_by = #{updateBy},
+			   update_time = #{updateTime}
+         WHERE id = #{id} 
+           AND del = 0 
+    </update>
+
+	<update id="update">
+		UPDATE cust_user SET
+			<if test="name!=null">
+			name = #{name},
+			</if>
+			<if test="realName!=null">
+				real_name = #{realName},
+			</if>
+			<if test="idType!=null">
+			id_type = #{idType},
+			</if>
+			<if test="idNo!=null">
+			id_no = #{idNo},
+			</if>
+			<if test="bankCode!=null">
+			bank_code = #{bankCode},
+			</if>
+			<if test="cardNo!=null">
+			card_no = #{cardNo},
+			</if>
+			<if test="mobile!=null">
+			mobile = #{mobile},
+			</if>
+			<if test="email!=null">
+			email = #{email},
+			</if>
+			<if test="emailBind!=null">
+			email_bind = #{emailBind},
+			</if>
+			<if test="avatar!=null">
+			avatar = #{avatar},
+			</if>
+			<if test="sex!=null">
+			sex = #{sex},
+			</if>
+			<if test="birthday!=null">
+			birthday = #{birthday},
+			</if>
+			<if test="password!=null">
+			password = #{password},
+			</if>
+			<if test="paypwd!=null">
+			paypwd = #{paypwd},
+			</if>
+			<if test="qq!=null">
+			qq = #{qq},
+			</if>
+			<if test="alipayId!=null">
+			alipay_id = #{alipayId},
+			</if>
+			<if test="xuexinId!=null">
+			xuexin_id = #{xuexinId},
+			</if>
+			<if test="weixinOpenid!=null">
+			weixin_openid = #{weixinOpenid},
+			</if>
+			<if test="loginNum!=null">
+			login_num = #{loginNum},
+			</if>
+			<if test="registerTime!=null">
+			register_time = #{registerTime},
+			</if>
+			<if test="loginTime!=null">
+			login_time = #{loginTime},
+			</if>
+			<if test="lastLoginTime!=null">
+			last_login_time = #{lastLoginTime},
+			</if>
+			<if test="loginIp!=null">
+			login_ip = #{loginIp},
+			</if>
+			<if test="lastLoginIp!=null">
+			last_login_ip = #{lastLoginIp},
+			</if>
+			<if test="type!=null">
+			type = #{type},
+			</if>
+			<if test="level!=null">
+			level = #{level},
+			</if>
+			<if test="points!=null">
+			points = #{points},
+			</if>
+			<if test="bindId!=null">
+			bind_id = #{bindId},
+			</if>
+			<if test="protocolNo!=null">
+			protocol_no = #{protocolNo},
+			</if>
+			<if test="accountId!=null">
+			account_id = #{accountId},
+			</if>
+			<if test="kdAccountId!=null">
+			kd_account_id = #{kdAccountId},
+			</if>
+			<if test="hjsAccountId!=null">
+			hjs_account_id = #{hjsAccountId},
+			</if>
+			<if test="availableBalance!=null">
+			available_balance = #{availableBalance},
+			</if>
+			<if test="frozenBalance!=null">
+			frozen_balance = #{frozenBalance},
+			</if>
+			<if test="creditLine!=null">
+			credit_line = #{creditLine},
+			</if>
+			<if test="availCreditLine!=null">
+			avail_credit_line = #{availCreditLine},
+			</if>
+			<if test="usedCreditLine!=null">
+			used_credit_line = #{usedCreditLine},
+			</if>
+			<if test="exppoints!=null">
+			exppoints = #{exppoints},
+			</if>
+			<if test="source!=null">
+			source = #{source},
+			</if>
+			<if test="channel!=null">
+			channel = #{channel},
+			</if>
+			<if test="inviterId!=null">
+			inviter_id = #{inviterId}
+			</if>
+			<if test="status!=null">
+			status = #{status},
+			</if>
+			<if test="remark!=null">
+			remark = #{remark},
+			</if>
+			update_by = #{updateBy},
+			update_time = #{updateTime}
+		WHERE del = 0
+		  AND id = #{id}
+	</update>
+
+	<update id="updateIdentityInfo">
+		UPDATE cust_user SET
+			<if test="name!=null">
+				name = #{name},
+			</if>
+			<if test="realName!=null">
+				real_name = #{realName},
+			</if>
+			<if test="idType!=null">
+			id_type = #{idType},
+			</if>
+			<if test="idNo!=null">
+			id_no = #{idNo},
+			</if>
+			<if test="sex!=null">
+			sex = #{sex},
+			</if>
+			<if test="bankCode!=null">
+			bank_code = #{bankCode},
+			</if>
+			<if test="bankMobile!=null">
+			bank_mobile = #{bankMobile},
+			</if>
+			<if test="cardNo!=null">
+			card_no = #{cardNo},
+			</if>
+			<if test="bankCityId!=null and bankCityId != '(null)' and bankCityId != ''">
+			bank_city_id = #{bankCityId},
+			</if>
+			<if test="email != null">
+			email = #{email},
+			</if>
+			<if test="birthday!=null">
+			birthday = #{birthday},
+			</if>
+			<if test="bindId!=null">
+			bind_id = #{bindId},
+			</if>
+			<if test="protocolNo!=null">
+			protocol_no = #{protocolNo},
+			</if>
+			<if test="accountId!=null">
+			account_id = #{accountId},
+			</if>
+			<if test="kdAccountId!=null">
+			kd_account_id = #{kdAccountId},
+			</if>
+			<if test="identityStatus!=null">
+			identity_status = #{identityStatus},
+			</if>
+			<if test="remark!=null">
+			remark = #{remark},
+			</if>
+			update_by = #{updateBy},
+			update_time = #{updateTime}
+		WHERE del = 0
+		  AND id = #{id}
+	</update>
+
+	<update id="updateBaseInfo">
+		UPDATE cust_user SET
+		<if test="qq != null">
+			qq = #{qq},
+		</if>
+		<if test="email != null">
+			email = #{email},
+		</if>
+		<if test="channel!=null">
+			channel = #{channel},
+		</if>
+		<if test="registerTime!=null">
+			register_time = #{registerTime},
+		</if>
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+		WHERE del = 0
+		AND id = #{id}
+	</update>
+
+	<update id="deleteById">
+		UPDATE cust_user SET
+		   <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		   </if>
+		   <if test="updateTime!=null">
+			   update_time = #{updateTime},
+		   </if>
+	           del = 1
+		WHERE id = #{id}
+	</update>
+	<update id="delete">
+		UPDATE cust_user SET
+			<if test="updateBy!=null">
+			   update_by = #{updateBy},
+		   </if>
+		   <if test="updateTime!=null">
+			   update_time = #{updateTime},
+		   </if>
+	           del = 1
+		<include refid="where_obj" />
+	</update>
+	
+	<update id="updateTermsAuthId">
+		UPDATE cust_user SET
+		   terms_auth_id = #{termsAuthId},
+		   update_by = #{updateBy},
+		   update_time = #{updateTime}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="custUserList" resultMap="BaseResultMap">
+		SELECT a.id,
+				a.real_name,
+				a.sex,
+				a.mobile,
+				a.id_no,
+				a.account_id,
+				a.paypwd,
+				a.bank_code,
+				a.card_no,
+				a.available_balance,
+				a.frozen_balance,
+				a.status,
+				a.create_time,
+				a.channel,
+				a.remark
+				<!-- ,
+				CASE WHEN b.user_id is not null THEN 1 ELSE 0 END  as blacklist -->
+			from cust_user a
+			<!-- LEFT JOIN credit.risk_blacklist b ON a.id = b .user_id -->
+		<where>
+			a.del = 0
+			<if test="dto.remark != null and dto.remark != ''">
+                and a.remark = #{dto.remark}
+            </if>
+			<if test="dto.channel != null and dto.channel != ''">
+				and a.channel IN (${dto.channel})
+			</if>
+			<if test="dto.realName != null and dto.realName != ''">
+				and a.real_name = #{dto.realName}
+			</if>
+			<if test="dto.idNo != null and dto.idNo != ''">
+				 and a.id_no = #{dto.idNo}
+			</if>
+			<if test="dto.mobile != null and dto.mobile != ''">
+				and a.mobile = #{dto.mobile}
+			</if>
+			<if test="dto.registerStart != null and dto.registerStart != '' ">
+                <![CDATA[ AND a.register_time >= #{dto.registerStart} ]]>
+            </if>
+            <if test="dto.registerEnd != null and dto.registerEnd != ''">
+                <![CDATA[ AND a.register_time <= #{dto.registerEnd} ]]>
+            </if>
+			<choose>
+				<when test="dto.openAccount != null and dto.openAccount == 0">
+					and a.account_id is null
+				</when>
+				<when test="dto.openAccount != null and dto.openAccount == 1">
+					and a.account_id is not null
+				</when>
+			</choose>
+		</where>
+		ORDER BY register_time desc
+	</select>
+
+	<update id="updateStatus">
+		UPDATE cust_user SET
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateBindInfo">
+		UPDATE cust_user SET
+			<if test="updateBy!=null">
+			   update_by = #{updateBy},
+		   </if>
+		   <if test="updateTime!=null">
+			   update_time = #{updateTime},
+		   </if>
+		   <if test="bindId!=null">
+			   bind_id = #{bindId},
+		   </if>
+		   <if test="protocolNo!=null">
+			   protocol_no = #{protocolNo},
+		   </if>
+		   <if test="bankCityId!=null and bankCityId != '(null)' and bankCityId != ''">
+			   bank_city_id = #{bankCityId},
+		   </if>
+			real_name = #{realName},
+		   	id_type = #{idType},
+		   	id_no = #{idNo},
+		   	card_no = #{cardNo},
+		   	bank_code = #{bankCode}
+		WHERE id = #{id}
+	</update>
+
+	<select id="findByIdList" resultType="CustUser">
+		select
+		<include refid="All_Column" />
+		from cust_user
+		where id IN
+		<foreach item="id" collection="idList" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+
+	<select id="findByNameAndIdNo" resultMap="BaseResultMap">
+		SELECT
+        <include refid="All_Column" />
+		from cust_user
+		where
+			del = 0
+			and identity_status = 1
+			and real_name = #{realName}
+			and id_no = #{idNo}
+	</select>
+
+	<select id="findByNameAndIdNoByYixin" resultMap="BaseResultMap">
+		SELECT
+		<include refid="All_Column" />
+		from cust_user
+		where
+		del = 0
+		and real_name = #{realName}
+		and id_no = #{idNo}
+	</select>
+
+	<select id="getLoanCountByMobile" parameterType="string" resultType="string">
+		select c.loan_succ_count as loanCount 
+		from loan_user_info_history c 
+		where c.mobile = #{mobile} and c.del = 0 ORDER BY c.create_time desc limit 1
+	</select>
+	
+	<select id="getByAccountId" parameterType="string" resultMap="BaseResultMap">
+	  select
+      <include refid="All_Column" />
+	   from cust_user
+	   where account_id = #{accountId} and del = 0
+	</select>
+	
+	<select id="countByIdNo" resultType="int">
+		SELECT COUNT(*)
+		FROM cust_user c
+		WHERE c.del = 0 AND c.id_no = #{idNo}
+	</select>
+
+	<select id="countByUserInfo" resultMap="BaseResultMap">
+		SELECT <include refid="All_Column" />
+		FROM cust_user c
+		<where>
+			<if test="userName != null and userName !=''">
+				and c.real_name=#{userName}
+			</if>
+			<if test="userIdCard != null and userIdCard !=''">
+				and c.id_no like #{userIdCard}
+			</if>
+			<if test="userPhone != null and userPhone !=''">
+				and c.mobile like CONCAT( #{userPhone}, '%')
+			</if>
+		</where>
+		limit 1
+	</select>
+
+	<update id="updateEmail">
+		UPDATE cust_user SET email = #{email} WHERE id = #{userId}
+	</update>
+</mapper>

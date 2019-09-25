@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.sys.dao.CustUserExportDAO">
+
+	<sql id="Loan_Apply_Columns">
+		a.id AS "id",
+		a.user_name AS "userName",
+		a.mobile AS
+		"mobile",
+		a.approve_time AS "approveTime"
+	</sql>
+
+	<sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} DESC
+			</when>
+			<otherwise>
+				ORDER BY create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+
+	<select id="findList" resultType="com.rongdu.loans.cust.vo.CustUserExportVO">
+		<choose>
+			<when test="approveResult==1">
+				SELECT real_name AS userName,mobile AS mobile
+				,register_time AS
+				approveTime FROM cust_user WHERE id NOT IN
+				(SELECT DISTINCT(user_id) FROM loan_apply )
+				<if test="checkStart != null and checkStart != '' ">
+					and register_time >= #{checkStart}
+				</if>
+				<if test="checkEnd != null and checkEnd != '' ">
+					and register_time &lt;= #{checkEnd}
+				</if>
+				<if test="userName != null and userName != '' ">
+						and real_name = #{userName}
+				</if>
+				<if test="mobile != null and mobile != '' ">
+						and mobile = #{mobile}
+				</if>
+				<if test="channelName != null and channelName != '' ">
+						and channel = #{channelName}
+				</if>
+				
+			</when>
+			<when test="approveResult==3">
+				SELECT real_name AS userName,mobile AS mobile
+				,register_time AS
+				approveTime FROM cust_user WHERE card_no is  null
+				<if test="checkStart != null and checkStart != '' ">
+					and register_time >= #{checkStart}
+				</if>
+				<if test="checkEnd != null and checkEnd != '' ">
+					and register_time &lt;= #{checkEnd}
+				</if>
+				<if test="userName != null and userName != '' ">
+						and real_name = #{userName}
+				</if>
+				<if test="mobile != null and mobile != '' ">
+						and mobile = #{mobile}
+				</if>
+				<if test="channelName != null and channelName != '' ">
+						and channel = #{channelName}
+				</if>
+				
+			</when>
+			<when test="approveResult ==4">
+                SELECT a.user_id,
+					  a.id           AS "id",
+					  a.user_name    AS "userName",
+					  a.mobile       AS "mobile",
+					  max(a.update_time) AS "approveTime"
+				  FROM loan_apply a
+				 WHERE a.`status` >=514 and a.apply_status= 1 and a.del= 0
+				AND a.user_id NOT IN(SELECT w.user_id  FROM loan_apply w WHERE w.apply_status= 0)
+				AND a.user_id NOT IN(SELECT s.user_id  FROM loan_apply s WHERE s.approve_result= 2 or s.approve_result= 4)
+				AND a.user_id NOT IN(SELECT q.user_id  FROM loan_overdue q  where q.overdue_days > 5)
+				AND a.user_id NOT IN(SELECT ifnull(user_id,'')  FROM credit.`risk_blacklist`)
+				          
+				    <if test="checkStart != null and checkStart != '' ">
+						<![CDATA[	and a.update_time >= #{checkStart}]]>
+					</if>
+					<if test="checkEnd != null and checkEnd != '' ">
+						<![CDATA[ 	and a.update_time <= #{checkEnd}]]>
+					</if>
+					<if test="userName != null and userName != '' ">
+						and a.user_name = #{userName}
+					</if>
+					<if test="mobile != null and mobile != '' ">
+						and a.mobile = #{mobile}
+					</if>
+					<if test="channelName != null and channelName != '' ">
+						and channel_id = #{channelName}
+					</if>
+				GROUP BY a.user_id
+			
+			</when>
+			<when test="approveResult==0">
+					SELECT
+				<include refid="Loan_Apply_Columns" />
+					,a.loan_succ_count as succCount
+				FROM loan_apply a 
+				<where>
+					a.del=0
+					<if test="userName != null and userName != '' ">
+						and a.user_name = #{userName}
+					</if>
+					<if test="mobile != null and mobile != '' ">
+						and a.mobile = #{mobile}
+					</if>
+					<if test="status != null">
+						and a.status=#{status}
+					</if>
+					<if test="approveResult != null and approveResult == 2">
+						and a.approve_result in (2,4)
+					</if>
+					<if test="checkStart != null and checkStart != '' ">
+						and a.approve_time >= #{checkStart}
+					</if>
+					<if test="checkEnd != null and checkEnd != '' ">
+						and a.approve_time &lt;= #{checkEnd}
+					</if>
+					<if test="channelName != null and channelName != '' ">
+						and channel_id = #{channelName}
+					</if>
+				</where>
+				ORDER BY a.create_time DESC
+			</when>
+			<otherwise>
+				SELECT
+				<include refid="Loan_Apply_Columns" />
+				FROM loan_apply a
+				<where>
+					a.del=0
+					<if test="userName != null and userName != '' ">
+						and a.user_name = #{userName}
+					</if>
+					<if test="mobile != null and mobile != '' ">
+						and a.mobile = #{mobile}
+					</if>
+					<if test="status != null">
+						and a.status=#{status}
+					</if>
+					<if test="approveResult != null and approveResult == 2">
+						and a.approve_result in (2,4)
+					</if>
+					<if test="checkStart != null and checkStart != '' ">
+						and a.approve_time >= #{checkStart}
+					</if>
+					<if test="checkEnd != null and checkEnd != '' ">
+						and a.approve_time &lt;= #{checkEnd}
+					</if>
+					<if test="channelName != null and channelName != '' ">
+						and channel_id = #{channelName}
+					</if>
+				</where>
+				<include refid="pageOrderBy"></include>
+
+			</otherwise>
+
+		</choose>
+
+	</select>
+	
+	
+	
+	
+	<select id="findMarketingUser" resultType="com.rongdu.loans.cust.vo.CustUserAllotVO">
+		<choose>
+			<when test="custOP.approveResult == 2 and custOP.approveResult != null">
+				SELECT
+				  c.id            AS id,
+				  c.real_name     AS userName,
+				  c.mobile        AS mobile,
+				  c.register_time AS approveTime,
+				  m.user_name AS allotName,
+				  m.id AS allotId,
+				  m.is_push AS isPush,
+				  m.warn_time AS warnTime ,
+				  m.allot_date as allotDate
+				FROM cust_user c  LEFT JOIN loan_market_allot m ON  c.id = m.cust_user_id
+				WHERE 
+					c.id  IN (
+						 SELECT a.user_id
+							 FROM loan_apply a
+							 WHERE a.`status` >=514 AND a.apply_status= 1 AND a.del= 0
+							AND a.user_id NOT IN(SELECT w.user_id  FROM loan_apply w WHERE w.apply_status= 0)
+					)
+				<if test="custOP.checkStart != null and custOP.checkStart != '' ">
+					and c.register_time >= #{custOP.checkStart}
+				</if>
+				<if test="custOP.checkEnd != null and custOP.checkEnd != '' ">
+					and c.register_time &lt;= #{custOP.checkEnd}
+				</if>
+				<if test="custOP.userName != null and custOP.userName != '' ">
+						and c.real_name = #{custOP.userName}
+				</if>
+				<if test="custOP.mobile != null and custOP.mobile != '' ">
+						and c.mobile = #{custOP.mobile}
+				</if>
+				<if test="custOP.channelName != null and custOP.channelName != '' ">
+						and c.channel = #{custOP.channelName}
+				</if>
+				<if test="custOP.isPush != null and custOP.isPush != '' ">
+						and m.is_push =  #{custOP.isPush}
+				</if>
+				<if test="custOP.allotUserId != null and custOP.allotUserId != '' ">
+						and m.user_id =  #{custOP.allotUserId}
+				</if>
+				
+				<if test="custOP.updateStart != null and custOP.updateStart != '' ">
+					and m.allot_date >= #{custOP.updateStart}
+				</if>
+				<if test="custOP.updateEnd != null and custOP.updateEnd != '' ">
+					and m.allot_date &lt;= #{custOP.updateEnd}
+				</if>
+				
+			</when>
+			<otherwise>
+					SELECT
+						  c.id            AS id,
+						  c.real_name     AS userName,
+						  c.mobile        AS mobile,
+						  c.register_time AS approveTime,
+						  m.user_name AS allotName,
+						  m.id AS allotId,
+						  m.is_push AS isPush,
+						  m.warn_time AS warnTime,
+						   m.allot_date as allotDate
+					FROM cust_user c  LEFT JOIN loan_market_allot m ON  c.id = m.cust_user_id
+					WHERE
+					 c.id NOT IN(SELECT DISTINCT (user_id) FROM loan_apply)
+					<if test="custOP.checkStart != null and custOP.checkStart != '' ">
+						and c.register_time >= #{custOP.checkStart}
+					</if>
+					<if test="custOP.checkEnd != null and custOP.checkEnd != '' ">
+						and c.register_time &lt;= #{custOP.checkEnd}
+					</if>
+					<if test="custOP.userName != null and custOP.userName != '' ">
+							and c.real_name = #{custOP.userName}
+					</if>
+					<if test="custOP.mobile != null and custOP.mobile != '' ">
+							and c.mobile = #{custOP.mobile}
+					</if>
+					<if test="custOP.channelName != null and custOP.channelName != '' ">
+							and c.channel = #{custOP.channelName}
+					</if>
+					<if test="custOP.isPush != null and custOP.isPush != '' ">
+						and m.is_push =  #{custOP.isPush}
+					</if>
+					<if test="custOP.allotUserId != null and custOP.allotUserId != '' ">
+							and m.user_id =  #{custOP.allotUserId}
+					</if>
+						<if test="custOP.updateStart != null and custOP.updateStart != '' ">
+						and m.allot_date >= #{custOP.updateStart}
+					</if>
+					<if test="custOP.updateEnd != null and custOP.updateEnd != '' ">
+						and m.allot_date &lt;= #{custOP.updateEnd}
+					</if>
+			</otherwise>
+		</choose>
+
+	</select>
+	
+
+</mapper>

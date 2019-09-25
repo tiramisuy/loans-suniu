@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.basic.dao.NotificationDAO">
+    
+    <resultMap id="BaseResultMap" type="com.rongdu.loans.basic.entity.Notification">
+		<id column="ID" property="id" />
+		<result column="TITLE" property="title" />
+		<result column="SUMMARY" property="summary" />
+		<result column="NOTIFY_TIME" property="notifyTime" />
+		<result column="CONTENT" property="content" />
+		<result column="TYPE" property="type" />
+		<result column="STATUS" property="status" />
+		<result column="REMARK" property="remark" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="DEL" property="del" />
+	</resultMap>
+	
+	<resultMap id="simpleMap" type="com.rongdu.loans.basic.vo.NotificationVO">
+		<id column="ID" property="id" />
+		<result column="TITLE" property="title" />
+		<result column="SUMMARY" property="summary" />
+		<result column="NOTIFY_TIME" property="notifyTime" />
+		<result column="CONTENT" property="content" />
+		<result column="TYPE" property="type" />
+		<result column="STATUS" property="status" />
+	</resultMap>
+	
+	<sql id="All_Column">
+		id, title, summary, notify_time, content, type, status, remark, create_by, create_time, update_by, update_time, del
+	</sql>
+	
+	<sql id="where_obj">
+		<where>
+		    del = 0
+			<if test="id!=null">
+				AND id = #{id}
+			</if>
+	        <if test="title!=null">	
+			    AND title = #{title}
+			</if>
+			 <if test="summary!=null">	
+			    AND summary = #{summary}
+			</if>
+		    <if test="content!=null">
+			    AND content = #{content}
+			</if>
+		    <if test="type!=null">
+				AND type = #{type}
+			</if>
+		    <if test="status!=null">
+			   AND status = #{status}
+			</if>
+	   </where>
+	</sql>
+
+	<select id="getById" parameterType="string" resultMap="BaseResultMap">
+	  select 
+      <include refid="All_Column" /> 
+	    from basic_notification 
+	   where id = #{id} 
+	     and del = 0
+	</select>
+	
+	<select id="getValidNotifications" resultMap="simpleMap">
+	  select 
+             id, title, summary, date_format(notify_time, '%Y-%m-%d %h:%i') notify_time, type, status 
+	    from basic_notification 
+	   where del = 0 
+	     and status = 1
+	     ORDER BY notify_time DESC
+	</select>
+	
+	<select id="getValidNotificationByProductId" resultMap="simpleMap">
+	  select 
+             id, title, summary, date_format(notify_time, '%Y-%m-%d %h:%i') notify_time, content, type, status 
+	    from basic_notification 
+	   where del = 0 
+	     and status = 1
+	     <if test="productId!=null and productId!=''">
+	    	and remark = #{productId}
+	    </if>
+	    ORDER BY notify_time DESC
+	</select>
+	
+	<select id="getNotificationDetail" resultMap="simpleMap">
+	  select 
+             id, title, summary, date_format(notify_time, '%Y-%m-%d %h:%i') notify_time, content, type, status 
+	    from basic_notification 
+	   where del = 0 
+	     and status = 1
+	     and id = #{id}
+	</select>
+	
+	<select id="countValidNotification" resultType="int">
+	  select COUNT(1)
+	    from basic_notification 
+	   where del = 0 
+	     and status = 1
+	    <if test="productId!=null and productId!=''">
+	    	and remark = #{productId}
+	    </if>
+	</select>
+	
+	<select id="get" parameterType="map" resultMap="BaseResultMap">
+	  select 
+      <include refid="All_Column" /> 
+	  from basic_notification 
+	  <include refid="where_obj" /> 
+	</select>
+	
+	<select id="findList" parameterType="map" resultMap="BaseResultMap">
+	  select 
+      <include refid="All_Column" /> 
+	  from basic_notification 
+	  <include refid="where_obj" /> 
+	  LIMIT #{startIndex}, #{pageSize}
+	</select>
+	
+	<select id="countFindList" parameterType="map" resultType="int">
+	  select COUNT(1)
+	  from basic_notification 
+	  <include refid="where_obj" /> 
+	</select>
+	
+	<select id="findAllList" parameterType="map" resultMap="BaseResultMap">
+	  select 
+      <include refid="All_Column" /> 
+	  from basic_notification
+	  LIMIT #{startIndex}, #{pageSize}
+	</select>
+	
+	<select id="countFindAllList" resultType="int">
+	  select COUNT(1)
+	  from basic_notification
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO basic_notification(
+			id,
+			title,
+			summary,
+			content,
+			type,
+			status,
+			remark,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			del
+		) VALUES (
+			#{id},
+			#{title},
+			#{summary},
+			#{content},
+			#{type},
+			#{status},
+			#{remark},
+			#{createBy},
+			#{createTime},
+			#{updateBy},
+			#{updateTime},
+			#{del}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE basic_notification SET 
+		    <if test="title!=null">	
+			title = #{title},
+			</if>
+			<if test="summary!=null">	
+			summary = #{summary},
+			</if>
+		    <if test="content!=null">
+			content = #{content},
+			</if>
+		    <if test="type!=null">
+			type = #{type},
+			</if>
+		    <if test="status!=null">
+			status = #{status},
+			</if>
+			update_by = #{updateBy},
+			update_time = #{updateTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByid">
+		UPDATE basic_notification SET 	
+		   <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		   </if>
+		   <if test="updateTime!=null">
+			   update_time = #{updateTime},
+		   </if> 
+	           del = 1
+		WHERE id = #{id}
+	</update>
+	<update id="delete">
+		UPDATE basic_notification SET 	
+		   <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		   </if>
+		   <if test="updateTime!=null">
+			   update_time = #{updateTime},
+		   </if> 
+	           del = 1
+		<include refid="where_obj" />
+	</update>
+	
+</mapper>

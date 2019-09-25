@@ -1,0 +1,189 @@
+#copyright {
+	position: fixed;
+	text-align: center;
+	vertical-align:bottom;
+	color: #fff;
+	width: 100%;
+	opacity: .99;
+	filter: alpha(opacity = 99);
+	line-height: 30px;
+	top:92%;
+	_width: 100%;
+	_position: absolute;
+	_top: expression(eval(document.documentElement.scrollTop +
+		document.documentElement.clientHeight-this.offsetHeight- ( parseInt(this.currentStyle.marginTop
+		, 10)||0)-(parseInt(this.currentStyle.marginBottom, 10)||0)));
+}
+
+#copyright a {
+	color: blue;
+	color: #fff;
+	font-size: 13px;
+	margin: 0px 5px;
+}
+
+* {
+	margin: 0;
+	padding: 0
+}
+
+ul, ol {
+	list-style: none
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background: url(../images/body_bg.gif) 50% top;
+	MARGIN: 0px 0px;
+}
+
+.content_ht {
+	width: 1000px;
+	margin: 0px auto;
+	height: 100%;
+}
+
+.content_right {
+	width: 500px;
+}
+
+.content_left {
+	float: left;
+	width: 500px;
+	background: url(../images/left_line.gif) no-repeat right center;
+	height: 460px;
+}
+
+.left_weizi {
+	width: 500px;
+	margin: 20% auto 0px auto;
+	height: 300px;
+	background: url(../images/login_bg1.png) no-repeat right center;
+}
+
+.LOGONEW {
+	width: 500px;
+	padding: 80px 0 0 50px;
+	height: 308px
+}
+
+.LOGONEW1 {
+	width: 260px;
+	float: left
+}
+
+.admin_bg {
+	font-weight: bold;
+	font-size: 16px;
+	padding-left: 25px;
+	/*
+	background: url(../images/admin_bg.gif) no-repeat left center;
+	height: 22px;
+	line-height: 22px;
+	margin-bottom: 10px;
+	*/
+}
+
+.bodybox ul li {
+	height: 40px;
+	line-height: 40px;
+	text-align:left;
+}
+
+.LOGONEW1 li input {
+	border: 0px solid #008000;height: 28px;
+	width:170px;
+}
+
+.input-label{
+	width:80px;
+}
+
+.bodybox {
+	margin-left: 20px;
+}
+
+.logn2 img {
+	cursor: pointer;
+	margin-bottom: -5px;
+}
+
+.lognAD4 {
+	float: left;
+	background: url(../images/login_botton.gif);
+	height: 83px;
+	width: 83px;
+	padding: 0;
+	margin-top: 60px;
+	margin-left: 30px;
+}
+
+.unpa {
+	height: 22px;
+	line-height: 22px;
+	font-size: 16px;
+	font-weight: bold;
+	font-family: Arial, Helvetica, sans-serif;
+	width: 146px;
+	border: none;
+	background: url(../images/inputbg.gif) no-repeat;
+	padding-left: 4px;
+}
+
+.code {
+	height: 22px;
+	line-height: 22px;
+	font-size: 16px;
+	font-weight: bold;
+	font-family: Arial, Helvetica, sans-serif;
+	padding-left: 4px;
+	width: 79px;
+	background: url(../images/b_inputbg.gif) no-repeat;
+	margin-right: 10px;
+}
+
+.lognAD4 a {
+	text-indent: -10000px;
+	display: block;
+	cursor: pointer;
+	width: 83px;
+	height: 83px;
+	overflow: hidden;
+}
+
+.logn3 img {
+	margin-left: 25px;
+	margin-top: 4px;
+}
+
+.footer_bg {
+	margin: 0px auto;
+	text-align: center;
+	width: 100%
+}
+
+.footer_img {
+	height: 50px;
+	font-size: 12px;
+	color: #fff;
+	padding-top: 10px;
+	background: url(../images/footer_010.gif) no-repeat bottom right;
+}
+
+* html .logn3 {
+	padding: 13px 143px 0px 300px;
+}
+
+* html .logn4 {
+	padding: 20px 460px 0 20px;
+}
+
+#errorMsg {
+    font-weight: normal;
+    color: red;
+    width: 100%;
+    display: block;
+    text-align: center;
+    margin-bottom: 15px
+}

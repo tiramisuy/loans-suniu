@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+	<description>日志管理模块配置</description>
+	 
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	
+	<!-- 
+	<bean id="logAspect" class="com.rongdu.loans.service.log.LogAspect"/>
+	 -->
+	 
+	<bean id="jdbcLogWriter" class="com.rongdu.loans.service.log.JdbcLogWriter">
+		<property name="queueName" value="operationlog" />
+		<property name="batchSize" value="20" />
+		<property name="sql">
+			<value>
+			insert into access_log (access_date, access_time, costed_time, emp_name, ip, login_log_id, method, module_name, params, request_url, status, user_agent, user_id, username) 
+    		values(:accessDate, :accessTime, :costedTime, :empName, :ip, :loginLogId, :method, :moduleName, :params, :requestUrl, :status, :userAgent, :userId, :username)
+			</value>
+		</property>
+	</bean>
+	
+</beans>

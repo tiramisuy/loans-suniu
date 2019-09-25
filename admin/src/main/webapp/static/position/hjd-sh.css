@@ -1,0 +1,20 @@
+.zj-img{
+    width: 400px;
+    height: 200px;
+    border:3px solid #f5f5f5;
+    margin:  20px;
+}
+.zj-dl{
+    width: 608px;
+    float: left;
+    margin:  20px;
+}
+.zj-dl img{
+    border:3px solid #f5f5f5;
+    width: 600px;
+    height: 300px;
+}
+.zj-dl dt{
+    line-height: 30px;
+    padding-bottom: 10px;
+}

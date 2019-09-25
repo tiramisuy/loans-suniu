@@ -1,0 +1,363 @@
+body,button,input,select,textarea{font:12px/1.414;color:#666;}
+h1,h2,h3,h4,h5,h6,dl,dt,dd,ul,ol,li,th,td,p,blockquote,pre,form,fieldset,legend,input,button,textarea,hr{margin:0; padding:0;font-weight:normal}
+table{border-collapse:collapse;border-spacing:0;}
+body{margin:auto!important;max-width:750px;background: #292967;font-family: '微软雅黑'}
+li{list-style:none;}
+fieldset,img{border:0;}
+q:before,q:after{content:'';}
+input,textarea{outline-style:none;}
+input[type="text"],input[type="password"],textarea{outline-style:none;-webkit-appearance:none;}
+textarea{resize:none}
+address,caption,cite,code,dfn,em,i,th,var{font-style:normal;font-weight:normal;}
+legend{color:#000;}
+.mui-segmented-control.mui-segmented-control-inverted~.mui-slider-progress-bar {
+    background: transparent!important;
+}
+.mui-slider .mui-segmented-control.mui-segmented-control-inverted~.mui-slider-group .mui-slider-item {
+    border:0!important;
+}
+.mui-table-view-cell:after{left:0!important}
+abbr,acronym {border:0;font-variant:normal;}
+a{text-decoration:none; color:#999;}
+a:hover{text-decoration:none!important;}
+.fl{float: left;}
+.fr{float: right;}
+.clearfix:after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+
+::-webkit-input-placeholder {
+    color:rgba(191,191,191,1);
+}
+:-moz-placeholder {/* Firefox 18- */
+    color:rgba(191,191,191,1);
+}
+::-moz-placeholder{/* Firefox 19+ */
+    color:rgba(191,191,191,1);
+}
+:-ms-input-placeholder {
+    color:rgba(191,191,191,1);
+}
+
+.container{
+	padding:0 0.4rem;
+}
+img{
+	max-width: 100%;
+}
+/* banner */
+.banner{
+    width:100%;
+    height: 10rem;
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+.banner .logo{
+    position: absolute;
+    top:-.2rem;
+    right:.6rem;
+    background: #fff2e1;
+    border-radius: 8px;
+    padding:.1rem .4rem;
+}
+.banner .logo img{
+    max-width: 3rem;
+    margin-top:.25rem;
+}
+.banner_btn{
+    position: absolute;
+    bottom:0.4rem;
+    left: .1rem;
+    width:9.8rem;
+    height: 0.8rem;
+}
+
+.content{
+    width:9rem;
+    margin:-.9rem 0.5rem 0;
+    background-color: rgba(255, 242, 225, 1);
+    overflow: hidden;
+    position: relative;
+    z-index: 9999;
+    padding-bottom:1rem;
+}
+.content_bg{
+    position: absolute;
+    bottom:-.4rem;
+    left: 0;
+}
+.content .bg{
+    background-image: url('/static/xiaoheiyu/images/shadow.png');
+    background-position: top center;
+    background-repeat: no-repeat;
+    width:100%;
+    height: 1.8rem;
+    position: relative;
+    top:-.8rem;
+}
+.content .title{
+    text-align: center;
+    margin-top:-1.5rem;
+    position: relative;
+    z-index: 999
+}
+.content .title img{
+   max-width: 6rem;
+   margin:0 0 0.1rem;
+}
+.content .title p{
+    font-size:0.32rem;
+    color:rgba(41,41,103,1);
+}
+.Myform{
+    width:8.55rem;
+    margin:.2rem auto 0;
+}
+.Myform .li2 label{
+    width:5rem;
+}
+.Myform label{
+    height:1rem;
+    background:rgba(255,255,255,1);
+    display: block;
+    margin:.2rem 0;
+    border:1px solid rgba(255, 122, 123, 1);
+    border-radius: 20px;
+}
+.Myform ul li{
+    overflow: hidden;
+}
+.Myform .li1 label span{
+    background-image: url('/static/xiaoheiyu/images/phone_icon.png') ;
+}
+.Myform .li2 label span{
+    background-image: url('/static/xiaoheiyu/images/code_icon.png');
+}
+.Myform .li3 label span{
+    background-image: url('/static/xiaoheiyu/images/password_icon.png');
+}
+.Myform label span{
+    width:1rem;
+    height: 1rem;
+    background-size: 40%;
+    float:left;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.Myform .li1 label input[type=number],.Myform .li3 label input[type=text]{
+    width:7rem;
+}
+.Myform label input[type=text],.Myform label input[type=number],.Myform label input{
+    height: 0.98rem;
+    border:0;
+    outline: 0;
+    float:left;
+    line-height: 0.98rem;
+    font-size:.4rem;
+    overflow: hidden;
+}
+.Myform .code{
+    width:3.4rem;
+    height: 1.2rem;
+    background: url('/static/xiaoheiyu/images/code_btn.png') no-repeat center;
+    float:right;
+    background-size: 90%;
+    border:0;
+    outline: 0;
+    font-size:0.43rem;
+    color:rgba(255,255,255,.8);
+    margin-top:.2rem;
+    transform: scale(0.9)
+}
+.Myform .li2 label{
+    float:left;
+}
+.Myform .check{
+    width:8.55rem;
+    height:1.2rem;
+    background:rgba(240,61,67,1);
+    border-radius: 15px;
+    border:0;
+    outline: 0;
+    font-size:0.43rem;
+    color:rgba(255,255,255,1);
+}
+.Myform .li4{
+    margin-top: .2rem;
+}
+.Myform .li5 p{
+    font-size:0.35rem;
+    color:rgba(51,51,51,1);
+}
+.Myform .li5 p a{
+    color:rgba(245, 187, 64, 1);
+    display: inline-block;
+    text-decoration: underline;
+}
+.Myform .li5 span{
+    font-size:0.35rem;
+    color:rgba(51,51,51,1);
+    text-decoration: underline;
+}
+.Myform .li5{
+    margin-top: .3rem;
+}
+.Myform input[type=checkbox]{
+    vertical-align: middle;
+}
+.Tips{
+    color:red;
+    text-indent: .2rem;
+    display: block;
+}
+
+
+.li5 span {position: relative;}
+.input_check {position: absolute;visibility: hidden;}
+.input_check+label {display: inline-block;width: 14px;height: 14px;border: 1px solid #ccad74;border-radius: 0;margin:0;vertical-align: middle;} 
+.input_check:checked+label:after {content: "";position: absolute;left: 2px;bottom: .2rem;width: 9px;height: 4px; border: 2px solid rgba(41, 41, 103, 1);border-top-color: transparent;border-right-color: transparent; -ms-transform: rotate(-60deg); -moz-transform: rotate(-60deg); -webkit-transform: rotate(-60deg); transform: rotate(-45deg);}
+
+/*注册结果弹框*/
+.reg-resultbg{
+	position: fixed;
+	left: 0;
+	top: 0;
+	background: rgba(0,0,0,0.6);
+	width: 100%;
+    height: 100%;
+    z-index: 9999;
+}
+.reg-result{
+    position: fixed;
+    z-index: 999999;
+    top:50%;
+    left:50%;
+    margin-top:-3.25rem;
+    margin-left: -3.25rem;
+    width: 6.5rem;
+    height: 6.5rem;
+    text-align: center;
+    background: url(/static/xiaoheiyu/images/reg-result.png) no-repeat;
+    background-size: 100% 100%;
+}
+.reg-resultText{
+	font-size: 0.3rem;
+	color: #361726;
+	margin-top: 0.66rem;	
+}
+.reg-resultBtn{
+	display:block;
+	width:3.5rem;
+	height:1rem;
+	background:url(/static/xiaoheiyu/images/reg-resultBtn.png) no-repeat;
+	background-size:100% 100%;
+    margin: 0.8rem auto 0;
+}
+.reg-resultBtn:focus,.reg-resultBtn:active{
+    outline: none;
+    border:0;
+}
+.reg-close{
+	width: 16.82%;
+	position: absolute;
+	left: 50%;
+	bottom:10%;
+	z-index: 9;
+	margin-left: -8.41%;
+	font-size: 0.5rem;
+}
+.reg-close img{
+	display:block;
+	max-width:100%;
+}
+
+/*--------------------下载  star--------------------*/
+.download{
+	position: fixed;
+	width: 100%; 
+	height: 100%;
+	background: url(/static/xiaoheiyu/images/download-bg.png) no-repeat;
+	background-size: cover;
+	overflow: hidden;
+}
+.download-btn{
+	display: block;
+	margin: 9.8rem auto 0;
+}
+
+.reg_submit{
+	width: 6.4rem;
+	height: 0.9rem;
+	line-height: 0.9rem;
+	text-align:center;
+	font-size:0.3rem;
+	color: #ffffff;
+	letter-spacing:0.03rem;
+	font-weight:bold;
+	background: url(/static/xiaoheiyu/images/login_btn.png) no-repeat;
+	background-size: 100% 100%;
+}
+.download-app{
+	display:block;
+	width: 100%;
+	height: 2rem;
+	margin-top: 0.73rem;
+}
+
+/* 申请 */
+.Myform .tlt{
+    color:#eb6100;
+    font-size: .4rem;
+    text-align: center;
+    margin:.5rem 0 .4rem;
+}
+.Myform .apply_btn{
+    width:7rem;
+    height: 1.5rem;
+    background:url('/static/xiaoheiyu/images/apply_button.png') no-repeat center;
+    border:0;
+    background-size: 100%;
+    color:#fff;
+    font-size: .43rem;
+    margin:auto;
+    display: block;
+}
+.Myform .reset{
+    color:#666666;
+    font-size: .4rem;
+    text-align: center;
+    margin:.4rem 0 .2rem;
+}
+.Myform .mobile{
+    margin-left: .5rem;
+    text-align: center;
+    color:#666666;
+    font-size: .5rem!important;
+}
+.Myform .mobile::-webkit-input-placeholder {
+    color:#666666;
+}
+.Myform .mobile:-moz-placeholder {/* Firefox 18- */
+    color:#666666;
+}
+.Myform .mobile::-moz-placeholder{/* Firefox 19+ */
+    color:#666666;
+}
+.Myform .mobile:-ms-input-placeholder {
+    color:#666666;
+}
+
+/*针对的是Chrome*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button{
+  -webkit-appearance: none !important;
+  margin: 0;
+}
+/*针对的是Firefox*/
+input[type="number"]{-moz-appearance:textfield;}

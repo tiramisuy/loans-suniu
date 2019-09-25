@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.UserInfoHistoryDAO">
+    
+	<resultMap id="BaseResultMap" type="com.rongdu.loans.loan.entity.UserInfoHistory">
+		<id column="ID" property="id" />
+		<result column="APPLY_ID" property="applyId" />
+		<result column="APPLY_COUNT" property="applyCount" />
+		<result column="LOAN_SUCC_COUNT" property="loanSuccCount" />
+		<result column="user_id" property="userId" />
+		<result column="USER_NAME" property="userName" />
+		<result column="ID_TYPE" property="idType" />
+		<result column="ID_NO" property="idNo" />
+		<result column="MOBILE" property="mobile" />
+		<result column="SEX" property="sex" />
+		<result column="MARITAL" property="marital" />
+		<result column="DEGREE" property="degree" />
+		<result column="NATION" property="nation" />
+		<result column="RESIDE_TYPE" property="resideType" />
+		<result column="RESIDE_ADDR" property="resideAddr" />
+		<result column="RESIDE_YEAR" property="resideYear" />
+		<result column="RESIDE_PROVINCE" property="resideProvince" />
+		<result column="RESIDE_CITY" property="resideCity" />
+		<result column="RESIDE_DISTRICT" property="resideDistrict" />
+		<result column="REG_ADDR" property="regAddr" />
+		<result column="REG_PROVINCE" property="regProvince" />
+		<result column="REG_CITY" property="regCity" />
+		<result column="REG_DISTRICT" property="regDistrict" />
+		<result column="INDIV_MONTH_INCOME" property="indivMonthIncome" />
+		<result column="FAMILY_MONTH_INCOME" property="familyMonthIncome" />
+		<result column="PAF_NO" property="pafNo" />
+		<result column="SS_NO" property="ssNo" />
+		<result column="INDUSTRY" property="industry" />
+		<result column="COM_NAME" property="comName" />
+		<result column="WORK_ADDR" property="workAddr" />
+		<result column="WORK_PROVINCE" property="workProvince" />
+		<result column="WORK_CITY" property="workCity" />
+		<result column="WORK_DISTRICT" property="workDistrict" />
+		<result column="WORK_POSITION" property="workPosition" />
+		<result column="WORK_YEAR" property="workYear" />
+		<result column="PARENT_PROVINCE" property="parentProvince" />
+		<result column="PARENT_CITY" property="parentCity" />
+		<result column="PARENT_DISTRICT" property="parentDistrict" />
+		<result column="PARENT_ADDRESS" property="parentAddress" />
+		<result column="COM_TEL_ZONE" property="comTelZone" />
+		<result column="COM_TEL_NO" property="comTelNo" />
+		<result column="COM_TEL_EXT" property="comTelExt" />
+		<result column="STATUS" property="status" />
+		<result column="REMARK" property="remark" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="DEL" property="del" />
+	</resultMap>
+	
+	<sql id="All_Column">
+		id,user_id,apply_id,apply_count,loan_succ_count,user_name, id_type, id_no, mobile, sex, marital, degree, nation,
+		 reside_type, reside_addr, reside_year, reside_province, reside_city,
+		  reside_district, reg_addr, reg_province, reg_city, reg_district, 
+		  indiv_month_income, family_month_income, paf_no, ss_no, industry,
+		   com_name, work_addr, work_province, work_city, work_district,
+		    work_position, work_year,parent_province,parent_city,parent_district,parent_address,
+		     com_tel_zone, com_tel_no,
+		     com_tel_ext, status, remark, create_by, create_time, update_by, update_time, del
+	</sql>
+	<select id="getByApplyId" parameterType="string" resultMap="BaseResultMap">
+		SELECT
+		<include refid="All_Column"/>
+		FROM loan_user_info_history
+		WHERE del = 0
+		AND apply_id = #{applyId}
+	</select>
+
+	<select id="countByApplyId" parameterType="string" resultType="int">
+		SELECT COUNT(1)
+		  FROM loan_user_info_history
+		 WHERE del = 0
+		   AND apply_id = #{applyId}
+	</select>
+	
+	<!-- 从 cust_user_info表获取数据 -->
+	<select id="getCurUserInfo" parameterType="string" resultMap="BaseResultMap">
+	  SELECT 
+			 id user_id, user_name, id_type, id_no, mobile, sex, marital, degree, nation,
+			 reside_type, reside_addr, reside_year, reside_province, reside_city,
+			  reside_district, reg_addr, reg_province, reg_city, reg_district, 
+			  indiv_month_income, family_month_income, paf_no, ss_no, industry,
+			   com_name, work_addr, work_province, work_city, work_district,
+			    work_position, work_year, parent_province,parent_city,parent_district,
+			    parent_address,com_tel_zone, com_tel_no,
+			     com_tel_ext, status,remark
+		FROM cust_user_info
+	   WHERE del = 0
+	     AND id = #{userId}
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO loan_user_info_history(
+			id,
+			apply_id,
+			apply_count,
+			loan_succ_count,
+			user_id,
+			user_name,
+			id_type,
+			id_no,
+			mobile,
+			sex,
+			marital,
+			degree,
+			nation,
+			reside_type,
+			reside_addr,
+			reside_year,
+			reside_province,
+			reside_city,
+			reside_district,
+			reg_addr,
+			reg_province,
+			reg_city,
+			reg_district,
+			indiv_month_income,
+			family_month_income,
+			paf_no,
+			ss_no,
+			industry,
+			com_name,
+			work_addr,
+			work_province,
+			work_city,
+			work_district,
+			work_position,
+			work_year,
+			parent_province,
+			parent_city,
+			parent_district,
+			parent_address,
+			com_tel_zone,
+			com_tel_no,
+			com_tel_ext,
+			status,
+			remark,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			del
+		) VALUES (
+			#{id},
+			#{applyId},
+			#{applyCount},
+			#{loanSuccCount},
+			#{userId},
+			#{userName},
+			#{idType},
+			#{idNo},
+			#{mobile},
+			#{sex},
+			#{marital},
+			#{degree},
+			#{nation},
+			#{resideType},
+			#{resideAddr},
+			#{resideYear},
+			#{resideProvince},
+			#{resideCity},
+			#{resideDistrict},
+			#{regAddr},
+			#{regProvince},
+			#{regCity},
+			#{regDistrict},
+			#{indivMonthIncome},
+			#{familyMonthIncome},
+			#{pafNo},
+			#{ssNo},
+			#{industry},
+			#{comName},
+			#{workAddr},
+			#{workProvince},
+			#{workCity},
+			#{workDistrict},
+			#{workPosition},
+			#{workYear},
+			#{parentProvince},
+			#{parentCity},
+			#{parentDistrict},
+			#{parentAddress},
+			#{comTelZone},
+			#{comTelNo},
+			#{comTelExt},
+			#{status},
+			#{remark},
+			#{createBy},
+			#{createTime},
+			#{updateBy},
+			#{updateTime},
+			#{del}
+		)
+	</insert>
+
+	<update id="deleteById">
+	    UPDATE cust_user_info SET
+	        <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		    </if>
+		    <if test="updateTime!=null">
+			  update_time = #{updateTime},
+		    </if> 
+	          del = 1
+		 WHERE id = #{id}
+	</update>
+</mapper>

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.app.dao.AppBannerDAO">
+    
+	<resultMap id="BaseResultMap" type="com.rongdu.loans.app.entity.AppBanner">
+		<id column="ID" property="id" />
+		<result column="CATEGORY_ID" property="categoryId" />
+		<result column="TITLE" property="title" />
+		<result column="IMAGE_ID" property="imageId" />
+		<result column="IMAGE_URL" property="imageUrl" />
+		<result column="IMAGE_ORDER" property="imageOrder" />
+		<result column="HREF" property="href" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="REMARK" property="remark" />
+		<result column="DEL" property="del" />
+	</resultMap>
+	
+	<sql id="All_Column">
+		id, category_id, title, image_id, image_url, href, image_order, create_by, create_time, update_by, update_time, remark, del
+	</sql>
+	
+	<sql id="Where_Obj">
+		<where>
+		    del = 0
+		    <if test="id!=null">
+				AND id = #{id}
+			</if>
+			<if test="categoryId!=null">
+				AND category_id = #{categoryId}
+			</if>
+			<if test="title!=null">
+				AND title = #{title}
+			</if>
+			<if test="imageId!=null">
+				AND image_id = #{imageId}
+			</if> 
+			<if test="imageUrl!=null">
+			    AND image_url = #{imageUrl}
+			</if>
+			<if test="href!=null">
+			    AND href = #{href}
+			</if>
+	   </where>
+	</sql>
+    	
+	<select id="getById" parameterType="string" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM app_banner
+	   WHERE del = 0
+	     AND id = #{id}
+	</select>
+	
+	<select id="getAppBannerByType" parameterType="string" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM app_banner
+	   WHERE del = 0
+	     AND category_id = #{categoryId} 
+	     ORDER BY image_id
+	</select>
+	
+	<select id="get" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM app_banner
+	     <include refid="Where_Obj"/>
+	   ORDER BY id
+	   LIMIT 1
+	</select>
+	
+	<select id="findList" resultType="list">
+		SELECT 
+		 <include refid="All_Column"/>
+		FROM app_banner
+	     <include refid="Where_Obj"/>
+	</select>
+	
+	<select id="findAllList" resultType="list">
+		SELECT 
+			<include refid="All_Column"/>
+		FROM app_banner
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO app_banner(
+			id,
+			category_id,
+			title,
+			image_id,
+			image_url,
+			image_order,
+			href,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			remark,
+			del
+		) VALUES (
+			#{id},
+			#{categoryId},
+			#{title},
+			#{imageId},
+			#{imageUrl},
+			#{imageOrder},
+			#{href},
+			#{createBy},
+			#{createTime},
+			#{updateBy},
+			#{updateTime},
+			#{remark},
+			#{del}
+		)
+	</insert>
+	
+	<insert id="batchSaveOrUpdate" parameterType="java.util.List">
+		INSERT INTO app_banner(
+			id,
+			category_id,
+			title,
+			image_id,
+			image_url,
+			image_order,
+			href,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			remark,
+			del
+		) 
+	   <foreach collection="list" item="item" index="index" separator=",">
+	       VALUES (
+			#{item.id},
+			#{item.categoryId},
+			#{item.title},
+			#{item.imageId},
+			#{item.imageUrl},
+			#{item.imageOrder},
+			#{item.href},
+			#{item.createBy},
+			#{item.createTime},
+			#{item.updateBy},
+			#{item.updateTime},
+			#{item.remark},
+			#{item.del}
+			)
+       </foreach>
+		on duplicate key update
+		    id = VALUES (id),
+			category_id = VALUES (category_id),
+			title = VALUES (title),
+			image_id = VALUES (image_id),
+			image_url = VALUES (image_url),
+			image_order = VALUES (image_order),
+			href = VALUES (href),
+			update_by = VALUES (update_by),
+			update_time = VALUES (update_time),
+			remark = VALUES (remark),
+			del = VALUES (del)
+	</insert>
+	
+	<update id="update">
+		UPDATE app_banner SET 
+		    <if test="categoryId!=null">	
+			   category_id = #{categoryId},
+			</if>
+			<if test="title!=null">
+			   title = #{title},
+			</if>
+			<if test="imageId!=null">
+			   image_id = #{imageId},
+			</if>
+			<if test="imageUrl!=null">
+			   image_url = #{imageUrl},
+			</if>
+			<if test="href!=null">
+			   href = #{href},
+			</if>
+			<if test="imageOrder!=null">
+			   image_order = #{imageOrder},
+			</if>
+			<if test="updateBy!=null">
+			   update_by = #{updateBy},
+			</if>
+			<if test="updateTime!=null">
+			   update_time = #{updateTime},
+			</if>
+			<if test="remark!=null">
+			   remark = #{remark},
+			</if>
+			update_by = #{updateBy},
+			update_time = #{updateTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteById">
+	    UPDATE app_banner SET
+	        <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		    </if>
+		    <if test="updateTime!=null">
+			  update_time = #{updateTime},
+		    </if> 
+	          del = 1
+		 WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+	    UPDATE app_banner SET
+	       <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		   </if>
+		   <if test="updateTime!=null">
+			   update_time = #{updateTime},
+		   </if> 
+	           del = 1
+		<include refid="Where_Obj"/>
+	</update>
+</mapper>

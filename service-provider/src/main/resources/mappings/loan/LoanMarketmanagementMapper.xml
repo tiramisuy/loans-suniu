@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.LoanMarketManagementDao">
+	
+	<sql id="insertColumns">
+		(
+			id,
+			apply_id,
+			user_id,
+			user_name,
+			allot_date,
+			remark,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			del
+		)
+	</sql>
+	
+	<sql id="insertValues">
+		(
+			#{entity.id},
+			#{entity.applyId},
+			#{entity.userId},
+			#{entity.userName},
+			#{entity.allotDate},
+			#{entity.remark},
+			#{entity.createBy},
+			#{entity.createTime},
+			#{entity.updateBy},
+			#{entity.updateTime},
+			#{entity.del}
+		)
+	</sql>
+	
+	
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="op.userId != null and op.userId != ''">
+				user_id = #{op.userId},
+			</if>
+			<if test="op.userName != null and op.userName != ''">
+				user_name = #{op.userName},
+			</if>
+			<if test="op.warnTime != null and op.warnTime != ''">
+				warn_time = #{op.warnTime},
+			</if>
+			<if test="op.content != null and op.content != ''">
+				content = #{op.content},
+			</if>
+			<if test="op.isWarn != null">
+				is_warn = #{op.isWarn},
+			</if>
+			<if test="op.remark != null and op.remark != ''">
+				remark = #{op.remark},
+			</if>
+			<if test="op.updateBy != null">
+				update_by = #{op.updateBy},
+			</if>
+			<if test="op.updateTime != null">
+				update_time = #{op.updateTime},
+			</if>
+			<if test="op.isPush != null">
+				is_push = #{op.isPush},
+			</if>
+			<if test="op.allotDate != null">
+				allot_date = #{op.allotDate},
+			</if>
+		</set>
+	</sql>
+	
+	<insert id="insertMarket">
+		INSERT INTO loan_market_management
+		<include refid="insertColumns" />
+		VALUES
+		<include refid="insertValues" />
+	</insert>
+	
+	
+	<insert id="insertBatch">
+		INSERT INTO loan_market_management
+		<include refid="insertColumns" />
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertValues"/>
+        </foreach>	
+	</insert>
+	
+	
+	<select id="getMarketList" resultType="com.rongdu.loans.loan.vo.LoanMarketManagementVO">
+       SELECT
+		  a.id,
+		  a.cont_no,
+		  a.apply_date,
+		  a.apply_time,
+		  a.user_id,
+		  a.user_name,
+		  a.id_no,
+		  a.mobile,
+		  a.product_id,
+		  a.product_name,
+		  a.company_id,
+		  a.apply_amt,
+		  a.approve_amt,
+		  a.apply_term,
+		  a.approve_term,
+		  a.basic_rate,
+		  a.actual_rate,
+		  a.interest,
+		  a.serv_fee,
+		  a.serv_fee_rate,
+		  a.overdue_rate,
+		  a.overdue_fee,
+		  a.repay_freq,
+		  a.repay_unit,
+		  a.term,
+		  a.apply_status,
+		  a.status,
+		  a.approve_time,
+		  m.id as marketId,
+		  m.user_name as opeatorName,
+		  m.is_warn,
+		  m.is_push,
+		  m.warn_time,
+		  m.allot_date
+		FROM loan_market_management m
+		  LEFT JOIN loan_apply a
+		    ON m.apply_id = a.id
+        <where>
+            a.del = 0
+            <if test="op.productId != null and op.productId != ''">
+                and a.product_id = #{op.productId}
+            </if>
+            <if test="op.channel != null and op.channel != ''">
+                and a.channel_id = #{op.channel}
+            </if>
+            <if test="op.mobile != null and op.mobile != ''">
+                and a.mobile = #{op.mobile}
+            </if>
+            <if test="op.idNo != null and op.idNo != ''">
+                and a.id_no = #{op.idNo}
+            </if>
+            <if test="op.userName != null and op.userName != ''">
+                and a.user_name = #{op.userName}
+            </if>
+            <if test="op.userId != null and op.userId != ''">
+                and m.user_id = #{op.userId}
+            </if>
+            <if test="op.status != null and op.status != ''">
+            	 <if test="op.status != 514 ">
+                	  and a.status = #{op.status}
+                </if>
+                <if test="op.status == 514 ">
+                	<![CDATA[ and a.status >=514 ]]>
+                </if>
+            </if>
+            <if test="op.applyTimeStart != null and op.applyTimeStart != '' ">
+                <![CDATA[ AND a.approve_time >= #{op.applyTimeStart} ]]>
+            </if>
+            <if test="op.applyTimeEnd != null and op.applyTimeEnd != '' ">
+                <![CDATA[ AND a.approve_time <= #{op.applyTimeEnd} ]]>
+            </if>
+            <if test="op.isPush != null">
+				AND m.is_push = #{op.isPush}
+			</if>
+            
+              <if test="op.updateStart != null and op.updateStart != '' ">
+                <![CDATA[ AND m.allot_date >= #{op.updateStart} ]]>
+            </if>
+            <if test="op.updateEnd != null and op.updateEnd != '' ">
+                <![CDATA[ AND m.allot_date <= #{op.updateEnd} ]]>
+            </if>
+        </where>
+        ORDER BY a.apply_time  desc
+    </select>
+    
+	
+	
+	
+    <select id="getMarketById" resultType="com.rongdu.loans.loan.vo.MarketManagementVO">
+        SELECT
+        	id,
+			apply_id,
+			user_id,
+			user_name,
+			warn_time,
+			content,
+			is_warn,
+			is_push,
+			remark,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			del
+        FROM loan_market_management
+        WHERE del = 0
+        AND id = #{id}
+    </select>
+    
+    
+    
+      <select id="getMarketByApplyId" resultType="com.rongdu.loans.loan.vo.MarketManagementVO">
+        SELECT
+        	id,
+			apply_id,
+			user_id,
+			user_name,
+			warn_time,
+			content,
+			is_warn,
+			is_push,
+			allot_date,
+			remark,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			del
+        FROM loan_market_management
+        WHERE del = 0
+        AND apply_id = #{applyId}
+    </select>
+	
+	
+	<update id="updateMarket">
+			UPDATE loan_market_management  
+				<include refid="updateSelectiveColumns"/>
+			WHERE id = #{op.id}
+	</update>
+
+
+	<select id="getMarketCountList" resultType="com.rongdu.loans.loan.vo.LoanMarketCountVO">
+		SELECT 
+			m.user_name AS userName ,
+			COUNT(*) AS allNum ,
+			SUM(CASE WHEN a.status >=511 THEN 1 ELSE 0 END) AS outNum
+		FROM loan_market_management m 
+			LEFT JOIN  loan_apply a ON m.apply_id = a.id   
+		  <where>
+            <if test="op.userId != null and op.userId != ''">
+                and  m.user_id = #{op.userId}
+            </if>
+          	<if test="op.searchStrat != null and op.searchStrat != '' ">
+                <![CDATA[ AND m.allot_date >= #{op.searchStrat} ]]>
+            </if>
+            <if test="op.searchEnd != null and op.searchEnd  != '' ">
+                <![CDATA[ AND m.allot_date <= #{op.searchEnd } ]]>
+            </if>
+          </where>
+          GROUP BY m.user_id
+	</select>
+
+
+</mapper>

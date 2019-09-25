@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-4.0.xsd   http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit.xsd">
+	
+	<!-- 配置线程池 -->  
+    <!--<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">-->
+        <!--&lt;!&ndash; 核心线程数，默认为1 &ndash;&gt;-->
+        <!--<property name="corePoolSize" value="10" />-->
+        <!--&lt;!&ndash; 最大线程数，默认为Integer.MAX_VALUE &ndash;&gt;-->
+        <!--<property name="maxPoolSize" value="50" />-->
+        <!--&lt;!&ndash; 队列最大长度，一般需要设置值>=notifyScheduledMainExecutor.maxNum；默认为Integer.MAX_VALUE &ndash;&gt;-->
+        <!--<property name="queueCapacity" value="1000" />-->
+        <!--&lt;!&ndash; 线程池维护线程所允许的空闲时间，默认为60s &ndash;&gt;-->
+        <!--<property name="keepAliveSeconds" value="300" />-->
+        <!--&lt;!&ndash; 线程池对拒绝任务（无线程可用）的处理策略，目前只支持AbortPolicy、CallerRunsPolicy；默认为后者 &ndash;&gt;-->
+        <!--<property name="rejectedExecutionHandler">-->
+            <!--&lt;!&ndash; AbortPolicy:直接抛出java.util.concurrent.RejectedExecutionException异常 &ndash;&gt;-->
+            <!--&lt;!&ndash; CallerRunsPolicy:主线程直接执行该任务，执行完之后尝试添加下一个任务到线程池中，可以有效降低向线程池内添加任务的速度 &ndash;&gt;-->
+            <!--&lt;!&ndash; DiscardOldestPolicy:抛弃旧的任务、暂不支持；会导致被丢弃的任务无法再次被执行 &ndash;&gt;-->
+            <!--&lt;!&ndash; DiscardPolicy:抛弃当前任务、暂不支持；会导致被丢弃的任务无法再次被执行 &ndash;&gt;-->
+            <!--<bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy" />-->
+        <!--</property>-->
+    <!--</bean>-->
+	
+	<!-- 连接服务配置  -->
+    <!--<rabbit:connection-factory id="connectionFactory"-->
+               <!--host="${rabbit.host}" port="${rabbit.port}" username="${rabbit.username}" password="${rabbit.password}" publisher-confirms="true"  />-->
+
+    <!--<rabbit:admin connection-factory="connectionFactory" id="amqpAdmin" />-->
+
+    <!-- queue 队列声明-->
+    <!--<rabbit:queue id="lendPayNotifyQuene1" durable="true"  auto-delete="false" exclusive="false" name="lendPayNotifyQuene1" />-->
+    <!--<rabbit:queue id="accessLogQuene" durable="true"  auto-delete="false" exclusive="false" name="accessLogQuene" />-->
+    <!--<rabbit:queue id="repayIngQueue" durable="true"  auto-delete="false" exclusive="false" name="repayIngQueue" />-->
+    <!--<rabbit:queue id="pushJDQQuene" durable="true"  auto-delete="false" exclusive="false" name="pushJDQQuene" />-->
+    <!--<rabbit:queue id="pushDWDBaseInfoQuene" durable="true"  auto-delete="false" exclusive="false" name="pushDWDBaseInfoQuene" />-->
+    <!--<rabbit:queue id="pushDWDAdditionalInfoQuene" durable="true"  auto-delete="false" exclusive="false" name="pushDWDAdditionalInfoQuene" />-->
+
+    <!-- exchange queue binging key 绑定 -->
+    <!--<rabbit:direct-exchange name="mq-exchange" durable="true" auto-delete="false" id="mq-exchange">-->
+        <!--<rabbit:bindings>-->
+            <!--&lt;!&ndash;<rabbit:binding queue="lendPayNotifyQuene1" key="lendPayNotifyQuene1" />&ndash;&gt;-->
+            <!--<rabbit:binding queue="accessLogQuene" key="accessLogQuene" />-->
+            <!--<rabbit:binding queue="repayIngQueue" key="repayIngQueue" />-->
+            <!--<rabbit:binding queue="pushJDQQuene" key="pushJDQQuene" />-->
+            <!--<rabbit:binding queue="pushDWDBaseInfoQuene" key="pushDWDBaseInfoQuene" />-->
+            <!--<rabbit:binding queue="pushDWDAdditionalInfoQuene" key="pushDWDAdditionalInfoQuene" />-->
+        <!--</rabbit:bindings>-->
+    <!--</rabbit:direct-exchange>-->
+	
+    <!-- spring template声明  -->
+    <!--<rabbit:template exchange="mq-exchange" id="amqpTemplate"-->
+                     <!--connection-factory="connectionFactory" message-converter="jsonMessageConverter"-->
+                     <!--confirm-callback="confirmCallBackListener"-->
+                     <!--return-callback="returnCallBackListener"-->
+                     <!--mandatory="true" />                    -->
+
+    <!-- 监听容器：当有消息到达时会通知监听在对应的队列上的监听对象 -->
+    <!--<rabbit:listener-container  connection-factory="connectionFactory" acknowledge="manual" task-executor="taskExecutor" concurrency="2">-->
+        <!--&lt;!&ndash;<rabbit:listener queues="lendPayNotifyQuene1" ref="messageConsumerListener" />&ndash;&gt;-->
+        <!--<rabbit:listener queues="accessLogQuene" ref="accessLogConsumerListener" />-->
+        <!--<rabbit:listener queues="repayIngQueue" ref="repayIngConsumer" />-->
+        <!--<rabbit:listener queues="pushJDQQuene" ref="jDQConsumer" />-->
+        <!--<rabbit:listener queues="pushDWDBaseInfoQuene" ref="DWDConsumer" />-->
+        <!--<rabbit:listener queues="pushDWDAdditionalInfoQuene" ref="DWDAdditionConsumer" />-->
+
+    <!--</rabbit:listener-container>-->
+</beans>

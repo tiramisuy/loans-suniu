@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.GoodsOrderDao">
+    
+	<sql id="goodsOrderColumns">
+		a.id AS "id",
+		a.goods_id AS "goodsId",
+		a.account_id AS "accountId",
+		a.phone AS "phone",
+		a.name AS "name",
+		a.address AS "address",
+		a.price AS "price",
+		a.create_by AS "createBy",
+		a.pay_time AS "payTime",
+		a.deliver_time AS "deliverTime",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del",
+		a.invoice AS "invoice",
+		a.status AS "status",
+		a.coupon_id AS "couponId",
+		a.coupon AS "coupon",
+		a.user_name AS "userName",
+		a.user_phone AS "userPhone",
+		a.remark AS "remark"
+	</sql>
+	
+	<sql id="goodsOrderVOColumns">
+		a.id AS "id",
+		a.goods_id AS "goodsId",
+		a.account_id AS "accountId",
+		a.phone AS "phone",
+		a.name AS "name",
+		a.address AS "address",
+		a.price AS "price",
+		a.create_by AS "createBy",
+		a.pay_time AS "payTime",
+		a.deliver_time AS "deliverTime",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del",
+		a.remark AS "remark",
+		a.invoice AS "invoice",
+		a.status AS "status",
+		a.coupon_id AS "couponId",
+		a.coupon AS "coupon",
+		b.goods_name AS "goodsName",
+		b.goods_pic AS "goodsPic",
+		a.express_no AS "expressNo"
+	</sql>
+	
+	<sql id="goodsOrderJoins">
+	</sql>
+    
+	<sql id="insertValues">
+	(		
+		#{id},
+		#{goodsId},
+		#{accountId},
+		#{phone},
+		#{name},
+		#{address},
+		#{price},
+		#{createBy},
+		#{payTime},
+		#{deliverTime},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del},
+		#{invoice},
+		#{status},
+		#{couponId},
+		#{coupon},
+		#{userName},
+		#{userPhone},
+		#{remark}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.goodsId},
+		#{entity.accountId},
+		#{entity.phone},
+		#{entity.name},
+		#{entity.address},
+		#{entity.price},
+		#{entity.createBy},
+		#{entity.payTime},
+		#{entity.deliverTime},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del},
+		#{entity.invoice},
+		#{entity.status},
+		#{entity.couponId},
+		#{entity.coupon},
+		#{entity.userName},
+		#{entity.userPhone}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		id,
+		goods_id,
+		account_id,
+		phone,
+		name,
+		address,
+		price,
+		create_by,
+		pay_time,
+		deliver_time,
+		create_time,
+		update_by,
+		update_time,
+		del,
+		invoice,
+		status,
+		coupon_id,
+		coupon,
+		user_name,
+		user_phone,
+		remark
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		goods_id = #{goodsId},
+		account_id = #{accountId},
+		phone = #{phone},
+		name = #{name},
+		address = #{address},
+		price = #{price},
+		pay_time = #{payTime},
+		deliver_time = #{deliverTime},
+		update_by = #{updateBy},
+		update_time = #{updateTime},
+		invoice = #{invoice},
+		status = #{status},
+		coupon_id = #{couponId},
+		coupon = #{coupon},
+		user_name = #{userName},
+		user_phone = #{userPhone}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.goodsId != null">
+				goods_id = #{entity.goodsId},
+			</if>
+			<if test="entity.accountId != null">
+				account_id = #{entity.accountId},
+			</if>
+			<if test="entity.phone != null">
+				phone = #{entity.phone},
+			</if>
+			<if test="entity.name != null">
+				name = #{entity.name},
+			</if>
+			<if test="entity.address != null">
+				address = #{entity.address},
+			</if>
+			<if test="entity.price != null">
+				price = #{entity.price},
+			</if>
+			<if test="entity.payTime != null">
+				pay_time = #{entity.payTime},
+			</if>
+			<if test="entity.deliverTime != null">
+				deliver_time = #{entity.deliverTime},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+			<if test="entity.invoice != null">
+				invoice = #{entity.invoice},
+			</if>
+			<if test="entity.status != null">
+				status = #{entity.status},
+			</if>
+			<if test="entity.couponId != null">
+				coupon_id = #{entity.couponId},
+			</if>
+			<if test="entity.coupon != null">
+				coupon = #{entity.coupon},
+			</if>
+			<if test="entity.userName != null">
+				user_name = #{entity.userName},
+			</if>
+			<if test="entity.userPhone != null">
+				user_phone = #{entity.userPhone},
+			</if>
+			<if test="entity.expressNo != null">
+				express_no = #{entity.expressNo},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+  	<select id="get" resultType="GoodsOrder">
+		SELECT 
+		<include refid="goodsOrderColumns"/>
+		FROM loan_goods_order a
+		<include refid="goodsOrderJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+  	<select id="getById" resultType="GoodsOrder">
+		SELECT 
+		<include refid="goodsOrderColumns"/>
+		FROM loan_goods_order a
+		<include refid="goodsOrderJoins"/>
+		WHERE a.id = #{id}
+	</select>
+		
+    <select id="getByCriteria" resultType="GoodsOrder">
+		SELECT 
+		<include refid="goodsOrderColumns"/>
+		FROM loan_goods_order a
+		<include refid="goodsOrderJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultType="GoodsOrder">
+		SELECT 
+		<include refid="goodsOrderColumns"/>
+		FROM loan_goods_order a
+		<include refid="goodsOrderJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultType="GoodsOrder">
+		SELECT 
+		<include refid="goodsOrderColumns"/>
+		FROM loan_goods_order a
+		<include refid="goodsOrderJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllVOByCriteriaList" resultType="com.rongdu.loans.loan.vo.GoodsOrderVO">
+		SELECT 
+		<include refid="goodsOrderVOColumns"/>
+		FROM loan_goods_order a join loan_goods_list b on a.goods_id=b.id 
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultType="GoodsOrder">
+		SELECT 
+		<include refid="goodsOrderColumns"/>
+		FROM loan_goods_order a
+		<include refid="goodsOrderJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="GoodsOrder">
+		SELECT 
+		<include refid="goodsOrderColumns"/>
+		FROM loan_goods_order a
+		<include refid="goodsOrderJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="GoodsOrder">
+		SELECT 
+		<include refid="goodsOrderColumns"/>
+		FROM loan_goods_order a
+		<include refid="goodsOrderJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM loan_goods_order
+		<include refid="goodsOrderJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM loan_goods_order
+		<include refid="goodsOrderJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<select id="goodsOrderList" resultType="com.rongdu.loans.loan.vo.GoodsOrderVO">
+		SELECT 
+			a.id AS "id",
+			a.goods_id AS "goodsId",
+			b.goods_name AS "goodsName",
+			a.account_id AS "accountId",
+			a.phone AS "phone",
+			a.name AS "name",
+			a.address AS "address",
+			a.deliver_time AS "deliverTime",
+			a.pay_time AS "payTime",
+			a.price AS "price",
+			a.status AS "status",
+			a.coupon AS "coupon",
+			a.user_name AS "userName",
+			a.user_phone AS "userPhone",
+			b.goods_price AS "goodsPrice",
+			a.create_time AS "createTime",
+			a.remark AS "remark",
+			a.express_no AS "expressNo"
+		FROM loan_goods_order a
+		LEFT JOIN loan_goods_list b ON a.goods_id = b.id
+		<where>
+			a.del = 0 
+			<if test="op.id != null and op.id != ''">
+				AND a.id = #{op.id}
+			</if>
+			<if test="op.userName != null and op.userName != ''">
+				AND a.user_name = #{op.userName}
+			</if>
+			<if test="op.mobile != null and op.mobile != ''">
+				AND a.user_phone = #{op.mobile}
+			</if>
+			<if test="op.deliveryName != null and op.deliveryName != ''">
+				AND a.name = #{op.deliveryName}
+			</if>
+			<if test="op.deliveryMobile != null and op.deliveryMobile != ''">
+				AND a.phone = #{op.deliveryMobile}
+			</if>
+			<if test="op.status != null and op.status != ''">
+				AND a.status = #{op.status}
+			</if>
+			<if test="op.startTime != null and op.startTime != ''">
+               <![CDATA[ AND a.create_time >= #{op.startTime} ]]>
+            </if>
+            <if test="op.endTime != null and op.endTime != ''">
+               <![CDATA[ AND a.create_time <= #{op.endTime} ]]>
+            </if>
+		</where>
+		<include refid="pageOrderBy"/>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO loan_goods_order
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+	
+	<insert id="insertBatch">
+		INSERT INTO loan_goods_order
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	<update id="update">
+		UPDATE loan_goods_order SET 
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE loan_goods_order 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE loan_goods_order 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE loan_goods_order		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE loan_goods_order
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByCriteria">
+		UPDATE loan_goods_order
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE loan_goods_order 
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE loan_goods_order
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM loan_goods_order
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM loan_goods_order
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM loan_goods_order
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM loan_goods_order
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	
+	 
+</mapper>

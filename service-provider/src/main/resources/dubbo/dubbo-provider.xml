@@ -1,0 +1,151 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+	   http://code.alibabatech.com/schema/dubbo
+	   http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	   
+	<!-- 提供方应用信息，用于计算依赖关系 -->
+	<dubbo:application name="loans-service" owner="loans"/>
+
+	<!-- 使用zookeeper注册中心暴露服务地址 -->
+	<dubbo:registry protocol="zookeeper" address="${dubbo.registry.address}" file="${dubbo.default.cache.path}"/>
+
+	<!-- 用dubbo协议在20880端口暴露服务 -->
+	<dubbo:protocol name="dubbo" server="netty" serialization="java" port="${dubbo.default.protocol.port}"/>
+
+	<!-- 当ProtocolConfig和ServiceConfig某属性没有配置时,采用此缺省值 -->
+	<dubbo:provider timeout="999999" retries="0" threadpool="cached" threads="500" accepts="1000" group="${dubbo.provider.default.group}" version="${dubbo.provider.default.version}" payload="838860800"
+	 loadbalance="leastactive"/>
+
+	<!-- 暴露服务接口 一个服务可以用多个协议暴露，一个服务也可以注册到多个注册中心-->
+	<!--Provider上尽量多配置Consumer端的属性，让Provider实现者一开始就思考Provider服务特点、服务质量的问题-->
+	<!-- app -->
+	<dubbo:service interface="com.rongdu.loans.app.service.AppUpgradeService" ref="appUpgradeService"/>
+	<dubbo:service interface="com.rongdu.loans.app.service.AppBannerService" ref="appBannerService" />
+	<dubbo:service interface="com.rongdu.loans.app.service.AppBankLimitService" ref="appBankLimitService" />
+    <!-- app -->
+    
+    <!-- loan -->
+    <dubbo:service interface="com.rongdu.loans.loan.service.GoodsAddressService" ref="goodsAddressService"/>
+	<dubbo:service interface="com.rongdu.loans.loan.service.LoanGoodsService" ref="loanGoodsService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.LoanProductService" ref="loanProductService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.LoanApplyService" ref="loanApplyService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.OperationLogService" ref="operationLogService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.PromotionCaseService" ref="promotionCaseService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.ContractService" ref="contractService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.RefuseReasonService" ref="refuseReasonService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.RepayPlanItemService" ref="repayPlanItemService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.LoanRepayPlanService" ref="loanRepayPlanService" />
+    <dubbo:service interface="com.rongdu.loans.loan.service.BorrowInfoService" ref="borrowInfoService" /> 
+	<dubbo:service interface="com.rongdu.loans.loan.service.DeductionLogService" ref="deductionLogService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.ContactHistoryService" ref="contactHistoryService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.SettlementService" ref="settlementService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.CollectionRecordService" ref="collectionRecordService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.OverdueService" ref="overdueService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.RepayWarnService" ref="repayWarnService" />
+	
+	<dubbo:service interface="com.rongdu.loans.loan.service.OverdueCountService" ref="overdueCountService" />
+
+	<dubbo:service interface="com.rongdu.loans.loan.service.CancelLogService" ref="cancelLogService"/>
+
+	
+	
+	<dubbo:service interface="com.rongdu.loans.loan.service.ShopWithholdService" ref="shopWithholdService"/>
+	<dubbo:service interface="com.rongdu.loans.loan.service.CollectionAssignmentService" ref="collectionAssignmentService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.XianJinBaiKaService" ref="xianJinBaiKaService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.ApplyTripartiteService" ref="applyTripartiteService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.RongService" ref="rongService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.LoanTrafficService" ref="loanTrafficService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.JDQService" ref="jdqService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.DWDService" ref="dwdService" />
+	
+	<dubbo:service interface="com.rongdu.loans.loan.service.ApplyAllotService" ref="applyAllotService" />
+	
+	<dubbo:service interface="com.rongdu.loans.loan.service.LoanMarketManagementService" ref="loanMarketManagementService" />
+	
+	<dubbo:service interface="com.rongdu.loans.loan.service.LoanTripProductService" ref="loanTripProductService" />
+	
+	<dubbo:service interface="com.rongdu.loans.loan.service.MarketAllotService" ref="marketAllotService" />
+	
+	<dubbo:service interface="com.rongdu.loans.loan.service.ShoppedCouponService" ref="shoppedCouponService" />
+
+	
+	<!-- loan -->
+	<!-- code y0706 -->
+	<dubbo:service interface="com.rongdu.loans.loan.service.ApplyTripartiteRong360Service" ref="applyTripartiteRong360Service" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.JDQStatusFeedBackService" ref="jdqStatusFeedBackService" />
+	
+	<!-- statistical -->
+	<dubbo:service interface="com.rongdu.loans.statistical.service.StatisticalService" ref="statisticalService" />
+	<dubbo:service interface="com.rongdu.loans.statistical.service.ZhimaStatisticalService" ref="zhimaStatisticalService" />
+	
+	<!-- statistical -->
+
+    <!-- scheduler -->
+	<dubbo:service interface="com.rongdu.loans.scheduler.service.SchedulerService" ref="schedulerService" />
+	<!-- scheduler -->
+
+    <!-- cust -->
+	<dubbo:service interface="com.rongdu.loans.cust.service.CustUserService" ref="custUserService" />
+	<dubbo:service interface="com.rongdu.loans.cust.service.MessageService" ref="messageService" />
+	<dubbo:service interface="com.rongdu.loans.cust.service.BindCardService" ref="bindCardService" />
+	<dubbo:service interface="com.rongdu.loans.cust.service.CustUserGroupService" ref="custUserGroupService" />
+	<dubbo:service interface="com.rongdu.loans.cust.service.SmsCodeService" ref="smsCodeService" />
+	<dubbo:service interface="com.rongdu.loans.cust.service.CustCouponService" ref="custCouponService" />
+	<!-- cust -->
+	
+	<!-- basic -->
+	<dubbo:service interface="com.rongdu.loans.basic.service.NotificationService" ref="notificationService" />
+	<dubbo:service interface="com.rongdu.loans.basic.service.ShortMsgService" ref="shortMsgService" />
+	<dubbo:service interface="com.rongdu.loans.basic.service.AlarmService" ref="alarmService" />
+	<dubbo:service interface="com.rongdu.loans.basic.service.AreaService" ref="areaService" />
+	<dubbo:service interface="com.rongdu.loans.basic.service.CityService" ref="cityService" />
+	<dubbo:service interface="com.rongdu.loans.basic.service.ProvinceService" ref="provinceService" />
+	<dubbo:service interface="com.rongdu.loans.basic.service.StoreService" ref="storeService" />
+	<dubbo:service interface="com.rongdu.loans.basic.service.ConfigService" ref="configService" />
+	<!-- basic -->
+	
+	<!-- pay -->
+	<dubbo:service interface="com.rongdu.loans.pay.service.WithholdService" ref="withholdService" />
+	<dubbo:service interface="com.rongdu.loans.pay.service.KjtpayService" ref="kjtpayService" />
+	<!-- pay -->
+	
+	<dubbo:service interface="com.rongdu.loans.bankDeposit.service.BankDepositService" ref="bankDepositService" />
+	
+	<!-- file -->
+	<dubbo:service interface="com.rongdu.loans.fileserver.service.FileserverService" ref="fileserverService" />
+	<dubbo:service interface="com.rongdu.loans.loan.service.RongPointCutService" ref="rongPointCutService" />
+	
+	<!-- borrow -->
+	<dubbo:service interface="com.rongdu.loans.borrow.service.HelpApplyService" ref="helpApplyService" />
+	<dubbo:service interface="com.rongdu.loans.borrow.service.HelpResultService" ref="helpResultService" />
+<!-- 	<dubbo:service interface="com.rongdu.loans.borrow.service.HelpAllotService" ref="helpAllotService" /> -->
+	
+	<dubbo:service interface="com.rongdu.loans.loan.service.ShopService" ref="shopService" />
+
+	<!-- KOUDAI -->
+    <dubbo:service interface="com.rongdu.loans.koudai.service.PayLogService" ref="kdPayLogService" />
+    <dubbo:service interface="com.rongdu.loans.koudai.service.KDPayService" ref="kdPayService" />
+    <dubbo:service interface="com.rongdu.loans.koudai.service.KDDepositService" ref="kDDepositService" />
+    
+    <!-- TONGRONG -->
+    <dubbo:service interface="com.rongdu.loans.tongrong.service.TRPayService" ref="tRPayService" />
+    <dubbo:service interface="com.rongdu.loans.common.dwd.DWDConfig" ref="dwdConfig" />
+
+	<!-- 无忧存证 -->
+	<dubbo:service interface="com.rongdu.loans.loan.service.CarefreeCounterfoilService" ref="carefreeCounterfoilService"/>
+
+	<!-- HanJingSuo -->
+    <dubbo:service interface="com.rongdu.loans.hanjs.service.HanJSUserService" ref="hanJSUserService" />
+    
+    <!-- sys -->
+    <dubbo:service interface="com.rongdu.loans.sys.service.UserService" ref="userService" />
+
+	<!-- 贷款钱包 -->
+    <dubbo:service interface="com.rongdu.loans.loan.service.LoanWalletService" ref="loanWalletService" />
+
+	<!-- 安融 -->
+	<dubbo:service interface="com.rongdu.loans.loan.service.ApplyTripartiteAnrongService" ref="applyTripartiteAnrongService" />
+</beans>

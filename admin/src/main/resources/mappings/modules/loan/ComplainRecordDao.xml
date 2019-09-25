@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.ComplainRecordDao">
+    
+	<sql id="complainRecordColumns">
+		a.id AS "id",
+		a.subject AS "subject",
+		a.name AS "name",
+		a.mobile AS "mobile",
+		a.status AS "status",
+		a.message AS "message",
+		a.type AS "type",
+		a.channel AS "channel",
+		a.complain_type AS "complainType",
+		a.complain_point AS "complainPoint",
+		a.emergency AS "emergency",
+		a.handle_user_id AS "handleUserId",
+		a.handle_user_name AS "handleUserName",
+		a.last_creater_time AS "lastCreaterTime",
+		a.last_hander_time AS "lastHanderTime",
+		a.content AS "content",
+		a.next_time AS "nextTime",
+		a.remark AS "remark",
+		a.create_by AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del AS "del"
+	</sql>
+	
+	<sql id="complainRecordJoins">
+	</sql>
+	
+	<sql id="complainRecordWhere">
+		<if test="subject != null and subject != ''">
+			  and a.subject like CONCAT('%',#{subject},'%') 
+		</if>
+		<if test="mobile != null and mobile != ''">
+			  and a.mobile = #{mobile} 
+		</if>
+		<if test="status != null and status != ''">
+			  and a.status = #{status} 
+		</if>
+		<if test="type != null and type != ''">
+			  and a.type = #{type} 
+		</if>
+		<if test="emergency != null and emergency != ''">
+			  and a.emergency = #{emergency} 
+		</if>
+		<if test="handleUserId != null and handleUserId != ''">
+			  and a.handle_user_id = #{handleUserId} 
+		</if>
+	</sql>
+	
+	
+    
+	<sql id="insertValues">
+	(		
+		#{id},
+		#{subject},
+		#{name},
+		#{mobile},
+		#{status},
+		#{message},
+		#{type},
+		#{complainType},
+		#{complainPoint},
+		#{channel},
+		#{emergency},
+		#{handleUserId},
+		#{handleUserName},
+		#{lastCreaterTime},
+		#{lastHanderTime},
+		#{content},
+		#{nextTime},
+		#{remark},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{del}
+	)	
+	</sql>
+	
+	<sql id="insertBatchValues">
+	(		
+		#{entity.id},
+		#{entity.subject},
+		#{entity.name},
+		#{entity.mobile},
+		#{entity.status},
+		#{entity.message},
+		#{entity.type},
+		#{entity.complainType},
+		#{entity.complainPoint},
+		#{entity.channel},
+		#{entity.emergency},
+		#{entity.handleUserId},
+		#{entity.handleUserName},
+		#{entity.content},
+		#{entity.nextTime},
+		#{entity.remark},
+		#{entity.createBy},
+		#{entity.createTime},
+		#{entity.updateBy},
+		#{entity.updateTime},
+		#{entity.del}
+	)	
+	</sql>
+	
+	<sql id="insertColumns">
+	(		
+		id,
+		subject,
+		name,
+		mobile,
+		status,
+		message,
+		type,
+		complain_type,
+		complain_point,
+		channel,
+		emergency,
+		handle_user_id,
+		handle_user_name,
+		last_creater_time,
+		last_hander_time,
+		content,
+		next_time,
+		remark,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		del
+	) 
+	</sql>
+	
+	<sql id="updateColumns">		
+		subject = #{subject},
+		name = #{name},
+		mobile = #{mobile},
+		status = #{status},
+		message = #{message},
+		<if test="complainType != null and complainType != ''">
+		complain_type = #{complainType},
+		</if>
+		<if test="complainPoint != null and complainPoint != ''">
+		complain_point = #{complainPoint},
+		</if>
+		channel = #{channel},
+		type = #{type},
+		emergency = #{emergency},
+		handle_user_id = #{handleUserId},
+		handle_user_name = #{handleUserName},
+		content = #{content},
+		<if test="nextTime != null and nextTime != ''">
+			next_time = #{nextTime},
+		</if>
+		<if test="lastCreaterTime != null and lastCreaterTime != ''">
+			last_creater_time = #{lastCreaterTime},
+		</if>
+		<if test="lastHanderTime != null and lastHanderTime != ''">
+			last_hander_time = #{lastHanderTime},
+		</if>
+		remark = #{remark},
+		update_by = #{updateBy},
+		update_time = #{updateTime}
+	</sql>
+	
+	<sql id="updateSelectiveColumns">
+		<set>
+			<if test="entity.subject != null">
+				subject = #{entity.subject},
+			</if>
+			<if test="entity.name != null">
+				name = #{entity.name},
+			</if>
+			<if test="entity.mobile != null">
+				mobile = #{entity.mobile},
+			</if>
+			<if test="entity.status != null">
+				status = #{entity.status},
+			</if>
+			<if test="entity.message != null">
+				message = #{entity.message},
+			</if>
+			<if test="entity.type != null">
+				type = #{entity.type},
+			</if>
+			<if test="entity.emergency != null">
+				emergency = #{entity.emergency},
+			</if>
+			<if test="entity.handleUserId != null">
+				handle_user_id = #{entity.handleUserId},
+			</if>
+			<if test="entity.handleUserName != null">
+				handle_user_name = #{entity.handleUserName},
+			</if>
+			<if test="entity.content != null">
+				content = #{entity.content},
+			</if>
+			<if test="entity.remark != null">
+				remark = #{entity.remark},
+			</if>
+			<if test="entity.updateBy != null">
+				update_by = #{entity.updateBy},
+			</if>
+			<if test="entity.updateTime != null">
+				update_time = #{entity.updateTime},
+			</if>
+		</set>
+	</sql>
+	
+	<sql id="whereByCriteriaList">
+		<where>
+			<foreach collection="criteriaList" item="criteria" separator=" AND ">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="whereByCriteria">
+		<where>
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="AND |OR ">
+						<foreach collection="criteria.pairList" item="pair">
+							<choose>
+								<when test="pair.criterion.singleValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value}
+								</when>
+								<when test="pair.criterion.betweenValue">
+									${pair.logic} ${pair.criterion.column}
+									${pair.criterion.match}
+									${pair.criterion.value} and
+									${pair.criterion.secondValue}
+								</when>
+								<when test="pair.criterion.listValue">
+									${pair.logic} ${pair.criterion.column} ${pair.criterion.match}
+									<foreach collection="pair.criterion.value" item="item" open="(" close=")" separator=",">
+										#{item}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+		</where>
+	</sql>
+	
+   <sql id="orderBy">
+		ORDER BY a.create_time DESC
+	</sql>
+	
+   <sql id="pageOrderBy">
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_time DESC
+			</otherwise>
+		</choose>
+	</sql>
+  
+  	<select id="get" resultType="ComplainRecord">
+		SELECT 
+		<include refid="complainRecordColumns"/>
+		FROM loan_complain_record a
+		<include refid="complainRecordJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+  	<select id="getById" resultType="ComplainRecord">
+		SELECT 
+		<include refid="complainRecordColumns"/>
+		FROM loan_complain_record a
+		<include refid="complainRecordJoins"/>
+		WHERE a.id = #{id}
+	</select>
+		
+    <select id="getByCriteria" resultType="ComplainRecord">
+		SELECT 
+		<include refid="complainRecordColumns"/>
+		FROM loan_complain_record a
+		<include refid="complainRecordJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="findAllByCriteria" resultType="ComplainRecord">
+		SELECT 
+		<include refid="complainRecordColumns"/>
+		FROM loan_complain_record a
+		<include refid="complainRecordJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="findAllByCriteriaList" resultType="ComplainRecord">
+		SELECT 
+		<include refid="complainRecordColumns"/>
+		FROM loan_complain_record a
+		<include refid="complainRecordJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="orderBy" />
+	</select>
+	
+	<select id="getPage" resultType="ComplainRecord">
+		SELECT 
+		<include refid="complainRecordColumns"/>
+		FROM loan_complain_record a
+		<include refid="complainRecordJoins"/>
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteria" resultType="ComplainRecord">
+		SELECT 
+		<include refid="complainRecordColumns"/>
+		FROM loan_complain_record a
+		<include refid="complainRecordJoins"/>
+		<include refid="whereByCriteria" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="getPageByCriteriaList" resultType="ComplainRecord">
+		SELECT 
+		<include refid="complainRecordColumns"/>
+		FROM loan_complain_record a
+		<include refid="complainRecordJoins"/>
+		<include refid="whereByCriteriaList" />
+		<include refid="pageOrderBy" />
+	</select>
+	
+	<select id="countByCriteria" resultType="Long">
+		SELECT COUNT(1) FROM loan_complain_record
+		<include refid="complainRecordJoins"/>
+		<include refid="whereByCriteria" />
+	</select>
+	
+	<select id="countByCriteriaList" resultType="Long">
+		SELECT COUNT(1) FROM loan_complain_record
+		<include refid="complainRecordJoins"/>
+		<include refid="whereByCriteriaList" />
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO loan_complain_record
+		<include refid="insertColumns"/>
+		VALUES 
+		<include refid="insertValues"/>
+	</insert>
+	
+	<insert id="insertBatch">
+		INSERT INTO loan_complain_record
+		<include refid="insertColumns"/>
+		VALUES
+		<foreach collection="list" item="entity" index="index" separator=",">
+         <include refid="insertBatchValues"/>
+        </foreach>	
+	</insert>
+	
+	<update id="update">
+		UPDATE loan_complain_record SET 
+		<include refid="updateColumns"/>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByCriteriaSelective">
+		UPDATE loan_complain_record 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="updateByCriteriaListSelective">
+		UPDATE loan_complain_record 
+		<include refid="updateSelectiveColumns"/>
+		<include refid="whereByCriteriaList"/>
+	</update>
+
+	<update id="updateByIdSelective">
+		UPDATE loan_complain_record		
+		<include refid="updateSelectiveColumns"/>
+		WHERE id = #{entity.id}
+	</update>
+
+	<update id="delete">
+		UPDATE loan_complain_record
+		SET del = 1
+		,update_by=#{updateBy}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByCriteria">
+		UPDATE loan_complain_record
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE loan_complain_record 
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	<update id="deleteByCriteriaList">
+		UPDATE loan_complain_record
+		SET del = 1
+		,update_by=#{entity.updateBy}
+		<include refid="whereByCriteriaList"/>
+	</update>	
+	
+	<update id="deleteTruely">
+		DELETE FROM loan_complain_record
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteTruelyByCriteria">
+		DELETE FROM loan_complain_record
+		<include refid="whereByCriteria"/>
+	</update>
+	
+	<update id="deleteTruelyByCriteriaList">
+		DELETE FROM loan_complain_record
+		<include refid="whereByCriteriaList"/>
+	</update>
+	
+	<update id="deleteBatchTruely">
+		DELETE FROM loan_complain_record
+		WHERE id in
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">#{id} </foreach>    
+	</update>
+	
+	
+	
+	<!-- 分页查询用户信息 -->
+	<select id="findList" resultType="ComplainRecord">
+		SELECT
+			<include refid="complainRecordColumns"/>
+		FROM loan_complain_record a
+		
+		WHERE a.del = 0 
+								
+		<include refid="complainRecordWhere"/>
+		<if test="name != null and name != ''">
+			  and a.name = #{name} 
+		</if>
+		<if test="createBy != null and createBy != ''">
+			  and a.create_by = #{createBy} 
+		</if>
+		<if test="startTime != null and startTime != ''">
+			<![CDATA[ AND a.create_time >= #{startTime} ]]>
+		</if>
+		<if test="endTime != null and endTime != ''">
+			<![CDATA[ AND a.create_time <= #{endTime} ]]>
+		</if>
+		order by a.update_time desc
+	</select>
+	 
+</mapper>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.loan.dao.PromotionCaseDAO">
+
+	<resultMap id="BaseMap" type="com.rongdu.loans.loan.entity.PromotionCase">
+		<id column="ID" property="id" />
+		<result column="PRODUCT_ID" property="productId" />
+		<result column="CHANNEL_ID" property="channelId" />
+		<result column="CHANNEL_NAME" property="channelName" />
+		<result column="AMT_BEGIN" property="amtBegin" />
+		<result column="AMT_END" property="amtEnd" />
+		<result column="TERM_BEGIN" property="termBegin" />
+		<result column="TERM_END" property="termEnd" />
+		<result column="RATE_PER_YEAR" property="ratePerYear" />
+		<result column="RATE_PER_DAY" property="ratePerDay" />
+		<result column="SERV_FEE_TYPE" property="servFeeType" />
+		<result column="SERV_VALUE" property="servValue" />
+		<result column="SERV_FEE_RATE" property="servFeeRate" />
+		<result column="PREPAY_FEE_TYPE" property="prepayFeeType" />
+		<result column="PREPAY_VALUE" property="prepayValue" />
+		<result column="OVERDUE_FEE_TYPE" property="overdueFeeType" />
+		<result column="OVERDUE_VALUE" property="overdueValue" />
+		<result column="OVERDUE_FEE" property="overdueFee" />
+		<result column="DISCOUNT" property="discount" />
+		<result column="DISCOUNT_VALUE" property="discountValue" />
+		<result column="STATUS" property="status" />
+		<result column="REMARK" property="remark" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="DEL" property="del" />
+	</resultMap>
+	
+	<resultMap id="PromotionCaseVO" type="com.rongdu.loans.loan.vo.PromotionCaseVO">
+		<id column="ID" property="id" />
+		<result column="RATE_PER_DAY" property="dayInterest" />
+		<result column="SERV_FEE_RATE" property="servFee" />
+		<result column="TERM_END" property="period" />
+		<result column="STATUS" property="pStatus" />
+		<result column="RATE_PER_YEAR" property="yearInterest" />
+		<result column="update_time" property="updateTime" />
+	</resultMap>
+			
+	<resultMap id="ChannelVO" type="HashMap">
+		<result property="cid" column="channel_id" />
+		<result property="cName" column="channel_name" />
+	</resultMap>
+	
+	<sql id="All_Column">
+		id, product_id, channel_id, channel_name, amt_begin, amt_end,
+		 term_begin, term_end, rate_per_year, rate_per_day, serv_fee_type,
+		  serv_value, serv_fee_rate, prepay_fee_type, prepay_value, overdue_fee_type,
+		   overdue_value, overdue_fee, discount, discount_value, status,
+		    remark, create_by, create_time, update_by, update_time, del
+	</sql>
+
+	<select id="getByApplyInfo" parameterType="com.rongdu.loans.loan.option.PromotionCaseOP" resultMap="BaseMap">
+	  SELECT
+		 <include refid="All_Column"/>
+		FROM loan_promotion_case
+	   WHERE del = 0
+        <if test="productId!=null">
+		 AND product_id = #{productId}
+		</if>
+		<if test="channelId!=null">
+		 AND channel_id = #{channelId}
+		</if>
+	</select>
+
+	<select id="getById" resultType="PromotionCase">
+		SELECT
+		<include refid="All_Column"/>
+		FROM loan_promotion_case
+		WHERE del = 0 and id = #{id}
+	</select>
+	
+	<select id="getPrePayInfoByApplyId" parameterType="string" resultType="com.rongdu.loans.loan.vo.PrePayCostingVO">
+		SELECT 
+		       lpc.prepay_fee_type prepayFeeType,
+		       lpc.prepay_value prepayValue,
+		       la.approve_amt loanAmt,
+		       la.approve_term loanTerm
+		  FROM loan_promotion_case lpc
+		  JOIN loan_apply la
+		    ON la.promotion_case_id = lpc.id
+		 WHERE lpc.del = 0 
+		   AND la.del = 0
+		   AND la.id = #{applyId}
+	</select>
+	
+	<select id="getByChannelID" parameterType="string" resultMap="PromotionCaseVO">
+		SELECT 
+				rate_per_day,serv_fee_rate,term_end ,status
+		FROM loan_promotion_case 
+		WHERE channel_id = #{channelId} ORDER BY term_end ASC
+	</select>
+	
+	<select id="getByProductIDAndChannelId" parameterType="string" resultMap="PromotionCaseVO">
+		SELECT 
+				rate_per_day,serv_fee_rate,term_end ,status,rate_per_year
+		FROM loan_promotion_case 
+		WHERE del = 0 and `status` =1
+		<if test="productId!=null">
+		 AND product_id = #{productId}
+		</if>
+		<if test="channelId!=null">
+		 AND channel_id = #{channelId}
+		</if>
+		ORDER BY update_time desc
+	</select>
+	
+	
+	<select id="getByProductIDAndChannelIdForPage" parameterType="string" resultMap="PromotionCaseVO">
+		SELECT 
+				id,rate_per_day,serv_fee_rate,term_end ,status,rate_per_year,update_time
+		FROM loan_promotion_case 
+		WHERE del = 0 and `status` =1
+		<if test="op.productId != null and op.productId != '' ">
+		 AND product_id = #{op.productId}
+		</if>
+		<if test="op.channelId != null and op.channelId != '' ">
+		 AND channel_id = #{op.channelId}
+		</if>
+		ORDER BY update_time desc
+	</select>
+	
+	<select id="checkByChannel" resultType="string">
+	  SELECT
+		     channel_id
+		FROM loan_promotion_case
+	   WHERE del = 0
+	     AND remark = '1'
+	     AND channel_id = #{channel}
+	     ORDER BY create_time desc LIMIT 1
+	</select>
+	
+	<update id="updatePromotion">
+		update loan_promotion_case 
+			set update_time = now()
+			where id=#{id}
+	</update>
+
+	<select id="findAllChannel" resultMap="ChannelVO" >
+		SELECT channel_id, channel_name from loan_promotion_case where del = 0 GROUP BY channel_id
+	</select>
+</mapper>

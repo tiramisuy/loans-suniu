@@ -1,0 +1,1355 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rongdu.loans.cms.dao.UserApplyCountDao">
+
+	<resultMap id="BaseResultMap" type="com.rongdu.loans.loan.vo.UserApplyCountVO">
+		<id column="totalReg" property="totalReg" />
+		<result column="applyRate" property="applyRate" />
+		<result column="totalApply" property="totalApply" />
+		<result column="applyPass" property="applyPass" />
+		<result column="applyPassRate" property="applyPassRate" />
+		<result column="loanPass" property="loanPass" />
+		<result column="loanPassNew" property="loanPassNew" />
+		<result column="loanPassOld" property="loanPassOld" />
+		<result column="loanPassRate" property="loanPassRate" />
+		<result column="loanReady" property="loanReady" />
+		<result column="totalApplyAmt" property="totalApplyAmt" />
+		<result column="totalLoan" property="totalLoan" />
+		<result column="totalLoanReady" property="totalLoanReady" />
+		<result column="over_due" property="overDue" />
+		<result column="over_due_amt" property="overDueAmt" />
+		<result column="total_repay" property="totalRepay" />
+		<result column="total_applyAccess" property="totalApplyAccess" />
+		<result column="total_applyMoney" property="totalApplyMoney" />
+	</resultMap>
+
+	<resultMap id="checkAllotResult" type="HashMap">
+		<result property="name" column="name"/>
+		<result property="id" column="id"/>
+		<result property="companyId" column="company_id"/>
+		<result property="total" column="total"/>
+		<result property="apprv" column="apprv"/>
+		<result property="notapprv" column="notapprv"/>
+		<result property="withdrawrv" column="withdrawrv"/>
+	</resultMap>
+
+	<sql id="regdatesql">
+		<![CDATA[
+			u.register_time >= #{startDate} and u.register_time <= #{endDate}
+		]]>		
+	</sql>
+
+	<sql id="applydatesql">
+		<![CDATA[
+			 a.apply_time >= #{startDate} and a.apply_time <= #{endDate}
+		]]>		
+	</sql>
+	
+	<sql id="approvedatesql">
+		<![CDATA[
+			 a.approve_time >= #{startDate} and a.approve_time <= #{endDate}
+		]]>		
+	</sql>
+	
+	<sql id="paydatesql">
+		<![CDATA[
+			 c.pay_time >= #{startDate} and c.pay_time <= #{endDate}
+		]]>		
+	</sql>
+	
+	<sql id="findGroupId">
+		SELECT
+			c.user_id
+		FROM
+			cust_user_group c
+		<where>
+			<if test="offices != null and offices != ''">
+                c.store_id = ${offices}
+            </if>
+            <if test="groupId != null and groupId != ''">
+                and c.group_id = ${groupId}
+            </if>
+         </where>   
+	</sql>
+
+	<sql id="loanAgain">
+		<if test="applyOP.loanSucess != null and applyOP.loanSucess != '' ">
+			<choose>
+				<when test="applyOP.loanSucess == 'yes'">
+					and la.loan_succ_count > 0
+				</when>
+				<otherwise>
+					and la.loan_succ_count = 0
+				</otherwise>
+			</choose>
+		</if>
+	</sql>
+
+	<select id="getOfficeListByArea" resultType="java.util.HashMap">
+		SELECT o.id as id, o.`name` as office FROM `sys_area` a 
+		LEFT JOIN sys_office o
+		ON a.id = o.area_id
+		WHERE a.id = #{0} 
+		AND o.remarks='CCD';
+	</select>
+	
+	<select id="getGroupByOffice" resultType="java.util.HashMap">
+		SELECT
+			o.id AS id,
+			o.`name` AS groupName
+		FROM
+			sys_office o
+		WHERE
+			o.parent_id = #{0} 
+		AND o.remarks = '3'
+		AND o.del_flag = 0
+		ORDER BY o.sort ASC;
+	</select>
+
+	<!-- 诚诚贷统计-->
+    <select id="getUserCountByOffice" resultMap="BaseResultMap">
+    	/*FORCE_SLAVE*/
+        SELECT
+			tab1.total_reg as "totalReg", 
+			tab2.total_applyAccess as "totalApplyAccess", 
+			tab2.total_applyMoney as "totalApplyMoney", 
+			tab4.loan_pass as "loanPass",  
+			tab4.total_loan as "totalLoan",
+			tab5.over_due_amt as "overDueAmt",
+			tab6.total_repay as "totalRepay"
+		FROM
+			(
+				SELECT count(*) AS total_reg  
+				FROM cust_user u
+				WHERE 
+				<include refid="regdatesql"/>
+				AND u.channel = 'CCDQB'
+				<if test="offices != null and offices != ''">
+                	AND u.remark IN (${offices})
+            	</if>
+				<if test="groupId != null and groupId != ''">
+                	AND u.id IN (<include refid="findGroupId"/>)
+            	</if>
+			) tab1,
+			(
+				SELECT 
+					IFNULL(sum(IFNULL(a.approve_amt, 0)), 0) AS total_applyMoney, count(*) AS total_applyAccess  
+				FROM loan_apply a
+				WHERE (a.`status` > 222 or a.`status` = 211 or a.`status` = 221 )
+				AND a.product_id = #{productId} and
+				<include refid="applydatesql"/>
+				AND a.company_id IN (${offices})
+				<if test="groupId != null and groupId != ''">
+				AND a.user_id IN (<include refid="findGroupId"/>)
+				</if>
+			) tab2,
+			(
+				 SELECT
+   					IFNULL(sum(IFNULL(a.approve_amt, 0)), 0) AS total_loan, count(*) AS loan_pass
+  				FROM
+  	 				loan_apply a left join loan_contract c on a.id = c.apply_id
+   				WHERE
+  	 				(a.`status` >= 610 or a.`status` = 511 or a.`status` = 514 )
+   				AND a.product_id = #{productId} and
+   				<include refid="paydatesql"/>
+   				AND a.company_id IN (${offices})
+				<if test="groupId != null and groupId != ''">
+				AND a.user_id IN (<include refid="findGroupId"/>)
+				</if>
+			) tab4,
+			(
+				SELECT
+					 IFNULL(
+				        SUM(IFNULL(l.total_amount, 0)),
+				        0
+				    ) AS over_due_amt
+				FROM
+					 loan_apply a left JOIN loan_repay_plan_item l on a.id = l.apply_id
+				WHERE
+					a.`status` = 710
+					<![CDATA[
+					AND l.repay_date >= #{startDate} and l.repay_date <= #{endDate}
+					]]>	
+					AND a.company_id IN (${offices})
+					<if test="groupId != null and groupId != ''">
+					AND a.user_id IN (<include refid="findGroupId"/>)
+					</if>
+			) tab5,
+			(
+				SELECT
+					IFNULL(
+						sum(IFNULL(i.actual_repay_amt, 0)),
+						0
+					) AS total_repay
+				FROM
+					loan_repay_plan_item i
+					LEFT JOIN loan_apply a ON i.apply_id = a.id
+				WHERE
+					i.`status` = 1
+					<![CDATA[
+					AND i.actual_repay_time >= #{startDate} and i.actual_repay_time <= #{endDate}
+					]]>	
+					AND a.company_id IN (${offices})
+					<if test="groupId != null and groupId != ''">
+					AND i.user_id IN (<include refid="findGroupId"/>)
+					</if>
+			) tab6
+    </select>
+
+
+	<!-- 现金白卡统计-->
+    <select id="getXjbkUserApplyCount" resultMap="BaseResultMap">
+    	/*FORCE_SLAVE*/
+    	SELECT
+				sum(case when a.`status` >=410 then 1 else 0 end) as applyPass, COUNT(*) as totalApply,
+				sum(case when a.`status` >=410 then 1 else 0 end) /	COUNT(*) as xjbkApplyPassRate
+			FROM
+				loan_apply a  
+			WHERE a.`loan_succ_count` =0
+				and a.`channel_id`  = 'XJBK'
+				<![CDATA[
+					AND a.`apply_time` >= #{startDate} and a.`apply_time` <= #{endDate}
+				]]>
+				<if test="productId != null and productId !='' ">
+					and a.product_id=#{productId}
+				</if>
+	</select>
+
+	<select id="getOperationalStatistics" resultType="com.rongdu.loans.loan.vo.OperationalStatisticsVO">
+		SELECT
+		COUNT(DISTINCT u.id) AS totalReg,		/*--用户注册数*/
+		SUM(CASE WHEN a.`status` > 170 THEN 1 ELSE 0 END) totalApply,	/*--生成订单数*/
+		SUM(CASE WHEN a.`status` >= 220 THEN 1 ELSE 0 END) applyAuto1Pass,/*	--机审通过数*/
+		SUM(CASE WHEN a.`status` >= 220 AND a.user_credit_line=1 THEN 1 ELSE 0 END) applyAuto2Pass,	/*--2次机审通过数*/
+		SUM(CASE WHEN a.`status` >= 410 THEN 1 ELSE 0 END) applyPass,	/*--审核通过数*/
+		SUM(CASE WHEN u.bind_id IS NOT NULL THEN 1 ELSE 0 END) bindBank,	/*--绑卡数*/
+		SUM(CASE WHEN u.bind_id IS NOT NULL AND a.user_credit_line=1 THEN 1 ELSE 0 END) bindBankAuto2,	/*--2次机审绑卡数*/
+		SUM(CASE WHEN a.`status` >= 511 THEN 1 ELSE 0 END) withdrawCount,	/*--放款数*/
+		SUM(CASE WHEN a.`status` >= 511 AND a.user_credit_line=1 THEN 1 ELSE 0 END) withdrawCountAuto2,	/*--2次机审放款数*/
+		SUM(CASE WHEN a.`status` >= 511 THEN a.approve_amt ELSE 0 END) withdrawAmt,	/*--放款金额*/
+		SUM(CASE WHEN a.`status` >= 511 AND a.user_credit_line=1 THEN a.approve_amt ELSE 0 END) withdrawAmtAuto2 /*--2次机审放款金额*/
+		FROM cust_user u
+		LEFT JOIN loan_apply a ON u.id = a.user_id
+		<where>
+			<if test="applyOP.channel != null and applyOP.channel != '' ">
+				AND u.channel IN (${applyOP.channel})
+			</if>
+			<!--<if test="applyOP.productId != null and applyOP.productId !='' ">
+				AND a.product_id = #{applyOP.productId}
+			</if>-->
+			<if test="applyOP.loanSucess != null and applyOP.loanSucess != '' and applyOP.loanSucess == 'yes'">
+				AND (a.loan_succ_count = 0 OR a.loan_succ_count IS NULL)		/*--首贷*/
+			</if>
+			<if test="applyOP.loanSucess != null and applyOP.loanSucess != '' and applyOP.loanSucess == 'no'">
+				AND la.loan_succ_count > 0		/*--复贷*/
+			</if>
+				AND
+			<![CDATA[u.register_time >= #{applyOP.applyStart} and u.register_time <date_add(#{applyOP.applyEnd},INTERVAL 1 day)]]>
+		</where>
+	</select>
+
+	<!-- 现金贷统计-->
+    <select id="getUserApplyCount" resultMap="BaseResultMap">
+    	/*FORCE_SLAVE*/
+        SELECT
+			tab1.total_reg as "totalReg",      
+			tab2.total_apply / tab1.total_reg AS "applyRate",  
+			tab2.total_apply as "totalApply",   
+			tab3.apply_pass AS "applyPass",    
+			tab3.apply_pass / tab2.total_apply AS "applyPassRate",  
+			tab8.loan_pass as "loanPass",
+			tab8.loan_pass_new as "loanPassNew",    
+			tab8.loan_pass_old as "loanPassOld",          
+			tab8.loan_pass / tab2.total_apply AS "loanPassRate", 
+			tab5.loan_ready as "loanReady",
+			tab5.raise_count as "raiseCount",
+			tab5.raise_amt as "raiseAmt",
+			tab5.withdraw_amt as "withdrawAmt",    
+			<!-- tab6.total_apply_amt as "totalApplyAmt", -->  
+			tab8.total_loan as "totalLoan",       
+			tab7.total_loan_ready  as "totalLoanReady",
+			tab9.over_due,
+			tab10.over_due_amt
+		FROM
+			(
+				SELECT count(*) AS total_reg  
+				FROM cust_user u
+				WHERE 
+				<include refid="regdatesql"/>
+				<if test="channels != null and channels != '' ">
+					AND u.channel IN (${channels})
+				</if>
+			) tab1,
+			(
+				SELECT
+					count(*) as total_apply
+				FROM
+					cust_user u 
+				WHERE
+				<include refid="regdatesql"/>
+				<if test="channels != null and channels != '' ">
+					AND u.channel IN (${channels})
+				</if>
+				AND EXISTS(select user_id from loan_apply a WHERE u.id = a.user_id and a.`status` > 170)
+			) tab2,
+			(
+				SELECT
+					count(*) as apply_pass
+				FROM
+					cust_user u 
+				WHERE
+				<include refid="regdatesql"/>
+				<if test="channels != null and channels != '' ">
+					AND u.channel IN (${channels})
+				</if>
+				AND EXISTS(select user_id from loan_apply a WHERE u.id = a.user_id and (a.`status` IN (211, 221) OR a.`status` > 223))
+			) tab3,
+			(
+				SELECT 
+					count(*) AS loan_ready,
+					sum(case when a.`status` = 411 then 1 else 0 end) raise_count,
+					sum(case when a.`status` = 411 then a.approve_amt else 0 end) raise_amt,
+					sum(case when a.`status` = 512 then a.approve_amt else 0 end) withdraw_amt
+				FROM loan_apply a
+				<![CDATA[
+				WHERE a.`status` >= 410 and a.`status` < 514 and a.`status` != 420 
+				]]>	
+				AND 
+				<include refid="approvedatesql"/>
+				
+				<if test="productId == null or productId =='' ">
+					and a.product_id in ('JDQXJD','JN','JN2','JNFQ','XJD')
+				</if>
+				<if test="productId != null and productId !='' ">
+					and a.product_id=#{productId}
+				</if>
+				
+				<if test="channels != null and channels != '' ">
+					AND a.channel_id IN (${channels})
+				</if>
+			<if test="termType != null and termType != '' ">
+            	<choose>
+		            <when test="termType == 1">
+		               and a.term = 1
+		            </when>
+		             <when test="termType == 2">
+		               and a.term = 3
+		            </when>
+		             <when test="termType == 3">
+		               and a.term = 6
+		            </when>
+		             <when test="termType == 5">
+		               and a.term = 4
+		            </when>
+		            <otherwise>
+		                and a.term NOT IN (1,3,6,4)
+		            </otherwise>
+            	</choose>
+            </if>
+			) tab5  
+			,
+			<!-- (
+				SELECT
+					IFNULL(
+						sum(IFNULL(a.apply_amt, 0)),
+						0
+					) AS total_apply_amt
+				FROM loan_apply a 
+				WHERE a.`status` > 170
+				AND 
+				<include refid="applydatesql"/>
+				
+				<if test="productId == null or productId =='' ">
+					and a.product_id in ('XJD','XJDFQ')
+				</if>
+				<if test="productId != null and productId !='' ">
+					and a.product_id=#{productId}
+				</if>
+				
+				<if test="channels != null and channels != '' ">
+					AND a.channel_id IN (${channels})
+				</if>
+				<if test="termType != null and termType != '' ">
+            	<choose>
+		            <when test="termType == 1">
+		               and a.term = 1
+		            </when>
+		             <when test="termType == 2">
+		               and a.term = 3
+		            </when>
+		             <when test="termType == 3">
+		               and a.term = 6
+		            </when>
+		             <when test="termType == 5">
+		               and a.term = 4
+		            </when>
+		            <otherwise>
+		                and a.term NOT IN (1,3,6,4)
+		            </otherwise>
+            	</choose>
+            </if>
+			) tab6 
+			, -->
+			(
+				SELECT
+					IFNULL(sum(IFNULL(a.approve_amt, 0)), 0) AS total_loan_ready
+				FROM loan_apply a
+				WHERE
+					<![CDATA[
+					a.`status` >= 410 and a.`status` < 514 and a.`status` != 511 and a.`status` != 420
+					]]>	
+				AND 
+				<include refid="approvedatesql"/>
+				
+				<if test="productId == null or productId =='' ">
+					and a.product_id in ('JDQXJD','JN','JN2','JNFQ','XJD')
+				</if>
+				<if test="productId != null and productId !='' ">
+					and a.product_id=#{productId}
+				</if>
+				
+				<if test="channels != null and channels != '' ">
+					AND a.channel_id IN (${channels})
+				</if>
+				<if test="termType != null and termType != '' ">
+            	<choose>
+		            <when test="termType == 1">
+		               and a.term = 1
+		            </when>
+		             <when test="termType == 2">
+		               and a.term = 3
+		            </when>
+		             <when test="termType == 3">
+		               and a.term = 6
+		            </when>
+		             <when test="termType == 5">
+		               and a.term = 4
+		            </when>
+		            <otherwise>
+		                and a.term NOT IN (1,3,6,4)
+		            </otherwise>
+            	</choose>
+            </if>
+			) tab7 
+			,
+			(
+			    SELECT
+   					IFNULL(sum(IFNULL(a.approve_amt, 0)), 0) AS total_loan, count(*) AS loan_pass,
+   					sum(case when a.loan_succ_count=0 then 1 else 0 end) loan_pass_new,
+	               	sum(case when a.loan_succ_count>0 then 1 else 0 end) loan_pass_old
+  				FROM
+  	 				loan_apply a 
+  	 				left join loan_contract c on a.id = c.apply_id
+   				WHERE
+  	 				(a.`status` >= 610 or a.`status` = 511 or a.`status` = 514 )
+   				AND 
+   				<include refid="paydatesql"/>
+   				
+				<if test="productId == null or productId =='' ">
+					and a.product_id in ('JDQXJD','JN','JN2','JNFQ','XJD')
+				</if>
+				<if test="productId != null and productId !='' ">
+					and a.product_id=#{productId}
+				</if>
+				
+   				<if test="channels != null and channels != '' ">
+					AND a.channel_id IN (${channels})
+				</if>
+					<if test="termType != null and termType != '' ">
+            	<choose>
+		            <when test="termType == 1">
+		               and a.term = 1
+		            </when>
+		             <when test="termType == 2">
+		               and a.term = 3
+		            </when>
+		             <when test="termType == 3">
+		               and a.term = 6
+		            </when>
+		             <when test="termType == 5">
+		               and a.term = 4
+		            </when>
+		            <otherwise>
+		                and a.term NOT IN (1,3,6,4)
+		            </otherwise>
+            	</choose>
+            </if>
+			) tab8,
+			(
+				SELECT
+					COUNT(*) as over_due
+				FROM
+					loan_overdue d 
+					left join loan_apply a on d.apply_id = a.id
+				WHERE d.status = 0
+				AND <include refid="applydatesql"/>
+				
+				<if test="productId == null or productId =='' ">
+					and a.product_id in ('JDQXJD','JN','JN2','JNFQ','XJD')
+				</if>
+				<if test="productId != null and productId !='' ">
+					and a.product_id=#{productId}
+				</if>
+				
+				<if test="channels != null and channels != '' ">
+					AND a.channel_id IN (${channels})
+				</if>
+					<if test="termType != null and termType != '' ">
+            	<choose>
+		            <when test="termType == 1">
+		               and a.term = 1
+		            </when>
+		             <when test="termType == 2">
+		               and a.term = 3
+		            </when>
+		             <when test="termType == 3">
+		               and a.term = 6
+		            </when>
+		             <when test="termType == 5">
+		               and a.term = 4
+		            </when>
+		            <otherwise>
+		                and a.term NOT IN (1,3,6,4)
+		            </otherwise>
+            	</choose>
+            </if>
+			) tab9,
+			(
+				SELECT
+					IFNULL(
+						sum(IFNULL(a.approve_amt, 0)),
+						0
+					) AS over_due_amt
+				FROM
+					loan_overdue d left 
+					join loan_apply a on d.apply_id = a.id
+				WHERE d.status = 0
+				AND <include refid="applydatesql"/>
+				
+				<if test="productId == null or productId =='' ">
+					and a.product_id in ('JDQXJD','JN','JN2','JNFQ','XJD')
+				</if>
+				<if test="productId != null and productId !='' ">
+					and a.product_id=#{productId}
+				</if>
+				
+				<if test="channels != null and channels != '' ">
+					AND a.channel_id IN (${channels})
+				</if>
+					<if test="termType != null and termType != '' ">
+            	<choose>
+		            <when test="termType == 1">
+		               and a.term = 1
+		            </when>
+		             <when test="termType == 2">
+		               and a.term = 3
+		            </when>
+		             <when test="termType == 3">
+		               and a.term = 6
+		            </when>
+		             <when test="termType == 5">
+		               and a.term = 4
+		            </when>
+		            <otherwise>
+		                and a.term NOT IN (1,3,6,4)
+		            </otherwise>
+            	</choose>
+            </if>
+			) tab10
+		
+    </select>
+    
+    
+    <!-- 现金贷还款统计 code y2316-->
+    <select id="getRepayCount" resultType="com.rongdu.loans.loan.vo.UserApplyRepayCountVO">
+    /*FORCE_SLAVE*/
+    SELECT
+    	tab1.totalAmt, tab1.totalNum, principal,payedPrincipal, tab1.payedNum, tab1.payedAmt, 
+    	tab1.delayNum, tab1.delayAmt, tab1.unpayNum, tab1.unpayAmt, tab1.repayDate,
+    	tab2.delayFee, partPayAmt
+    FROM
+    	(
+	    	SELECT 
+				 COUNT(apply_id) as totalNum ,SUM(p.total_amount) as totalAmt,
+				 SUM(principal) as principal,
+				 SUM(CASE WHEN p.status = 1 THEN principal else 0 end) as payedPrincipal,
+				 COUNT(CASE WHEN p.status = 1 THEN 1 else NULL end) as payedNum,
+				 SUM(CASE WHEN p.status = 1 THEN p.total_amount else 0 end) as payedAmt,
+				 COUNT(CASE WHEN p.status = 1 AND p.repay_type IN ('manualdelay','mandelay') THEN 1 else NULL end) as delayNum,
+				 SUM(CASE WHEN p.status = 1 AND p.repay_type IN ('manualdelay','mandelay') THEN p.principal else 0 end) as delayAmt,
+				 COUNT(CASE WHEN p.status = 0 THEN 1 else NULL end) as unpayNum,
+				 SUM(CASE WHEN p.status = 0 THEN p.principal + p.interest else 0 end) as unpayAmt, p.repay_date as repayDate,
+				 SUM(CASE WHEN p.status = 0 THEN p.actual_repay_amt else 0 end) as partPayAmt
+			FROM `loan_repay_plan_item` p 
+			left join loan_apply a on p.apply_id = a.id
+			WHERE
+			
+			<if test="applyOP.productId != null and  applyOP.productId != '' ">
+				a.product_id = #{applyOP.productId}
+			</if>
+			<if test="applyOP.productId == null or  applyOP.productId == '' ">
+				 a.product_id in ('JDQXJD','JN','JN2','JNFQ','XJD')
+			</if>
+			
+			<![CDATA[
+			AND DATE_FORMAT(p.`repay_date`,'%Y-%m-%d') >= DATE_FORMAT(#{applyOP.applyStart},'%Y-%m-%d')
+			and DATE_FORMAT(p.`repay_date`,'%Y-%m-%d') <= DATE_FORMAT(#{applyOP.applyEnd},'%Y-%m-%d')
+			]]>	
+			<if test="applyOP.channel != null and applyOP.channel != '' ">
+				AND a.channel_id IN (${applyOP.channel})
+			</if>
+			<if test="applyOP.termType != null and applyOP.termType != '' ">
+            	<choose>
+		            <when test="applyOP.termType == 1">
+		               and a.term = 1
+		            </when>
+		             <when test="applyOP.termType == 2">
+		               and a.term = 3
+		            </when>
+		             <when test="applyOP.termType == 3">
+		               and a.term = 6
+		            </when>
+		            <when test="applyOP.termType == 5">
+		               and a.term = 4
+		            </when>
+		            <otherwise>
+		                and a.term NOT IN (1,3,6,4)
+		            </otherwise>
+            	</choose>
+            </if>
+			GROUP BY p.repay_date
+		) tab1
+		LEFT JOIN
+		(
+			select SUM(l.succ_amt) as delayFee, CAST(p.`repay_date` AS DATE) as repayDate 
+			from loan_repay_log l 
+			LEFT JOIN `loan_repay_plan_item` p ON l.repay_plan_item_id = p.id
+			left join loan_apply a on p.apply_id = a.id
+			where  l.pay_type=2 and l.`status` ='SUCCESS' 
+			 
+			<if test="applyOP.productId != null and  applyOP.productId != '' ">
+				and	a.product_id = #{applyOP.productId}
+			</if>
+			<if test="applyOP.productId == null or  applyOP.productId == '' ">
+				and	 a.product_id in ('JDQXJD','JN','JN2','JNFQ','XJD')
+			</if>
+			and (IFNULL(p.repay_type,'')='manualdelay' or IFNULL(p.repay_type,'')='mandelay')
+			<![CDATA[
+			AND DATE_FORMAT(p.`repay_date`,'%Y-%m-%d') >= DATE_FORMAT(#{applyOP.applyStart},'%Y-%m-%d')
+			and DATE_FORMAT(p.`repay_date`,'%Y-%m-%d') <= DATE_FORMAT(#{applyOP.applyEnd},'%Y-%m-%d')
+			]]>
+			<if test="applyOP.channel != null and applyOP.channel != '' ">
+				AND a.channel_id IN (${applyOP.channel})
+			</if>
+			<if test="applyOP.termType != null and applyOP.termType != '' ">
+            	<choose>
+		            <when test="applyOP.termType == 1">
+		               and a.term = 1
+		            </when>
+		             <when test="applyOP.termType == 2">
+		               and a.term = 3
+		            </when>
+		             <when test="applyOP.termType == 3">
+		               and a.term = 6
+		            </when>
+		            <when test="applyOP.termType == 5">
+		               and a.term = 4
+		            </when>
+		            <otherwise>
+		                and a.term NOT IN (1,3,6,4)
+		            </otherwise>
+            	</choose>
+            </if>
+			GROUP BY CAST(p.`repay_date` AS DATE)
+		) tab2 ON tab1.repayDate = tab2.repayDate
+    </select>
+    
+    <select id="getDelaySum" resultType="java.lang.Double">
+    	/*FORCE_SLAVE*/
+    	SELECT 
+				  SUM(CASE WHEN p.status = 1 AND p.repay_type IN ('manualdelay','mandelay') THEN p.principal else 0 end) as delayAmt
+			FROM `loan_repay_plan_item` p 
+			left join loan_apply a on p.apply_id = a.id
+			WHERE a.product_id IN ('JDQXJD','JN','JN2','JNFQ','XJD')
+			<![CDATA[
+			AND DATE_FORMAT(p.`repay_date`,'%Y-%m-%d') >= DATE_FORMAT(#{applyOP.applyStart},'%Y-%m-%d')
+			and DATE_FORMAT(p.`repay_date`,'%Y-%m-%d') <= DATE_FORMAT(#{applyOP.applyEnd},'%Y-%m-%d')
+			]]>	
+			
+			<if test="applyOP.typeCheck != null and applyOP.typeCheck != ''">
+				<![CDATA[
+				 AND DATE_FORMAT(a.apply_time,'%Y-%m-%d') >= '2018-09-26'
+				]]>		
+			</if>
+			
+			<if test="applyOP.channel != null and applyOP.channel != '' ">
+				AND a.channel_id IN (${applyOP.channel})
+			</if>
+			<if test="applyOP.termType != null and applyOP.termType != '' ">
+            	<choose>
+		            <when test="applyOP.termType == 1">
+		               and a.term = 1
+		            </when>
+		             <when test="applyOP.termType == 2">
+		               and a.term = 3
+		            </when>
+		             <when test="applyOP.termType == 3">
+		               and a.term = 6
+		            </when>
+		            <when test="applyOP.termType == 5">
+		               and a.term = 4
+		            </when>
+		            <otherwise>
+		                and a.term NOT IN (1,3,6,4)
+		            </otherwise>
+            	</choose>
+            </if>
+    </select>
+
+	<select id="getOfficeListByProductId" resultType="java.util.HashMap">
+		SELECT o.id as id, o.`name` as office FROM sys_office o
+		WHERE o.remarks = #{0} 
+	</select>
+
+
+
+
+	<sql id="productApplyDateSql">
+		<![CDATA[
+			 a.apply_time >= #{startDate} and a.apply_time <= #{endDate}
+		]]>		
+	</sql>
+
+	<sql id="productPayDateSql">
+		<![CDATA[
+			 c.pay_time >= #{startDate} and c.pay_time <= #{endDate}
+		]]>		
+	</sql>
+
+	<!-- 产品统计-->
+    <select id="getProductCountByOffice" resultMap="BaseResultMap">
+    	/*FORCE_SLAVE*/
+        SELECT
+			tab1.total_reg as "totalReg", 
+			tab2.total_applyAccess as "totalApplyAccess", 
+			tab2.total_applyMoney as "totalApplyMoney", 
+			tab4.loan_pass as "loanPass",  
+			tab4.total_loan as "totalLoan",
+			tab5.over_due_amt as "overDueAmt",
+			tab6.total_repay as "totalRepay"
+		FROM
+			(
+				SELECT count(*) AS total_reg  
+				FROM cust_user u
+				WHERE 
+				<include refid="regdatesql"/>
+				<if test="productId != null and productId != '' and productId =='XJD' or productId =='XJDFQ'">
+                	AND u.channel NOT IN ('CCDQB','TFLAPP','LYFQAPP')
+            	</if>
+				<if test="productId != null and productId != '' and productId =='CCD'">
+                	AND u.channel= 'CCDQB'
+            	</if>
+            	<if test="productId != null and productId != '' and productId =='TFL'">
+                	AND u.channel= 'TFLAPP'
+            	</if>
+            	<if test="productId != null and productId != '' and productId =='LYFQ'">
+                	AND u.channel= 'LYFQAPP'
+            	</if>
+            	<if test="officeId != null">
+					AND u.remark IN (${officeId})
+				</if>
+			) tab1,
+			
+			
+			
+			(
+				SELECT 
+					IFNULL(sum(IFNULL(a.approve_amt, 0)), 0) AS total_applyMoney, count(*) AS total_applyAccess  
+				FROM loan_apply a
+				WHERE (a.`status` > 222 or a.`status` = 211 or a.`status` = 221 )
+				AND 
+				<include refid="productApplyDateSql"/>
+				<if test="officeId != null">
+					AND a.company_id IN (${officeId})
+				</if>
+				<if test="productId !=null and productId !='' ">
+					AND a.product_id = #{productId}
+				</if>
+			
+				
+			) tab2,
+			(
+				 SELECT
+   					IFNULL(sum(IFNULL(a.approve_amt, 0)), 0) AS total_loan, count(*) AS loan_pass
+  				FROM
+  	 				loan_apply a left join loan_contract c on a.id = c.apply_id
+   				WHERE
+  	 				(a.`status` >= 610 or a.`status` = 511 or a.`status` = 514 )
+   				AND 
+   				<include refid="productPayDateSql"/>
+				<if test="officeId != null">
+					AND a.company_id IN (${officeId})
+				</if>
+				<if test="productId != null and productId != '' ">
+					AND a.product_id = #{productId}
+				</if>
+			) tab4,
+			(
+				SELECT
+					 IFNULL(
+				        SUM(IFNULL(l.total_amount, 0)),
+				        0
+				    ) AS over_due_amt
+				FROM
+					 loan_apply a left JOIN loan_repay_plan_item l on a.id = l.apply_id
+				WHERE
+					a.`status` = 710
+					<![CDATA[
+					AND l.repay_date >= #{startDate} and l.repay_date <= #{endDate}
+					]]>	
+					<!-- AND a.company_id IN (${officeId}) -->
+				<if test="officeId != null">
+					AND a.company_id IN (${officeId})
+				</if>
+				<if test="productId != null and productId != '' ">
+					AND a.product_id = #{productId}
+				</if>
+			) tab5,
+			(
+				SELECT
+					IFNULL(
+						sum(IFNULL(i.actual_repay_amt, 0)),
+						0
+					) AS total_repay
+				FROM
+					loan_repay_plan_item i
+					LEFT JOIN loan_apply a ON i.apply_id = a.id
+				WHERE
+					i.`status` = 1
+					<![CDATA[
+					AND i.actual_repay_time >= #{startDate} and i.actual_repay_time <= #{endDate}
+					]]>	
+					<!-- AND a.company_id IN (${officeId}) -->
+					
+					<if test="officeId != null">
+					AND a.company_id IN (${officeId})
+				</if>
+				<if test="productId != null and productId != '' ">
+					AND a.product_id = #{productId}
+				</if>
+					
+			) tab6
+    </select>
+
+	<!-- 30天还款统计 code y2316-->
+    <select id="getThirtyRepayCount" resultType="java.util.HashMap">
+    /*FORCE_SLAVE*/
+    SELECT *, round(p1Payed/p1Total,4) p1Rate, round(p2Payed/p2Total,4) p2Rate, round(p3Payed/p3Total,4) p3Rate 
+    <if test="applyOP.termType != null and applyOP.termType == 'fore'">
+	          	,round(p4Payed/p4Total,4) p4Rate
+	</if>
+    from (
+	    SELECT  date_format(lr.loan_start_date,'%Y-%m-%d') loanStartDate,
+                SUM(CASE WHEN l.`status` = 1 AND l.this_term = 1 THEN 1 else 0 end) as p1Payed,
+                SUM(CASE WHEN l.this_term = 1 THEN 1 else 0 end) as p1Total,
+                SUM(CASE WHEN l.`status` = 1 AND l.this_term = 2 THEN 1 else 0 end) as p2Payed,
+                SUM(CASE WHEN l.this_term = 2 THEN 1 else 0 end) as p2Total,
+                SUM(CASE WHEN l.`status` = 1 AND l.this_term = 3 THEN 1 else 0 end) as p3Payed,
+                SUM(CASE WHEN l.this_term = 3 THEN 1 else 0 end) as p3Total
+           		<choose>
+			    	<when test="applyOP.termType == 'fore'">
+			    		,SUM(CASE WHEN l.`status` = 1 AND l.this_term = 4 THEN 1 else 0 end) as p4Payed,
+                		SUM(CASE WHEN l.this_term = 4 THEN 1 else 0 end) as p4Total,
+                		date_format(date_add(lr.loan_start_date,INTERVAL 6 day),'%Y-%m-%d') p1Date,
+			    		date_format(date_add(lr.loan_start_date,INTERVAL 13 day),'%Y-%m-%d') p2Date,
+			    		date_format(date_add(lr.loan_start_date,INTERVAL 20 day),'%Y-%m-%d') p3Date,
+			    		date_format(date_add(lr.loan_start_date,INTERVAL 27 day),'%Y-%m-%d') p4Date
+			    	</when>
+			    	<otherwise>
+			    		,date_format(date_add(lr.loan_start_date,INTERVAL 9 day),'%Y-%m-%d') p1Date,
+			    		date_format(date_add(lr.loan_start_date,INTERVAL 19 day),'%Y-%m-%d') p2Date,
+			    		date_format(date_add(lr.loan_start_date,INTERVAL 29 day),'%Y-%m-%d') p3Date
+			    	</otherwise>
+			    </choose>
+	    FROM loan_repay_plan_item l 
+	    LEFT JOIN loan_repay_plan lr ON l.apply_id = lr.apply_id
+	    LEFT JOIN loan_apply la ON l.apply_id = la.id
+	    WHERE l.del = 0
+		<if test="applyOP.compositeScore != null and applyOP.compositeScore != '' ">
+			<choose>
+				<when test="applyOP.compositeScore == 'A'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) > 550 and CONVERT(la.composite_score,SIGNED) <= 650 ]]>
+				</when>
+				<when test="applyOP.compositeScore == 'B'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) > 500 and CONVERT(la.composite_score,SIGNED) <= 550 ]]>
+				</when>
+				<when test="applyOP.compositeScore == 'C'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) > 450 and CONVERT(la.composite_score,SIGNED) <= 500 ]]>
+				</when>
+				<when test="applyOP.compositeScore == 'D'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) > 400 and CONVERT(la.composite_score,SIGNED) <= 450 ]]>
+				</when>
+				<when test="applyOP.compositeScore == 'E'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) >= 300 and CONVERT(la.composite_score,SIGNED) <= 400 ]]>
+				</when>
+			</choose>
+		</if>
+	    <choose>
+	    	<when test="applyOP.termType != null and applyOP.termType == 'fore'">
+	    		 AND l.total_term = 4
+	    	</when>
+	    	<otherwise>
+	    		AND l.total_term = 3
+	    	</otherwise>
+	    </choose>
+	    <![CDATA[
+			and date_format(lr.loan_start_date,'%Y-%m-%d') >= DATE_FORMAT(#{applyOP.applyStart},'%Y-%m-%d')
+			and date_format(lr.loan_start_date,'%Y-%m-%d') <= DATE_FORMAT(#{applyOP.applyEnd},'%Y-%m-%d')
+			]]>
+		<if test="applyOP.channel != null and applyOP.channel != '' ">
+			AND la.channel_id IN (${applyOP.channel})
+		</if>
+		<if test="applyOP.loanSucess != null and applyOP.loanSucess != '' and applyOP.loanSucess == 'yes'">
+			AND la.loan_succ_count = 0
+		</if>
+		<if test="applyOP.loanSucess != null and applyOP.loanSucess != '' and applyOP.loanSucess == 'no'">
+			AND la.loan_succ_count > 0
+		</if>
+		<if test="applyOP.userCreditLine != null and applyOP.userCreditLine != ''">
+			AND la.user_credit_line = ${applyOP.userCreditLine}
+		</if>
+	    GROUP BY date_format(lr.loan_start_date,'%Y-%m-%d')
+	 ) t
+    </select>
+    
+    <!-- 信审员单期还款统计 fy -->
+    <select id="approverOneRepayCount" resultType="java.util.HashMap">
+	    /*FORCE_SLAVE*/
+	    SELECT 
+	    	tab1.approverName AS approverName,
+	    	tab1.p1Payed AS p1Payed,
+	    	tab2.p1Total AS p1Total,
+	    	round(tab1.p1Payed/tab2.p1Total,4) p1Rate
+	    FROM
+	    (SELECT COUNT(DISTINCT(l.apply_id)) AS p1Payed,
+	    		la.approver_name AS approverName
+	    FROM loan_repay_plan_item l 
+	    LEFT JOIN loan_repay_plan lr ON l.apply_id = lr.apply_id
+	    LEFT JOIN loan_apply la ON l.apply_id = la.id
+	    WHERE l.del = 0 AND la.approver_id != 'system' AND l.total_term = 1 AND l.status = 1
+	    <![CDATA[
+			and date_format(lr.loan_start_date,'%Y-%m-%d') >= DATE_FORMAT(#{applyOP.applyStart},'%Y-%m-%d')
+			and date_format(lr.loan_start_date,'%Y-%m-%d') <= DATE_FORMAT(#{applyOP.applyEnd},'%Y-%m-%d')
+			]]>
+		<if test="applyOP.compositeScore != null and applyOP.compositeScore != '' ">
+			<choose>
+				<when test="applyOP.compositeScore == 'A'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) > 550 and CONVERT(la.composite_score,SIGNED) <= 650 ]]>
+				</when>
+				<when test="applyOP.compositeScore == 'B'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) > 500 and CONVERT(la.composite_score,SIGNED) <= 550 ]]>
+				</when>
+				<when test="applyOP.compositeScore == 'C'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) > 450 and CONVERT(la.composite_score,SIGNED) <= 500 ]]>
+				</when>
+				<when test="applyOP.compositeScore == 'D'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) > 400 and CONVERT(la.composite_score,SIGNED) <= 450 ]]>
+				</when>
+				<when test="applyOP.compositeScore == 'E'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) >= 300 and CONVERT(la.composite_score,SIGNED) <= 400 ]]>
+				</when>
+			</choose>
+		</if>
+		<if test="applyOP.auditor != null and applyOP.auditor != '' ">
+			AND la.approver_id = #{applyOP.auditor}
+		</if>
+		<if test="applyOP.channel != null and applyOP.channel != '' ">
+			AND la.channel_id IN (${applyOP.channel})
+		</if>
+		<if test="applyOP.loanSucess != null and applyOP.loanSucess != '' ">
+			<choose>
+				<when test="applyOP.loanSucess == 'yes'">
+					and la.loan_succ_count > 0
+				</when>
+				<otherwise>
+					and la.loan_succ_count = 0
+				</otherwise>
+			</choose>
+		</if>
+	    GROUP BY la.approver_id) tab1 LEFT JOIN
+		(SELECT COUNT(DISTINCT(l.apply_id)) AS p1Total,
+				la.approver_name AS approverName
+	    FROM loan_repay_plan_item l 
+	    LEFT JOIN loan_repay_plan lr ON l.apply_id = lr.apply_id
+	    LEFT JOIN loan_apply la ON l.apply_id = la.id
+	    WHERE l.del = 0 AND la.approver_id != 'system' AND l.total_term = 1
+	    <![CDATA[
+			and date_format(lr.loan_start_date,'%Y-%m-%d') >= DATE_FORMAT(#{applyOP.applyStart},'%Y-%m-%d')
+			and date_format(lr.loan_start_date,'%Y-%m-%d') <= DATE_FORMAT(#{applyOP.applyEnd},'%Y-%m-%d')
+			]]>
+		<if test="applyOP.compositeScore != null and applyOP.compositeScore != '' ">
+			<choose>
+				<when test="applyOP.compositeScore == 'A'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) > 550 and CONVERT(la.composite_score,SIGNED) <= 650 ]]>
+				</when>
+				<when test="applyOP.compositeScore == 'B'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) > 500 and CONVERT(la.composite_score,SIGNED) <= 550 ]]>
+				</when>
+				<when test="applyOP.compositeScore == 'C'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) > 450 and CONVERT(la.composite_score,SIGNED) <= 500 ]]>
+				</when>
+				<when test="applyOP.compositeScore == 'D'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) > 400 and CONVERT(la.composite_score,SIGNED) <= 450 ]]>
+				</when>
+				<when test="applyOP.compositeScore == 'E'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) >= 300 and CONVERT(la.composite_score,SIGNED) <= 400 ]]>
+				</when>
+			</choose>
+		</if>
+		<if test="applyOP.auditor != null and applyOP.auditor != '' ">
+			AND la.approver_id = #{applyOP.auditor}
+		</if>
+		<if test="applyOP.channel != null and applyOP.channel != '' ">
+			AND la.channel_id IN (${applyOP.channel})
+		</if>
+		<if test="applyOP.loanSucess != null and applyOP.loanSucess != '' ">
+			<choose>
+				<when test="applyOP.loanSucess == 'yes'">
+					and la.loan_succ_count > 0
+				</when>
+				<otherwise>
+					and la.loan_succ_count = 0
+				</otherwise>
+			</choose>
+		</if>
+	    GROUP BY la.approver_id) tab2 ON tab1.approverName = tab2.approverName	       
+    </select>
+
+	<!-- 现金贷信审员还款统计 fy-->
+    <select id="approverRepayCount" resultType="java.util.HashMap">
+    /*FORCE_SLAVE*/
+    SELECT *,
+     <choose>
+     	<when test="applyOP.termType != null and applyOP.termType == 'one'">
+     		round(p1Payed/p1Total,4) p1Rate
+     	</when>
+     	<when test="applyOP.termType != null and applyOP.termType == 'fore'">
+     		round(p1Payed/p1Total,4) p1Rate, round(p2Payed/p2Total,4) p2Rate, round(p3Payed/p3Total,4) p3Rate, round(p4Payed/p4Total,4) p4Rate
+     	</when>
+     	<otherwise>
+     		round(p1Payed/p1Total,4) p1Rate, round(p2Payed/p2Total,4) p2Rate, round(p3Payed/p3Total,4) p3Rate
+     	</otherwise>
+     </choose>
+     FROM (
+	    SELECT  la.approver_name AS approverName,
+	    		<choose>
+			     	<when test="applyOP.termType != null and applyOP.termType == 'one'">
+			     		SUM(CASE WHEN l.`status` = 1 AND l.total_term = 1 <include refid="loanAgain"/> THEN 1 else 0 end) as p1Payed,
+			            SUM(CASE WHEN l.total_term = 1 <include refid="loanAgain"/> THEN 1 else 0 end) as p1Total
+			     	</when>
+			     	<when test="applyOP.termType != null and applyOP.termType == 'fore'">
+					    SUM(CASE WHEN l.`status` = 1 AND l.this_term = 1 <include refid="loanAgain"/>  THEN 1 else 0 end) as p1Payed,
+			            SUM(CASE WHEN l.this_term = 1 <include refid="loanAgain"/> THEN 1 else 0 end) as p1Total,
+			            SUM(CASE WHEN l.`status` = 1  <include refid="loanAgain"/> AND l.this_term = 2 THEN 1 else 0 end) as p2Payed,
+			            SUM(CASE WHEN l.this_term = 2  <include refid="loanAgain"/> THEN 1 else 0 end) as p2Total,
+			            SUM(CASE WHEN l.`status` = 1 AND l.this_term = 3  <include refid="loanAgain"/> THEN 1 else 0 end) as p3Payed,
+			            SUM(CASE WHEN l.this_term = 3  <include refid="loanAgain"/> THEN 1 else 0 end) as p3Total,
+			            SUM(CASE WHEN l.`status` = 1 AND l.this_term = 4  <include refid="loanAgain"/> THEN 1 else 0 end) as p4Payed,
+			            SUM(CASE WHEN l.this_term = 4  <include refid="loanAgain"/> THEN 1 else 0 end) as p4Total
+			     	</when>
+			     	<otherwise>
+					    SUM(CASE WHEN l.`status` = 1 AND l.this_term = 1  <include refid="loanAgain"/> THEN 1 else 0 end) as p1Payed,
+			            SUM(CASE WHEN l.this_term = 1  <include refid="loanAgain"/> THEN 1 else 0 end) as p1Total,
+			            SUM(CASE WHEN l.`status` = 1 AND l.this_term = 2  <include refid="loanAgain"/> THEN 1 else 0 end) as p2Payed,
+			            SUM(CASE WHEN l.this_term = 2  <include refid="loanAgain"/> THEN 1 else 0 end) as p2Total,
+			            SUM(CASE WHEN l.`status` = 1 AND l.this_term = 3  <include refid="loanAgain"/> THEN 1 else 0 end) as p3Payed,
+			            SUM(CASE WHEN l.this_term = 3  <include refid="loanAgain"/> THEN 1 else 0 end) as p3Total
+			     	</otherwise>
+			     </choose>
+	    FROM loan_repay_plan_item l 
+	    LEFT JOIN loan_repay_plan lr ON l.apply_id = lr.apply_id
+	    LEFT JOIN loan_apply la ON l.apply_id = la.id
+	    WHERE l.del = 0 AND la.approver_id != 'system'
+		<if test="applyOP.loanSucess != null and applyOP.loanSucess != '' ">
+			<choose>
+				<when test="applyOP.loanSucess == 'yes'">
+					and la.loan_succ_count > 0
+				</when>
+				<otherwise>
+					and la.loan_succ_count = 0
+				</otherwise>
+			</choose>
+		</if>
+	    <choose>
+	     	<when test="applyOP.termType != null and applyOP.termType == 'one'">
+	     		AND l.total_term = 1 
+	     	</when>
+	     	<when test="applyOP.termType != null and applyOP.termType == 'fore'">
+	     		AND l.total_term = 4
+	     	</when>
+	     	<otherwise>
+	     		AND l.total_term = 3 
+	     	</otherwise>
+     	</choose>
+	    <![CDATA[
+			and date_format(lr.loan_start_date,'%Y-%m-%d') >= DATE_FORMAT(#{applyOP.applyStart},'%Y-%m-%d')
+			and date_format(lr.loan_start_date,'%Y-%m-%d') <= DATE_FORMAT(#{applyOP.applyEnd},'%Y-%m-%d')
+			]]>
+		<if test="applyOP.compositeScore != null and applyOP.compositeScore != '' ">
+			<choose>
+				<when test="applyOP.compositeScore == 'A'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) > 550 and CONVERT(la.composite_score,SIGNED) <= 650 ]]>
+				</when>
+				<when test="applyOP.compositeScore == 'B'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) > 500 and CONVERT(la.composite_score,SIGNED) <= 550 ]]>
+				</when>
+				<when test="applyOP.compositeScore == 'C'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) > 450 and CONVERT(la.composite_score,SIGNED) <= 500 ]]>
+				</when>
+				<when test="applyOP.compositeScore == 'D'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) > 400 and CONVERT(la.composite_score,SIGNED) <= 450 ]]>
+				</when>
+				<when test="applyOP.compositeScore == 'E'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) >= 300 and CONVERT(la.composite_score,SIGNED) <= 400 ]]>
+				</when>
+			</choose>
+		</if>
+		<if test="applyOP.auditor != null and applyOP.auditor != '' ">
+			AND la.approver_id = #{applyOP.auditor}
+		</if>
+		<if test="applyOP.channel != null and applyOP.channel != '' ">
+			AND la.channel_id IN (${applyOP.channel})
+		</if>
+	    GROUP BY la.approver_id
+	 ) t
+    </select>
+
+    <!-- 口袋放款的还款统计-->
+    <select id="getOtherRepayStat" resultType="com.rongdu.loans.loan.vo.UserApplyRepayCountVO">
+    /*FORCE_SLAVE*/
+    SELECT
+    	tab1.totalAmt, tab1.totalNum, principal,payedPrincipal, tab1.payedNum, tab1.payedAmt, 
+    	tab1.delayNum, tab1.delayAmt, tab1.unpayNum, tab1.unpayAmt, tab1.repayDate,
+    	tab2.delayFee
+    FROM
+    	(
+	    	SELECT 
+				 COUNT(p.apply_id) as totalNum ,SUM(p.total_amount) as totalAmt,
+				 SUM(p.principal) as principal,
+				 SUM(CASE WHEN p.status = 1 THEN p.principal else 0 end) as payedPrincipal,
+				 COUNT(CASE WHEN p.status = 1 THEN 1 else NULL end) as payedNum,
+				 SUM(CASE WHEN p.status = 1 THEN p.total_amount else 0 end) as payedAmt,
+				 COUNT(CASE WHEN p.status = 1 AND p.repay_type IN ('manualdelay','mandelay') THEN 1 else NULL end) as delayNum,
+				 SUM(CASE WHEN p.status = 1 AND p.repay_type IN ('manualdelay','mandelay') THEN p.principal else 0 end) as delayAmt,
+				 COUNT(CASE WHEN p.status = 0 THEN 1 else NULL end) as unpayNum,
+				 SUM(CASE WHEN p.status = 0 THEN p.principal + p.interest else 0 end) as unpayAmt, p.repay_date as repayDate
+			FROM `loan_repay_plan_item` p 
+			left join loan_repay_plan pl on p.apply_id = pl.apply_id
+			left join loan_apply a on p.apply_id = a.id
+			WHERE pl.withdrawal_source =2
+			<if test="applyOP.productId != null and  applyOP.productId != '' ">
+				and a.product_id = #{applyOP.productId}
+			</if>
+			<if test="applyOP.productId == null or  applyOP.productId == '' ">
+				and a.product_id in('XJD','XJDFQ')
+			</if>
+			
+			<![CDATA[
+			AND DATE_FORMAT(p.`repay_date`,'%Y-%m-%d') >= DATE_FORMAT(#{applyOP.applyStart},'%Y-%m-%d')
+			and DATE_FORMAT(p.`repay_date`,'%Y-%m-%d') <= DATE_FORMAT(#{applyOP.applyEnd},'%Y-%m-%d')
+			]]>	
+			<if test="applyOP.channel != null and applyOP.channel != '' ">
+				AND a.channel_id IN (${applyOP.channel})
+			</if>
+			<if test="applyOP.termType != null and applyOP.termType != '' ">
+            	<choose>
+		            <when test="applyOP.termType == 1">
+		               and a.term = 1
+		            </when>
+		             <when test="applyOP.termType == 2">
+		               and a.term = 3
+		            </when>
+		             <when test="applyOP.termType == 3">
+		               and a.term = 6
+		            </when>
+		            <otherwise>
+		                and a.term NOT IN (1,3,6)
+		            </otherwise>
+            	</choose>
+            </if>
+			GROUP BY p.repay_date
+		) tab1
+		LEFT JOIN
+		(
+			select SUM(l.succ_amt) as delayFee, CAST(p.`repay_date` AS DATE) as repayDate 
+			from loan_repay_log l 
+			LEFT JOIN `loan_repay_plan_item` p ON l.repay_plan_item_id = p.id
+			left join loan_repay_plan pl on p.apply_id = pl.apply_id
+			left join loan_apply a on p.apply_id = a.id
+			where  l.pay_type=2 and l.`status` ='SUCCESS' 
+			and pl.withdrawal_source =2 
+			<if test="applyOP.productId != null and  applyOP.productId != '' ">
+				and	a.product_id = #{applyOP.productId}
+			</if>
+			<if test="applyOP.productId == null or  applyOP.productId == '' ">
+				and	 a.product_id in ('JDQXJD','JN','JN2','JNFQ','XJD')
+			</if>
+			and (IFNULL(p.repay_type,'')='manualdelay' or IFNULL(p.repay_type,'')='mandelay')
+			<![CDATA[
+			AND DATE_FORMAT(p.`repay_date`,'%Y-%m-%d') >= DATE_FORMAT(#{applyOP.applyStart},'%Y-%m-%d')
+			and DATE_FORMAT(p.`repay_date`,'%Y-%m-%d') <= DATE_FORMAT(#{applyOP.applyEnd},'%Y-%m-%d')
+			]]>
+			<if test="applyOP.channel != null and applyOP.channel != '' ">
+				AND a.channel_id IN (${applyOP.channel})
+			</if>
+			<if test="applyOP.termType != null and applyOP.termType != '' ">
+            	<choose>
+		            <when test="applyOP.termType == 1">
+		               and a.term = 1
+		            </when>
+		             <when test="applyOP.termType == 2">
+		               and a.term = 3
+		            </when>
+		             <when test="applyOP.termType == 3">
+		               and a.term = 6
+		            </when>
+		            <otherwise>
+		                and a.term NOT IN (1,3,6)
+		            </otherwise>
+            	</choose>
+            </if>
+			GROUP BY CAST(p.`repay_date` AS DATE)
+		) tab2 ON tab1.repayDate = tab2.repayDate
+    </select>
+    
+    <!-- 口袋实际放款金额 -->
+    <select id="getKDPayAmt" resultType="java.lang.Double">
+    	/*FORCE_SLAVE*/
+    	SELECT SUM(k.pay_amt) AS payAmt 
+    	FROM koudai_pay_log k 
+    	WHERE k.pay_status = 0 and k.del = 0 
+		<![CDATA[
+		AND k.pay_time >= #{startDate} and k.pay_time <= #{endDate}
+		]]>	
+    </select>
+    
+    <!-- 单期还款统计 fy -->
+    <select id="oneRepayCount" resultType="java.util.HashMap">
+	    /*FORCE_SLAVE*/
+        SELECT *,
+        round(payedFirstLoan/firstLoan,4) payedFirstLoanRate, round(payedDoubleLoan/doubleLoan,4) payedDoubleLoanRate, round(p1Payed/p1Total,4) payedRate
+        from (
+	    SELECT
+		SUM(CASE WHEN la.loan_succ_count = 0 THEN 1 else 0 end) as firstLoan,
+		SUM(CASE WHEN la.loan_succ_count = 0 THEN 0 else 1 end) as doubleLoan,
+		COUNT(DISTINCT(l.apply_id)) AS p1Total,
+		SUM(CASE WHEN l.`status` = 1 and la.loan_succ_count = 0 THEN 1 else 0 end) as payedFirstLoan,
+		SUM(CASE WHEN l.`status` = 1 and la.loan_succ_count != 0 THEN 1 else 0 end) as payedDoubleLoan,
+		SUM(CASE WHEN l.`status` = 1 THEN 1 else 0 end) as p1Payed,
+		date_format(lr.loan_start_date,'%Y-%m-%d') AS loanStartDate,
+		date_format(lr.loan_end_date,'%Y-%m-%d') AS loanEndDate
+	    FROM loan_repay_plan lr
+	    LEFT JOIN loan_repay_plan_item l ON l.apply_id = lr.apply_id
+	    LEFT JOIN loan_apply la ON l.apply_id = la.id
+	    WHERE l.del = 0 AND l.total_term = 1
+	    <![CDATA[
+			and lr.loan_start_date >= #{applyOP.applyStart}
+			and lr.loan_start_date < date_add(#{applyOP.applyEnd},INTERVAL 1 day)
+			]]>
+		<if test="applyOP.compositeScore != null and applyOP.compositeScore != '' ">
+			<choose>
+				<when test="applyOP.compositeScore == 'A'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) > 550 and CONVERT(la.composite_score,SIGNED) <= 650 ]]>
+				</when>
+				<when test="applyOP.compositeScore == 'B'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) > 500 and CONVERT(la.composite_score,SIGNED) <= 550 ]]>
+				</when>
+				<when test="applyOP.compositeScore == 'C'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) > 450 and CONVERT(la.composite_score,SIGNED) <= 500 ]]>
+				</when>
+				<when test="applyOP.compositeScore == 'D'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) > 400 and CONVERT(la.composite_score,SIGNED) <= 450 ]]>
+				</when>
+				<when test="applyOP.compositeScore == 'E'.toString()">
+					<![CDATA[ and CONVERT(la.composite_score,SIGNED) >= 300 and CONVERT(la.composite_score,SIGNED) <= 400 ]]>
+				</when>
+			</choose>
+		</if>
+		<if test="applyOP.termType != null and applyOP.termType != '' and applyOP.termType == 'ones'">
+			AND la.approve_term = 8
+		</if>
+		<if test="applyOP.termType != null and applyOP.termType != '' and applyOP.termType == 'one'">
+			AND la.approve_term = 8
+		</if>
+		<if test="applyOP.channel != null and applyOP.channel != '' ">
+			AND la.channel_id IN (${applyOP.channel})
+		</if>
+		<if test="applyOP.loanSucess != null and applyOP.loanSucess != '' and applyOP.loanSucess == 'yes'">
+			AND la.loan_succ_count = 0
+		</if>
+		<if test="applyOP.loanSucess != null and applyOP.loanSucess != '' and applyOP.loanSucess == 'no'">
+			AND la.loan_succ_count > 0
+		</if>
+	    GROUP BY date_format(lr.loan_start_date,'%Y-%m-%d')
+        ) t
+    </select>
+
+	<select id="getCheckAllotList" resultMap="checkAllotResult">
+		SELECT
+		ap.operator_id,ap.approver_id,
+		COUNT(1) total,
+-- 		SUM(CASE WHEN ap.`approve_result` = 3 || ap.`approve_result` = 4 THEN 1 ELSE 0 END) total,
+		SUM(CASE WHEN ap.`approve_result` = 3 THEN 1 ELSE 0 END) apprv,
+		SUM(CASE WHEN ap.`approve_result` = 4 THEN 1 ELSE 0 END) notapprv,
+		SUM(CASE WHEN (select lpl.id from loan_pay_log lpl where ap.id = lpl.apply_id and lpl.status = 'S') is not NULL THEN 1 ELSE 0 END) withdrawrv
+		FROM `loan_apply` ap
+		WHERE del = 0 and ap.approve_result IN(3,4)
+-- 		WHERE del = 0 and ap.`status` != 223
+		<if test="applyOP.loanSucess != null and applyOP.loanSucess != '' ">
+			<choose>
+				<when test="applyOP.loanSucess == 'yes'">
+					and ap.loan_succ_count > 0
+				</when>
+				<otherwise>
+					and ap.loan_succ_count = 0
+				</otherwise>
+			</choose>
+		</if>
+		<if test="applyOP.channel != null and applyOP.channel != ''">
+			and ap.channel_id in (${applyOP.channel})
+		</if>
+		<if test="applyOP.productId != null and applyOP.productId !='' ">
+			and ap.product_id=#{applyOP.productId}
+		</if>
+		<if test="applyOP.termType != null and applyOP.termType != '' ">
+			<choose>
+				<when test="applyOP.termType == 1">
+					and ap.term = 1
+				</when>
+				<when test="applyOP.termType == 5">
+					and ap.term = 4
+				</when>
+				<otherwise>
+					and ap.term NOT IN (1,3,6,4)
+				</otherwise>
+			</choose>
+		</if>
+		<if test="applyOP.applyStart != null and applyOP.applyStart != '' and applyOP.applyEnd != null and applyOP.applyEnd != ''">
+			<![CDATA[
+			and ap.approve_time >= #{applyOP.applyStart} and ap.approve_time <= #{applyOP.applyEnd}
+			]]>
+		</if>
+		<if test="type != 'ALL' ">
+			and (ap.operator_id in
+			<foreach item="item" index="index" collection="auditorId" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+			or ap.approver_id in
+			<foreach item="item" index="index" collection="auditorId" open="(" separator="," close=")">
+				#{item}
+			</foreach>)
+		</if>
+		GROUP BY
+		ap.operator_id,ap.approver_id
+	</select>
+</mapper>

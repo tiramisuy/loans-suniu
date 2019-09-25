@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongdu.loans.app.dao.AppBankLimitDAO">
+    
+	<resultMap id="BaseResultMap" type="com.rongdu.loans.app.entity.AppBankLimit">
+		<id column="ID" property="id" />
+		<result column="CHANNEL" property="channel" />
+		<result column="IS_OPEN" property="isOpen" />
+		<result column="BANK_NO" property="bankNo" />
+		<result column="BANK_CODE" property="bankCode" />
+		<result column="BANK_NAME" property="bankName" />
+		<result column="ONCE_LIMIT" property="onceLimit" />
+		<result column="DAY_LIMIT" property="dayLimit" />
+		<result column="MONTH_LIMIT" property="monthLimit" />
+		<result column="NUM" property="num" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="REMARK" property="remark" />
+		<result column="DEL" property="del" />
+	</resultMap>
+
+	<resultMap id="sigResultMap" type="com.rongdu.loans.app.vo.AppBanksVO">
+		<id column="ID" property="id" />
+		<result column="BANK_NO" property="bankNo" />
+		<result column="BANK_CODE" property="bankCode" />
+		<result column="BANK_NAME" property="bankName" />
+		<result column="ONCE_LIMIT" property="onceLimit" />
+		<result column="DAY_LIMIT" property="dayLimit" />
+		<result column="MONTH_LIMIT" property="monthLimit" />
+	</resultMap>
+	
+	<sql id="All_Column">
+		id, channel, is_open, bank_no, bank_code, bank_name, once_limit, day_limit, month_limit, num, create_by, create_time, update_by, update_time, remark, del
+	</sql>
+	
+	<sql id="Where_Obj">
+		<where>
+		    del = 0
+		    <if test="id!=null">
+				AND id = #{id}
+			</if>
+			<if test="isOpen!=null">
+				AND is_open = #{isOpen}
+			</if>
+			<if test="bankNo!=null">
+				AND bank_no = #{bankNo}
+			</if>
+			<if test="bankCode!=null">
+				AND bank_code = #{bankCode}
+			</if>
+			<if test="bankName!=null">
+				AND bank_name = #{bankName}
+			</if>
+			<if test="onceLimit!=null">
+				AND once_limit = #{onceLimit}
+			</if>
+			<if test="dayLimit!=null">
+				AND month_limit = #{dayLimit}
+			</if>
+			<if test="monthLimit!=null">
+				AND bank_name = #{monthLimit}
+			</if> 
+			<if test="num!=null">
+			    AND num = #{num}
+			</if>
+	   </where>
+	</sql>
+    	
+	<select id="getById" parameterType="string" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM app_bank_limit
+	   WHERE del = 0
+	     AND id = #{id}
+	</select>
+	
+	<select id="getBanks" resultMap="sigResultMap">
+	  SELECT 
+		      bank_no, bank_code, bank_name, once_limit, day_limit, month_limit
+		FROM app_bank_limit
+	   WHERE del = 0
+	     AND is_open = 'Y'
+	</select>
+	
+	<select id="getBankNameAndNo" resultMap="sigResultMap">
+	  SELECT DISTINCT(bank_no), bank_code, bank_name FROM app_bank_limit WHERE del = 0 and is_open = 'Y'
+	</select>
+	
+	<select id="getBankNameAndNoByCode" resultMap="sigResultMap">
+	  SELECT 
+	         bank_no,
+	         bank_code,
+	         bank_name
+	    FROM app_bank_limit 
+	   WHERE del = 0
+	    AND  bank_code = #{bankCode}
+	    LIMIT 1
+	</select>
+	
+	<select id="get" resultMap="BaseResultMap">
+	  SELECT 
+		 <include refid="All_Column"/>
+		FROM app_bank_limit
+	     <include refid="Where_Obj"/>
+	   ORDER BY id
+	   LIMIT 1
+	</select>
+	
+	<select id="findList" resultType="list">
+		SELECT 
+		 <include refid="All_Column"/>
+		FROM app_bank_limit
+	     <include refid="Where_Obj"/>
+	</select>
+	
+	<select id="findAllList" resultType="list">
+		SELECT 
+			<include refid="All_Column"/>
+		FROM app_bank_limit
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO app_bank_limit(
+			id,
+			channel,
+			is_open,
+			bank_no,
+			bank_name,
+			bank_code,
+			once_limit,
+			day_limit,
+			month_limit,
+			num,
+			remarks,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			del
+		) VALUES (
+			#{id},
+			#{channel},
+			#{isOpen},
+			#{bankNo},
+			#{bankName},
+			#{bankCode},
+			#{onceLimit},
+			#{dayLimit},
+			#{monthLimit},
+			#{num},
+			#{remarks},
+			#{createBy},
+			#{createTime},
+			#{updateBy},
+			#{updateTime},
+			#{del}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE app_bank_limit SET
+		    <if test="channel!=null">	
+			channel = #{channel},
+			</if>
+			<if test="isOpen!=null">
+			is_open = #{isOpen},
+			</if>
+			<if test="bankNo!=null">
+			bank_no = #{bankNo},
+			</if>
+			<if test="bankCode!=null">
+			bank_code = #{bankCode},
+			</if>
+			<if test="bankName!=null">
+			bank_name = #{bankName},
+			</if>
+			<if test="onceLimit!=null">
+			once_limit = #{onceLimit},
+			</if>
+			<if test="dayLimit!=null">
+			day_limit = #{dayLimit},
+			</if>
+			<if test="monthLimit!=null">
+			month_limit = #{monthLimit},
+			</if>
+			<if test="num!=null">
+			num = #{num},
+			</if>
+			remarks = #{remarks},
+			update_by = #{updateBy},
+			update_time = #{updateTime},
+			del = #{del}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<update id="deleteById">
+	    UPDATE app_bank_limit SET
+	        <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		    </if>
+		    <if test="updateTime!=null">
+			  update_time = #{updateTime},
+		    </if> 
+	          del = 1
+		 WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+	    UPDATE app_bank_limit SET
+	       <if test="updateBy!=null">
+			   update_by = #{updateBy},
+		   </if>
+		   <if test="updateTime!=null">
+			   update_time = #{updateTime},
+		   </if> 
+	           del = 1
+		<include refid="Where_Obj"/>
+	</update>
+</mapper>

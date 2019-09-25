@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>PC网关测试DEMO</title>
+<style type="text/css">
+<!--
+.STYLE1 {
+	font-family: "微软雅黑";
+	font-size: x-large;
+}
+-->
+</style>
+</head>
+<body>
+    <form action="${pageContext.request.contextPath}/api/pc-pay/pc-pay-gate" method="post">
+<table width="40%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="93" colspan="2" align="center"><span class="STYLE1">网关测试DEMO</span></td>
+  </tr>
+  <tr>
+    <td width="50%" height="34" align="right">银行：</td>
+    <td width="50%">
+	<select name="PayID" id="PayID" >
+				<option value="" selected="selected">宝付收银台</option>				
+				<option value="3001">招商银行(借)</option>
+				<option value="3002">工商银行(借)</option>
+				<option value="3003">建设银行(借)</option>
+				<option value="3004">浦发银行(借)</option>
+				<option value="3005">农业银行(借)</option>
+				<option value="3006">民生银行(借)</option>
+				<option value="3009">兴业银行(借)</option>
+				<option value="3020">交通银行(借)</option>
+				<option value="3022">光大银行(借)</option>
+				<option value="3026">中国银行(借)</option>
+				<option value="3032">北京银行(借)</option>		
+				<option value="3035">平安银行(借)</option>
+				<option value="3036">广发银行(借)</option>
+				<option value="3039">中信银行(借)</option>
+
+				<option value="4001">招商银行(贷)</option>
+				<option value="4002">工商银行(贷)</option>
+				<option value="4003">建设银行(贷)</option>
+				<option value="4004">浦发银行(贷)</option>
+				<option value="4005">农业银行(贷)</option>
+				<option value="4006">民生银行(贷)</option>
+				<option value="4009">兴业银行(贷)</option>
+				<option value="4020">交通银行(贷)</option>
+				<option value="4022">光大银行(贷)</option>
+				<option value="4026">中国银行(贷)</option>
+				<option value="4032">北京银行(贷)</option>		
+				<option value="4035">平安银行(贷)</option>
+				<option value="4036">广发银行(贷)</option>
+				<option value="4039">中信银行(贷)</option>
+				
+				<option value="6050">华夏银行(企业)</option>
+				<option value="6037">上海农商银行(企业)</option>
+				<option value="6033">东亚银行(企业)</option>
+				<option value="6009">兴业银行(企业)</option>
+				<option value="6004">浦发银行(企业)</option>
+				<option value="6001">招商银行(企业)</option>
+				<option value="6036">广发银行(企业)</option>
+				<option value="6035">平安银行(企业)</option>
+				<option value="6026">中国银行(企业)</option>
+				<option value="6022">光大银行(企业)</option>
+				<option value="6020">交通银行(企业)</option>		
+				<option value="6006">民生银行(企业)</option>
+				<option value="6005">农业银行(企业)</option>
+				<option value="6003">建设银行(企业)</option>
+				<option value="6002">工商银行(企业)</option>
+      </select>
+	</td>
+  </tr>
+  <tr>
+    <td height="36" align="right">支付金额：</td>
+    <td><input name="OrderMoney" type="text" id="OrderMoney" /></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><label>
+      <input type="submit" name="Submit" value="提交" />
+    </label></td>
+  </tr>
+</table>
+    </form>
+</body>
+</html>

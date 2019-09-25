@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>manager</name>
+	<filePath>src/main/java/${packageName}/${moduleName}/manager/${subModuleName}</filePath>
+	<fileName>${ClassName}Manager.java</fileName>
+	<content><![CDATA[
+/**
+ *Copyright 2014-2017 聚宝钱包 All rights reserved.
+ */
+package ${packageName}.${moduleName}.manager<#if subModuleName != "">.${subModuleName}</#if>;
+
+import org.springframework.stereotype.Service;
+
+import com.rongdu.common.service.BaseManager;
+import ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>.${ClassName};
+import ${packageName}.${moduleName}.dao<#if subModuleName != "">.${subModuleName}</#if>.${ClassName}Dao;
+
+/**
+ * ${functionName}-实体管理实现类
+ * @author ${functionAuthor}
+ * @version ${functionVersion}
+ */
+@Service("${className}Manager")
+public class ${ClassName}Manager extends BaseManager<${ClassName}Dao, ${ClassName}, String> {
+	
+}
+]]>
+	</content>
+</template>
