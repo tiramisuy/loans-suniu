@@ -20,7 +20,7 @@
         <spring.version>3.1.1.RELEASE</spring.version>
         <struts.version>2.2.1</struts.version>
         <hibernate.version>3.5.5-Final</hibernate.version>
-        <validator.version>5.2.4.Final</validator.version>
+        <validator.version>5.3.6.Final</validator.version>
         <ehcache.version>2.4.6</ehcache.version>
         <ehcache-web.version>2.0.4</ehcache-web.version>
         <spring-security.version>3.0.3.RELEASE</spring-security.version>
