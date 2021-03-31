@@ -37,7 +37,7 @@
         <commons-beanutils.version>1.9.1</commons-beanutils.version>
         <jackson.version>2.7.4</jackson.version>
         <xstream.version>1.4.7</xstream.version>
-        <guava.version>17.0</guava.version>
+        <guava.version>29.0-jre</guava.version>
         <dozer.version>5.5.1</dozer.version>
         <poi.version>3.9</poi.version>
         <freemarker.version>2.3.23</freemarker.version>
@@ -111,7 +111,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>27.0.1-jre</version>
+            <version>29.0-jre</version>
         </dependency>
 
         <!-- json -->
