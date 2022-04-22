@@ -18,7 +18,7 @@
 
         <!-- main version setting -->
         <spring.version>3.1.1.RELEASE</spring.version>
-        <struts.version>2.2.1</struts.version>
+        <struts.version>2.5.30</struts.version>
         <hibernate.version>3.5.5-Final</hibernate.version>
         <validator.version>5.2.4.Final</validator.version>
         <ehcache.version>2.4.6</ehcache.version>
