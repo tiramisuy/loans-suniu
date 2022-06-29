@@ -58,7 +58,7 @@
 
         <!-- dubbo setting -->
         <dubbo.version>2.5.10</dubbo.version>
-        <zookeeper.version>3.4.9</zookeeper.version>
+        <zookeeper.version>3.4.14</zookeeper.version>
         <zkclient.version>0.10</zkclient.version>
 
     </properties>
